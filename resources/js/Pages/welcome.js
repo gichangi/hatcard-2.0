@@ -1,7 +1,7 @@
 
 function Welcome(props) {
     return (
-        <div>mew</div>
+        <div>mew {props.name}</div>
     );
 }
 

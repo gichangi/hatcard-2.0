@@ -1,0 +1,8 @@
+
+.pcoded-navbar .pcoded-inner-navbar li.pcoded-hasmenu .pcoded-submenu li > a {
+    text-align: left;
+    padding: 7px 7px 7px 60px;
+    margin: 0;
+    display: block;
+    color: red;
+}

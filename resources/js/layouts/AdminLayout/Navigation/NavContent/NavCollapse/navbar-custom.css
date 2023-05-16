@@ -1,0 +1,12 @@
+.pcoded-navbar .pcoded-inner-navbar > li.active > a, .pcoded-navbar .pcoded-inner-navbar > li.pcoded-trigger > a {
+    background: #992E62 !important;
+    color: #fff !important;
+}
+.dashboard-link {
+    color: #992E62 !important;
+    font-weight:bold;
+}
+.dashboard-link:hover{
+    color:#a9b7d0 !important;
+    font-weight:bold;
+}

@@ -14,5 +14,12 @@ use Illuminate\Support\Facades\Route;
     */
 
 Route::get('/', function () {
-    return Inertia('welcome');
+    return Inertia('auth/signin/SignIn');
+})->name('login');
+
+Route::middleware('auth')->group(function(){
+    Route::get('/sample-page', function () {
+        return Inertia('extra/SamplePage');
+    });
 });
+
