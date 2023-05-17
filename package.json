@@ -23,6 +23,7 @@
         "font-awesome": "^4.7.0",
         "formik": "^2.2.9",
         "jquery": "^3.6.0",
+        "material-react-table": "^1.11.3",
         "nib-core": "2.7.16",
         "npm": "^7.6.3",
         "react": "^18.0.0",

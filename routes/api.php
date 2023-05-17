@@ -25,6 +25,6 @@ Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::clas
 
 Route::middleware('auth:api')->group(function(){
     Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuItemsController::class, 'index']);
-    Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuGroupController::class, 'index']);
+    Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuItemsController::class, 'menuTree']);
     Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
 });

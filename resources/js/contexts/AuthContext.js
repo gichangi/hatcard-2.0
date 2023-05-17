@@ -84,7 +84,7 @@ export function updateMenuItemsAction(navMenuItems){
         let fetchResponse = {};
         let fetchRequest =  await axios({
             method: "get",
-            url: "/api/menu-groups",
+            url: "/api/menu-tree",
             headers: {
                 "Accept": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -130,8 +130,8 @@ export const AuthProvider = ({ children }) => {
                     localStorage.setItem('hatcard.auth', JSON.stringify(authStoreData));
                    localStorage.setItem('hatcard.navMenuItems', JSON.stringify(res.data.navigation_menu_items));
                     //Update redux state
-        /*           storeDispatch(updateAuthState(authStoreData))
-                   storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));*/
+                   storeDispatch(updateAuthState(authStoreData))
+                   storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                 }).catch(error =>{
@@ -183,8 +183,8 @@ export const AuthProvider = ({ children }) => {
                 if(menuItems.message === 'success'){
                     dispatch(updateAuthState(authStore));
                     dispatch(updateMenuItemsAction(menuItems.data));
-                  /*  storeDispatch(updateAuthState(authStore));
-                    storeDispatch(updateMenuItemsAction(menuItems.data))*/
+                    storeDispatch(updateAuthState(authStore));
+                    storeDispatch(updateMenuItemsAction(menuItems.data))
                     localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{
                     dispatch(resetAuthContext());

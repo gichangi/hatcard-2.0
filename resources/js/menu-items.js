@@ -16,8 +16,9 @@ const setMenuItems = () => {
           children: [
             {
               id: 'default',
-              title: 'Default',
+              title: 'Defaults',
               type: 'item',
+              category:'dashboard',
               url: 'dashboard/default'
             },
             {
@@ -1132,32 +1133,16 @@ const setMenuItems = () => {
   ]
   if(localStoreNavMenuItems !== 1){
     let navMenuItems = localStoreNavMenuItems;
-
     if(navMenuItems.length > 0){
-      navMenuItems.forEach(item =>{
-        console.log(item)
-        items.unshift({
-          id: item.id,
-          title: item.name,
-          type: 'group',
-          icon: 'fa fa-eye',
-          children: [
-            {
-              id: `${item.id}basic`,
-              title: 'Basic',
-              type: 'collapse',
-              icon: 'feather icon-home',
-            }
-          ]
-        })
-      })
-
-      console.log(items)
+      return {
+        items:navMenuItems
+      }
     }
-
   }
+
   return {
-    items:items
+    //items:items
+    items:[]
   }
 };
 const menuItems = setMenuItems();

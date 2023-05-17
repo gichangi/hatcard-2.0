@@ -47,6 +47,13 @@ const routes = [
         layout: AdminLayout,
         path: '/sample-page',
         component: lazy(() => import('./views/extra/SamplePage'))
+    },
+    {
+        exact: true,
+        guard: AuthGuard,
+        layout: AdminLayout,
+        path: '/admin/menu-management',
+        component: lazy(() => import('./views/admin/MenuManagement'))
     }
 ];
 

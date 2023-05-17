@@ -26,11 +26,12 @@ const theme = createTheme({
         root: {
           // Some CSS
           background:'#fff',
-          color:'white',
+          color:'white !important',
           fontSize: '1rem',
           '&:hover':{
             //background:'#f7f7f7'
-            background:'rgb(78, 212, 232)'
+            background:'rgb(78, 212, 232)',
+
           },
 
         },
@@ -79,7 +80,7 @@ const NavCollapse = ({ collapse, type }) => {
         case 'collapse':
           return <LoopNavCollapse key={item.id} collapse={item} type="sub" />;
         case 'item':
-          return <NavItem layout={layout} key={item.id} item={item} />;
+          return <NavItem layout={layout} key={item.id} item={item} showIcon={false} />;
         default:
           return false;
       }

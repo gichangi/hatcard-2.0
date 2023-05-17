@@ -38,4 +38,8 @@ class MenuItems extends Model
      * @var array<string, string>
      */
 
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id')->with('children')->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','parent_id','order_id')->where('status','active')->orderBy('order_id');
+    }
 }

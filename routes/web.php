@@ -21,5 +21,9 @@ Route::middleware('auth')->group(function(){
     Route::get('/sample-page', function () {
         return Inertia('extra/SamplePage');
     });
+    Route::get('/admin/menu-management', function () {
+        return Inertia('admin/MenuManagement');
+    });
+
 });
 

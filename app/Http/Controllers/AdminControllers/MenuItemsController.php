@@ -14,10 +14,22 @@ class MenuItemsController extends Controller
     public function index()
     {
         //pull all menu items
-        $menu_items = MenuItems::all();
-        return response()->json(['menu_items' => $menu_items], 200);
+        $MenuTree = MenuItems::all();
+        return response()->json(['menu_items' => $MenuTree], 200);
     }
-
+    /**
+     * Show menu with nested parenting using parent id field;
+     */
+    public function menuTree()
+    {
+        //pull all menu items
+        $MenuTree = MenuItems::with('children')
+            ->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','order_id')
+            ->where('parent_id',null)
+            ->orderBy('order_id')
+            ->get();
+        return response()->json(['navigation_menu_items' => $MenuTree], 200);
+    }
     /**
      * Show the form for creating a new resource.
      */

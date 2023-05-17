@@ -14,7 +14,7 @@ const NavGroup = ({ layout, group }) => {
         case 'collapse':
           return <NavCollapse key={item.id} collapse={item} type="main"/>;
         case 'item':
-          return <NavItem layout={layout} key={item.id} item={item} />;
+          return <NavItem layout={layout} key={item.id} item={item} customClass={'base-menu-item'}/>;
         default:
           return false;
       }

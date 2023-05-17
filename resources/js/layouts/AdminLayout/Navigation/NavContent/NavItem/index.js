@@ -27,7 +27,7 @@ const CustomNavLink = styled(NavLink)`
   }*/
 `
 
-const NavItem = ({ layout, item }) => {
+const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
   const windowSize = useWindowSize();
   const configContext = useContext(ConfigContext);
   const { dispatch } = configContext;
@@ -56,8 +56,10 @@ const NavItem = ({ layout, item }) => {
         //Gichangi customization
         //Customize here for change in colorclassName={'dashboardClass'}
 
-      <CustomNavLink to={item.url} className="nav-link dashboard-link" exact={true} target={itemTarget}>
-        <NavIcon  items={item} />
+      <CustomNavLink to={item.url} className={`${customClass} custom-menu-item nav-link ${item.category === 'dashboard'?'dashboard-link':''}`} exact={true} target={itemTarget}>
+        {showIcon &&
+            <NavIcon  items={item} />
+        }
         {itemTitle}
         <NavBadge items={item} />
       </CustomNavLink>

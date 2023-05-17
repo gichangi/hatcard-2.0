@@ -13,11 +13,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            \Database\Seeders\MenuGroupSeeder::class,
             \Database\Seeders\MenuItemsSeeder::class,
             \Database\Seeders\UserSeeder::class
-
-
         ]);
     }
 }
