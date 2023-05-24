@@ -1,10 +1,11 @@
-import fs from "node:fs";
+//import fs from "node:fs";
+import fs from 'fs/promises';
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import * as esbuild from "esbuild";
 import laravel from "laravel-vite-plugin";
 
-const sourceJSPattern = /\/resources\/js\/.*\.js$/;
+const sourceJSPattern = /\/resources\/js\/.*\.jsx$/;
 const rollupPlugin = (matchers) => ({
     name: "js-in-jsx",
     load(id) {
@@ -16,14 +17,20 @@ const rollupPlugin = (matchers) => ({
 });
 
 export default defineConfig({
+/*    server:{
+        hmr: true,
+      watch:{
+          usePolling:true
+      }
+    },*/
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/index.js'],
-            refresh: true,
+            input: ['resources/css/app.css', 'resources/js/index.jsx'],
+            refresh: false,
         }),
-        react(),
+        react(/*{ fastRefresh: false }*/)
     ],
-    build: {
+/*    build: {
         rollupOptions: {
             plugins: [
                 rollupPlugin([sourceJSPattern])
@@ -32,17 +39,32 @@ export default defineConfig({
         commonjsOptions: {
             transformMixedEsModules: true,
         },
-    },
-    optimizeDeps: {
+    },*/
+/*    optimizeDeps: {
         esbuildOptions: {
             loader: {
                 ".js": "jsx",
             },
         },
-    },
+    },*/
+ /*   optimizeDeps: {
+        esbuildOptions: {
+            plugins: [
+                {
+                    name: "load-js-files-as-jsx",
+                    setup(build) {
+                        build.onLoad({ filter: /\/resources\/js\/.*\.js$/ }, async (args) => ({
+                            loader: "jsx",
+                            contents: await fs.readFile(args.path, "utf8"),
+                        }));
+                    },
+                },
+            ],
+        },
+    },*/
     esbuild: {
         loader: "jsx",
-        include: [sourceJSPattern],
+        include: [/\/resources\/.*\.jsx$/, sourceJSPattern],
         exclude: [],
-    },
+    }
 });

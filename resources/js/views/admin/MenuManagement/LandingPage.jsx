@@ -7,8 +7,12 @@ import Card from "../../../components/Card/MainCard";
 import './custom-css.css'
 import Box from "@mui/material/Box";
 import {Button, IconButton, MenuItem, Tooltip} from "@mui/material";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-function index(props) {
+function LandingPage(props) {
     const[menuItems, setMenuItems] = useState([]);
     //optionally, you can manage any/all of the table state yourself
     const [rowSelection, setRowSelection] = useState({});
@@ -96,7 +100,6 @@ function index(props) {
                         columns={columns}
                         data={menuItems}
                         enableColumnActions={false}
-                        enablePagination={false} //disable a default feature
                         onRowSelectionChange={setRowSelection} //hoist internal state to your own state (optional)
                         state={{ rowSelection }} //manage your own state, pass it back to the table (optional)
                         tableInstanceRef={tableInstanceRef} //get a reference to the underlying table instance (optional)
@@ -135,27 +138,73 @@ function index(props) {
                         enableRowActions
                         positionActionsColumn="last"
                         renderRowActionMenuItems={({row, closeMenu}) => [
-                            <MenuItem key={1} onClick={() => {
-                                console.info('View Profile', row);
-                                console.info('View Profile', row.original.name);
-                                closeMenu();
-                            }}>
-                                View Profile {row.original.name}
+                            <MenuItem key={1}
+                                      onClick={() => {
+                                          console.info('View Profile', row.original.name);
+                                          props.pageSwitch(row.original);
+                                          closeMenu();
+                                      }}
+                                      sx={{
+                                          width:'140px'
+                                      }}
+                            >
+                                <VisibilityIcon/>&nbsp; View
                             </MenuItem>,
                             <MenuItem key={2} onClick={() => {
                                 console.info('Remove', row);
                                 closeMenu();
                             }}>
-                                 Remove
+                                <DeleteIcon/> &nbsp; Delete
                             </MenuItem>,
                             <MenuItem key={3} onClick={() => {
                                 console.info('Share', row);
                                 closeMenu();
                             }}>
-                                 Share
+                                {row.original.status === 'active' &&
+                                    <>
+                                        <DoDisturbIcon/>&nbsp; Disable
+                                    </>
+                                }
+                                {row.original.status !== 'active' &&
+                                    <>
+                                        <DoDisturbIcon/>&nbsp; Enable
+                                    </>
+                                }
                             </MenuItem>
                         ]}
+                        initialState={{
+                            pagination: {
+                                pageSize: 5,
+                                pageIndex: 0
+                            }
+                        }} muiTablePaginationProps={{
+                        rowsPerPageOptions: [5, 10, 20],
+                        showFirstButton: false,
+                        showLastButton: false,
+                        SelectProps: {
+                            native: true
+                        },
+                        labelRowsPerPage: 'Number of rows visible'
+                    }}
 
+
+                        //add custom action buttons to top-left of top toolbar
+                        renderTopToolbarCustomActions={({ table }) => (
+                            <Box sx={{ display: 'flex', gap: '1rem', p: '4px' }}>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<AddCircleIcon />}
+                                    onClick={() => {
+                                        props.pageSwitch();
+                                    }}
+                                    sx={{
+                                        fontWeight:'bolder'
+                                    }}
+                                >
+                                    Menu
+                                </Button>
+                            </Box>
+                        )}
 
 
                     />
@@ -171,4 +220,4 @@ const mapStateToProps = state => {
         reduxStore: state
     };
 };
-export default connect(mapStateToProps)(index);
+export default connect(mapStateToProps)(LandingPage);

@@ -175,7 +175,9 @@ export const AuthProvider = ({ children }) => {
 
     //Runs at start and page refresh
     useEffect(() => {
+
         (async () => {
+            console.log("authprovider")
             //check for cookies values if not push to login
             let authStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
             if(authStore!== 1){

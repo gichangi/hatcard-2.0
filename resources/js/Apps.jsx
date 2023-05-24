@@ -12,6 +12,8 @@ import { BASENAME } from './config/constant';
 const App = () => {
   return (
     <>
+
+
       <Router basename={BASENAME}>
         <AuthProvider>{renderRoutes(routes)}</AuthProvider>
       </Router>

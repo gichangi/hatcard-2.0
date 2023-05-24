@@ -10,25 +10,26 @@ import './index.scss';
 
 createInertiaApp({
     resolve: name => {
-        const pages = import.meta.glob('./views/**/*.js', { eager: true })
-        return pages[`./views/${name}.js`]
+        const pages = import.meta.glob('./views/**/*.jsx', { eager: true })
+        return pages[`./views/${name}.jsx`]
     },
     setup({el}) {
        // createRoot(el).render(<App {...props} />)
         const rootElement = document.getElementById("root");
-        const root = createRoot(el);
-
+        const root = createRoot(rootElement);
+        console.log("childrensautheindesx")
         root.render(
-            <Provider store={store}>
-                <ConfigProvider>
-                    <StrictMode>
+            <StrictMode>
+                <Provider store={store}>
+                    <ConfigProvider>
                         <App />
-                    </StrictMode>
-                </ConfigProvider>
-            </Provider>,
+                    </ConfigProvider>
+                </Provider>
+            </StrictMode>
+
         );
     },
 
 
 
-})
+});

@@ -24,6 +24,11 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/menu-management', function () {
         return Inertia('admin/MenuManagement');
     });
-
+    Route::get('/admin/users', function () {
+        return Inertia('admin/MenuManagement');
+    });
+    Route::get('/admin/menu-management/menu', function () {
+        return Inertia('admin/menu-management/menu');
+    });
 });
 

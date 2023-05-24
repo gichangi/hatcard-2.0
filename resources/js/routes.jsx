@@ -7,7 +7,6 @@ import AdminLayout from './layouts/AdminLayout';
 import GuestGuard from './components/Auth/GuestGuard';
 import AuthGuard from './components/Auth/AuthGuard';
 
-import { BASE_URL } from './config/constant';
 
 export const renderRoutes = (routes = []) => (
     <Suspense fallback={<Loader />}>
@@ -42,18 +41,27 @@ const routes = [
         component: lazy(() => import('./views/auth/signin/SignIn'))
     },
     {
-        exact: true,
-        guard: AuthGuard,
+        path: '*',
         layout: AdminLayout,
-        path: '/sample-page',
-        component: lazy(() => import('./views/extra/SamplePage'))
-    },
-    {
-        exact: true,
         guard: AuthGuard,
-        layout: AdminLayout,
-        path: '/admin/menu-management',
-        component: lazy(() => import('./views/admin/MenuManagement'))
+        routes: [
+            {
+                exact: true,
+                path: '/sample-page',
+                component: lazy(() => import('./views/extra/SamplePage'))
+            },
+            {
+                exact: true,
+                path: '/admin/menu-management',
+                component: lazy(() => import('./views/admin/MenuManagement'))
+            },
+            {
+                exact: true,
+                path: '/admin/users',
+                component: lazy(() => import('./views/admin/MenuManagement'))
+            }
+        ]
+
     }
 ];
 
