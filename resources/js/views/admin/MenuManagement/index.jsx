@@ -1,9 +1,9 @@
 import {connect} from "react-redux";
 import {Col, Row} from "react-bootstrap";
 import './custom-css.css'
-import LandingPage from "./LandingPage";
+import MenuItemGrid from "./MenuItemGrid";
 import {useEffect, useState} from "react";
-import NavMenuItem from "./NavMenuItem";
+import NewMenuItem from "./NewMenuItem";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
@@ -31,10 +31,10 @@ function index(props) {
         >
             <Paper elevation={0}>
                 {!showMenuItemPage &&
-                    <LandingPage pageSwitch={pageSwitch}  />
+                    <MenuItemGrid pageSwitch={pageSwitch}  />
                 }
                 { showMenuItemPage &&
-                    <NavMenuItem menuDetails={menuDetails}/>
+                    <NewMenuItem menuDetails={menuDetails}/>
                 }
             </Paper>
         </Box>

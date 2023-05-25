@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-function LandingPage(props) {
+function MenuItemGrid(props) {
     const[menuItems, setMenuItems] = useState([]);
     //optionally, you can manage any/all of the table state yourself
     const [rowSelection, setRowSelection] = useState({});
@@ -220,4 +220,4 @@ const mapStateToProps = state => {
         reduxStore: state
     };
 };
-export default connect(mapStateToProps)(LandingPage);
+export default connect(mapStateToProps)(MenuItemGrid);

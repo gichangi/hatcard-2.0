@@ -3,6 +3,8 @@ import { Card, Button, Row, Col } from 'react-bootstrap';
 import { Field, reduxForm } from 'redux-form';
 import {FormControl, InputLabel, MenuItem, OutlinedInput, Select, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid";
+import MenuGroupItem from "./MenuGroupItem";
+import MenuSubFolder from "./MenuSubFolder";
 
 const validate = (values) => {
     const errors = {};
@@ -33,17 +35,19 @@ const warn = (values) => {
     return warnings;
 };
 
-function NavMenuItem(props) {
+function NewMenuItem(props) {
     const [menuType,setMenuType] = useState("")
     const [menuTypeName,setMenuTypeName] = useState("")
     const [enableCreate, setEnableCreate] = useState(false);
     const [enableEdit, setEnableEdit] = useState(false);
-    const [personName, setPersonName] = useState([]);
+    const [menuComponent, setMenuComponent] = useState();
+
     const handleSubmit = () =>{
         alert("mew mew")
     }
     const handleChange = (event,node) => {
         event.preventDefault();
+        setMenuComponent(node.props.name);
         setMenuType(event.target.value);
         setMenuTypeName(node.props.name)
     };
@@ -54,6 +58,22 @@ function NavMenuItem(props) {
             setEnableCreate(true)
         }
     },[]);
+
+    const switchMenuComponent = () =>{
+        switch (menuComponent){
+            case 'Group':
+                return <MenuGroupItem />
+            case 'Sub-Folder':
+                return <MenuSubFolder />
+            case 'Link':
+                return <MenuGroupItem />
+            default:
+                return null
+        }
+    }
+
+
+
     const renderField = ({ input, label, type, meta: { touched, error, warning } }) => (
         <Row className="my-3">
             <Col sm={3}>
@@ -82,7 +102,7 @@ function NavMenuItem(props) {
                       alignItems="center"
                 >
                     <Grid item xs={2}                    >
-                        <Card.Title as="h5"><Typography sx={{fontSize:'18px',color:'#992E62', fontWeight:'bolder'}}>Menu Items New </Typography></Card.Title>
+                        <Card.Title as="h5"><Typography sx={{fontSize:'18px',color:'#992E62', fontWeight:'bolder'}}>Menu Item </Typography></Card.Title>
                     </Grid>
                     {enableCreate &&
                         <Grid item xs={4}>
@@ -120,9 +140,9 @@ function NavMenuItem(props) {
                                         },
                                     }}
                                 >
-                                    <MenuItem key={'Group'} value={'group'}  name={'Group'}>Group</MenuItem>
-                                    <MenuItem key={'Sub-Folder'} value={'sub-folder'} name={'Sub-Folder'}>Sub-Folder</MenuItem>
-                                    <MenuItem key={'Link'} value={'item'} name={'Link'}>Link</MenuItem>
+                                    <MenuItem value={'group'}  name={'Group'}>Group</MenuItem>
+                                    <MenuItem value={'sub-folder'} name={'Sub-Folder'}>Sub-Folder</MenuItem>
+                                    <MenuItem value={'item'} name={'Link'}>Link</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -133,12 +153,13 @@ function NavMenuItem(props) {
 
             </Card.Header>
             <Card.Body>
-
-
+                <Grid container>
+                    {switchMenuComponent()}
+                </Grid>
             </Card.Body>
             <Card.Footer>
             </Card.Footer>
         </Card>
     );
 }
-export default NavMenuItem;
+export default NewMenuItem;

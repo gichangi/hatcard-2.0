@@ -17,7 +17,6 @@ createInertiaApp({
        // createRoot(el).render(<App {...props} />)
         const rootElement = document.getElementById("root");
         const root = createRoot(rootElement);
-        console.log("childrensautheindesx")
         root.render(
             <StrictMode>
                 <Provider store={store}>

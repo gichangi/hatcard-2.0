@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('menu_items', function (Blueprint $table) {
             $table->uuid('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->text('menu_icon')->nullable();
-            $table->text('menu_url');
+            //Pass # as the default
+            $table->text('menu_url')->default('#');
             //Menu  : group,item,subfolder(collapse),
             $table->text('menu_type');
             //Menu category classifies the menu link type:  system-group,system-subfolder, system-link,custom-group,custom-subfolder,dashboard-link,
