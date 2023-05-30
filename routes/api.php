@@ -17,6 +17,7 @@
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::post('/register', [\App\Http\Controllers\UserManagement\UserController2::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\UserManagement\AuthController::class, 'login']);
 Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::class, 'all_users']);
@@ -24,7 +25,9 @@ Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::clas
 
 
 Route::middleware('auth:api')->group(function(){
-    Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuItemsController::class, 'index']);
-    Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuItemsController::class, 'menuTree']);
-    Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
+    Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'index']);
+    Route::post('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'store']);
+    Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
+    Route::post('/user/details', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'details']);
+    Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);
 });
