@@ -83,7 +83,7 @@ function NavigationMenuItem({menuDetails,pageSwitch}) {
     const switchMenuComponent = () =>{
         switch (menuComponent){
             case 'Group':
-                return <MenuGroupItem  updateFormData={updateFormData}/>
+                return <MenuGroupItem  updateFormData={updateFormData} setFormValidate={setFormValidate}/>
             case 'Sub-Folder':
                 return <MenuSubFolder updateFormData={updateFormData} setFormValidate={setFormValidate}/>
             case 'Link':

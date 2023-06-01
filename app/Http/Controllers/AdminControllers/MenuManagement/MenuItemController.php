@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers\MenuManagement;
 use App\Http\Controllers\Controller;
 use App\Models\AdminModels\MenuItems;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MenuItemController extends Controller
 {
@@ -32,7 +33,16 @@ class MenuItemController extends Controller
     public function store(Request $request)
     {
         //
-        dd($request->name);
+/*        if($request->id != null){
+
+        }else{
+
+        }*/
+
+        $navItem = MenuItems::create($request->all());
+        $navItem->created_by =Auth::id();
+        $navItem->last_updated_by =Auth::id();
+        $navItem->save();
     }
 
     /**

@@ -13,3 +13,21 @@
     color: #992E62 !important;
     font-size:18px !important;
 }*/
+.rfipbtn {
+    width: 50px !important;
+}
+
+.rfipbtn__current {
+    display: none;
+}
+
+
+.rfipbtn--blue .rfipbtn__button {
+    border: 1px solid #992E62 !important;
+    background-color: #992E62 !important;
+    color: #fff;
+}
+.rfipbtn--blue {
+    background-color: #992E62;
+    border: 1px solid #8c8c8c;
+}

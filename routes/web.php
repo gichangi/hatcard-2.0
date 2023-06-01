@@ -17,6 +17,15 @@ Route::get('/', function () {
     return Inertia('auth/signin/SignIn');
 })->name('login');
 
+Route::get('/landing', function () {
+    return Inertia('landing/LandingPage');
+});
+Route::get('/vsp', function () {
+    return Inertia('landing/VspPage');
+});
+Route::get('/pms', function () {
+    return Inertia('landing/ProgressiveModelPage');
+});
 Route::middleware('auth')->group(function(){
     Route::get('/sample-page', function () {
         return Inertia('extra/SamplePage');

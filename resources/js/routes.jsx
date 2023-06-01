@@ -38,6 +38,24 @@ const routes = [
         exact: true,
         guard: GuestGuard,
         path: '/',
+        component: lazy(() => import('./views/landing/LandingPage'))
+    },
+    {
+        exact: true,
+        guard: GuestGuard,
+        path: '/vsp',
+        component: lazy(() => import('./views/landing/VspPage'))
+    },
+    {
+        exact: true,
+        guard: GuestGuard,
+        path: '/pms',
+        component: lazy(() => import('./views/landing/ProgressiveModelPage'))
+    },
+    {
+        exact: true,
+        guard: GuestGuard,
+        path: '/login',
         component: lazy(() => import('./views/auth/signin/SignIn'))
     },
     {

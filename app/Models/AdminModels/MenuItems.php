@@ -21,7 +21,7 @@ class MenuItems extends Model
     public $incrementing = false;
     protected $table="menu_items";
     protected $fillable = [
-        'name', 'description','menu_image', 'menu_type','order_id', 'parent_id','menu_group_id', 'status', 'created_by','last_updated_by'
+        'name', 'description','menu_image', 'menu_type','menu_icon','menu_category','order_id', 'parent_id','menu_group_id', 'status', 'created_by','last_updated_by'
     ];
 
     /**

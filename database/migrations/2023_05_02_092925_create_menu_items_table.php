@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->text('menu_icon')->nullable();
+            $table->text('menu_image')->nullable();
             //Pass # as the default
             $table->text('menu_url')->default('#');
             //Menu  : group,item,subfolder(collapse),

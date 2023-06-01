@@ -26,7 +26,8 @@ const NavLeft = () => {
       <ListGroup as="ul" bsPrefix=" " className="navbar-nav mr-auto">
         <ListGroup.Item as="li" bsPrefix=" " className={navItemClass.join(' ')}>
           <a style={{'color':'#0F697D', 'fontFamily':"Noto Sans",'fontSize': "2.5rem", 'textAlign': "center", fontWeight:'bolder',marginLeft:'30%', width:'100%'}}  className="noble-ui-logo d-block mb-2">
-            Comprehensive Access and Review Dashboard
+            {/*Comprehensive Access and Review Dashboard*/}
+            Primary Health Care - Vital Signs Profile
           </a>
         </ListGroup.Item>
       </ListGroup>

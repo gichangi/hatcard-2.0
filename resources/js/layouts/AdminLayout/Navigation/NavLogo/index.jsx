@@ -18,10 +18,12 @@ const NavLogo = () => {
     <>
       <div className="navbar-brand header-logo" style={{backgroundColor:'#fff'}}>
         <Link to="#" className="b-brand">
-          <div className="b-bg" style={{backgroundImage:`url("images/hatcard_logo.jpg")`}}>
+          {/*<div className="b-bg" style={{backgroundImage:`url("images/hatcard_logo.jpg")`}}>*/}
+          <div className="b-bg" style={{backgroundImage:`url("images/vsp-favicon.png")`}}>
           </div>
           <span className="b-title" style={{color: '#A42262',fontFamily: 'Trebuchet', fontSize:'25px'}}>
-            hat<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>CARD</span>
+            {/*hat<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>CARD</span>*/}
+            PHC<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>-VSP</span>
           </span>
         </Link>
         <Link to="#" className={toggleClass.join(' ')} id="mobile-collapse" onClick={() => dispatch({ type: actionType.COLLAPSE_MENU })}>

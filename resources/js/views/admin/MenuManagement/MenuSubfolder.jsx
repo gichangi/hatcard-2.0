@@ -2,8 +2,9 @@ import Grid from "@mui/material/Grid";
 import {Col, Form, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import ImageUpload from "../../../components/Image/ImageUpload";
-import {FormHelperText, MenuItem, Select} from "@mui/material";
+import {FormHelperText, MenuItem, Select, Typography} from "@mui/material";
 import {apiFetch} from "../../../assets/api/utils";
+import IconPicker from "./IconPicker";
 
 
 const validate = (values) => {
@@ -42,11 +43,13 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
         parent_id:null,
         name:null,
         description:null,
-        menu_icon:null,
-        menu_type:'sub-folder',
+        menu_icon:'fa fa-wrench',
+        menu_image:null,
+        menu_url:"#",
+        menu_type:'collapse',
         menu_category:'custom-sub-folder',
-        status:true,
-        save:false
+        order_id:10,
+        status:'active'
     });
 
     const updateFormHelperText = () =>{
@@ -83,7 +86,12 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
 
     const handleImageChange = (base64) => {
         setTempVal(base64);
-        dataTemplate.menu_icon = base64;
+        dataTemplate.menu_image = base64;
+        updateFormData(dataTemplate)
+    }
+    const handleIconChange = (icon) =>{
+        setTempVal(icon);
+        dataTemplate.menu_icon = icon;
         updateFormData(dataTemplate)
     }
     const handleParentChange = (event,node) => {
@@ -100,9 +108,29 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
             <Form>
                 <Form.Group as={Row} controlId="parent">
                     <Form.Label  column sm={3}>
+                        Menu Icon
+                    </Form.Label>
+                    <Col sm={9}>
+                        <Grid container spacing={0}  direction="row" justifyContent="flex-start" alignItems="center">
+                            <Grid item xs={1}>
+                                <IconPicker selectedIcon={handleIconChange}/>
+                            </Grid>
+                            <Grid item xs={10} sx={{border:'solid 2px #eee',marginLeft:'12px',height:'50px'}}>
+                                <Typography variant="h5" component="div" gutterBottom sx={{color:'rgb(79, 79, 79)',paddingTop:'10px', fontSize:'20px'}}>
+                                    {dataTemplate.menu_icon}
+                                </Typography>
+                            </Grid>
+                        </Grid>
+
+                    </Col>
+                </Form.Group>
+
+                <Form.Group as={Row} controlId="parent">
+                    <Form.Label  column sm={3}>
                         Parent
                     </Form.Label>
                     <Col sm={9}>
+
                         <Select
                             displayEmpty
                             id="select-menu-type-select"
