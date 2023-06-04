@@ -1,9 +1,11 @@
 import Grid from "@mui/material/Grid";
 import {Fab} from "@mui/material";
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import {useState} from "react";
+import {forwardRef, useEffect, useState} from "react";
 
-function ImageUpload({imageBase64,height=310}) {
+//function ImageUpload({imageBase64,height=310,defaultImage=null}) {
+const ImageUpload = forwardRef(({imageBase64,height=310,defaultImage=null})=>{
+
     const [showImage,setShowImage] =useState(false);
     const [image,setImage] =useState();
 
@@ -22,8 +24,12 @@ function ImageUpload({imageBase64,height=310}) {
         }
         setShowImage(!showImage);
     }
-
-
+    useEffect(()=>{
+        if(defaultImage != null && defaultImage !== ''){
+            setImage(defaultImage);
+            setShowImage(true);
+        }
+    },[defaultImage])
     return (
         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{
             border:'2px solid red',
@@ -75,6 +81,6 @@ function ImageUpload({imageBase64,height=310}) {
 
         </Grid>
     );
-}
+})
 
 export default ImageUpload;

@@ -12,10 +12,10 @@ class MenuItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): \Illuminate\Http\JsonResponse
     {
         //pull all menu items
-        $menuItems = MenuItems::all();
+        $menuItems = MenuItems::orderByDesc('updated_at')->get();
         return response()->json(['menu_items' => $menuItems], 200);
     }
 
@@ -30,19 +30,17 @@ class MenuItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
-/*        if($request->id != null){
-
-        }else{
-
-        }*/
-
-        $navItem = MenuItems::create($request->all());
-        $navItem->created_by =Auth::id();
+        $navItem = MenuItems::updateOrCreate(['id'=>$request->id],$request->all());
+        //Check if object is
+        if($request->id == null) {
+            $navItem->created_by = Auth::id();
+        }
         $navItem->last_updated_by =Auth::id();
         $navItem->save();
+        return response()->json(['message' => ['type'=>'success']], 200);
+
     }
 
     /**

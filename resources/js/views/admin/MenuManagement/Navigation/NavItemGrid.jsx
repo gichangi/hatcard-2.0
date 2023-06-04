@@ -1,10 +1,10 @@
 import { useMemo, useRef, useState, useEffect } from 'react';
-import {apiFetch} from "../../../assets/api/utils";
+import {apiFetch} from "../../../../assets/api/utils";
 import {connect} from "react-redux";
 import MaterialReactTable from 'material-react-table';
 import {Col, Row} from "react-bootstrap";
-import Card from "../../../components/Card/MainCard";
-import './custom-css.css'
+import Card from "../../../../components/Card/MainCard";
+import '../custom-css.css'
 import Box from "@mui/material/Box";
 import {Button, IconButton, MenuItem, Tooltip} from "@mui/material";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-function MenuItemGrid(props) {
+function NavItemGrid(props) {
     const[menuItems, setMenuItems] = useState([]);
     //optionally, you can manage any/all of the table state yourself
     const [rowSelection, setRowSelection] = useState({});
@@ -220,4 +220,4 @@ const mapStateToProps = state => {
         reduxStore: state
     };
 };
-export default connect(mapStateToProps)(MenuItemGrid);
+export default connect(mapStateToProps)(NavItemGrid);

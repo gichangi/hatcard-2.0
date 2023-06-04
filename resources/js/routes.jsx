@@ -81,7 +81,7 @@ const routes = [
             {
                 exact: true,
                 path: '/admin/menu-management/menuitem',
-                component: lazy(() => import('./views/admin/MenuManagement/NavigationMenuItem'))
+                component: lazy(() => import('./views/admin/MenuManagement/Navigation'))
             }
         ]
 

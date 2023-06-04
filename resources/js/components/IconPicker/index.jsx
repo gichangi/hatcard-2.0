@@ -4,7 +4,7 @@ import '@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.base-theme.reac
 import '@fonticonpicker/react-fonticonpicker/dist/fonticonpicker.material-theme.react.css';
 import {iconsList} from "./IconsList";
 
-function IconPicker({selectedIcon}) {
+function Index({selectedIcon}) {
     const [icon,setIcon] = useState();
     const handleChange = (value) =>{
         let iconSelected = value === ''?null:value;
@@ -27,4 +27,4 @@ function IconPicker({selectedIcon}) {
     );
 }
 
-export default IconPicker;
+export default Index;

@@ -15,6 +15,7 @@
 }*/
 .rfipbtn {
     width: 50px !important;
+    min-height: 50px !important;
 }
 
 .rfipbtn__current {
@@ -30,4 +31,10 @@
 .rfipbtn--blue {
     background-color: #992E62;
     border: 1px solid #8c8c8c;
+}
+
+.swal2-styled.swal2-confirm {
+    background-color: rgb(15, 105, 125) !important;
+    color: #fff;
+    font-size: 1em;
 }

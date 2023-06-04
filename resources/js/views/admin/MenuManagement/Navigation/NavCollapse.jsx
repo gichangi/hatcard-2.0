@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid";
 import {Col, Form, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import ImageUpload from "../../../components/Image/ImageUpload";
+import ImageUpload from "../../../../components/Image/ImageUpload";
 import {FormHelperText, MenuItem, Select, Typography} from "@mui/material";
-import {apiFetch} from "../../../assets/api/utils";
-import IconPicker from "./IconPicker";
+import {apiFetch} from "../../../../assets/api/utils";
+import IconPicker from "../../../../components/IconPicker";
 
 
 const validate = (values) => {
@@ -32,7 +32,7 @@ const validate = (values) => {
 };
 
 
-function MenuSubfolder({updateFormData,setFormValidate}) {
+function NavCollapse({updateFormData,setFormValidate}) {
     const [defaultSwitch, setDefaultSwitch] = useState(true);
     const [parentName, setParentName] = useState("");
     const [parentId,setParentId] = useState("");
@@ -115,8 +115,8 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
                             <Grid item xs={1}>
                                 <IconPicker selectedIcon={handleIconChange}/>
                             </Grid>
-                            <Grid item xs={10} sx={{border:'solid 2px #eee',marginLeft:'12px',height:'50px'}}>
-                                <Typography variant="h5" component="div" gutterBottom sx={{color:'rgb(79, 79, 79)',paddingTop:'10px', fontSize:'20px'}}>
+                            <Grid item xs={11} sx={{border:'solid 2px #eee',marginLeft:'0px',height:'50px'}}>
+                                <Typography variant="h5" component="div" gutterBottom sx={{paddingLeft:'12px',color:'rgb(79, 79, 79)',paddingTop:'15px', fontSize:'14px'}}>
                                     {dataTemplate.menu_icon}
                                 </Typography>
                             </Grid>
@@ -154,6 +154,7 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
                                 color:'rgba(0, 0, 0, 0.7)',
                                 /*fontWeight:'bold',*/
                                 minWidth: 300,
+                                width: '100%',
                                 '.MuiOutlinedInput-notchedOutline': {
                                     borderColor: '#ddd',
                                 },
@@ -230,4 +231,4 @@ function MenuSubfolder({updateFormData,setFormValidate}) {
     );
 }
 
-export default MenuSubfolder;
+export default NavCollapse;

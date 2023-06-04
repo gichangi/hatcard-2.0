@@ -1,10 +1,10 @@
 import Grid from "@mui/material/Grid";
 import {Col, Form, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
-import ImageUpload from "../../../components/Image/ImageUpload";
+import {useEffect, useRef, useState} from "react";
+import ImageUpload from "../../../../components/Image/ImageUpload";
 import {FormHelperText, MenuItem, Select, Typography} from "@mui/material";
-import {apiFetch} from "../../../assets/api/utils";
-import IconPicker from "./IconPicker";
+import {apiFetch} from "../../../../assets/api/utils";
+
 
 
 const validate = (values) => {
@@ -14,7 +14,7 @@ const validate = (values) => {
     }
     if (!values.name) {
         errors.name = 'Required';
-    } else if (values.name.length > 10) {
+    } else if (values.name.length > 250) {
         errors.name = 'Must be 200 characters or less';
     }
 
@@ -32,17 +32,18 @@ const validate = (values) => {
 };
 
 
-function MenuGroup({updateFormData,setFormValidate}) {
+function NavGroup({updateFormData,setFormValidate,formData}) {
+    const imageUploadRef = useRef(null);
     const [defaultSwitch, setDefaultSwitch] = useState(true);
     const [parentName, setParentName] = useState("");
     const [parentId,setParentId] = useState("");
-    const [menuGroups,setMenuGroups] = useState([]);
     const [tempVal,setTempVal] = useState("");
     const [formErrors, setFormErrors] = useState({});
     const [dataTemplate,setDataTemplate]=useState({
         name:null,
-        description:null,
+        description: null,
         menu_url:"#",
+        menu_image: null,
         menu_type:'group',
         menu_category:'system-group',
         order_id:1,
@@ -53,6 +54,25 @@ function MenuGroup({updateFormData,setFormValidate}) {
         setFormErrors(validate(dataTemplate));
     }
 
+    useEffect(()=>{
+        setFormValidate({"validate":validate,'updateFormHelperText':updateFormHelperText});
+        if(formData!=null){
+            setDataTemplate({
+                id:formData.id,
+                name:formData.name,
+                description:formData.description,
+                menu_url:"#",
+                menu_image:formData.menu_image,
+                menu_type:'group',
+                menu_category:'system-group',
+                order_id:1,
+                status:formData.status
+            });
+        }
+
+
+    },[]);
+
 
     const toggleHandler = () => {
         setDefaultSwitch((prevState) => !prevState);
@@ -60,7 +80,6 @@ function MenuGroup({updateFormData,setFormValidate}) {
         updateFormData(dataTemplate);
     };
     const handleChange = (e)=>{
-        /*   dataTemplate = tempTT;*/
         e.preventDefault();
         dataTemplate[e.target.id] = e.target.value === ''?null:e.target.value;
         setDataTemplate(dataTemplate);
@@ -68,37 +87,11 @@ function MenuGroup({updateFormData,setFormValidate}) {
 
         updateFormData(dataTemplate)
     }
-    useEffect(()=>{
-        let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
-        let headers = {
-            "Accept": "application/json",
-            "Authorization": `Bearer ${autStore.token}`
-        }
-        apiFetch('GET',headers,'/api/menu-groups',{}).then(res=>{
-            setMenuGroups(res.data.menu_groups);
-            setFormValidate({"validate":validate,'updateFormHelperText':updateFormHelperText})
-        })
-
-    },[]);
-
     const handleImageChange = (base64) => {
         setTempVal(base64);
         dataTemplate.menu_image = base64;
         updateFormData(dataTemplate)
     }
-    const handleIconChange = (icon) =>{
-        setTempVal(icon);
-        dataTemplate.menu_icon = icon;
-        updateFormData(dataTemplate)
-    }
-    const handleParentChange = (event,node) => {
-        event.preventDefault();
-        dataTemplate.parent_id = node.props.value;
-        setParentName(node.props.name);
-        setParentId(node.props.value);
-        updateFormData(dataTemplate)
-
-    };
 
     return (
         <Grid item xs={6}>
@@ -113,7 +106,7 @@ function MenuGroup({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <Form.Control type="text" placeholder="Title" onChange={handleChange} />
+                        <Form.Control type="text" placeholder="Title" onChange={handleChange} value={dataTemplate.name} />
                     </Col>
                 </Form.Group>
 
@@ -127,7 +120,7 @@ function MenuGroup({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <Form.Control as="textarea" rows="3" onChange={handleChange} />
+                        <Form.Control as="textarea" rows="3" onChange={handleChange} value={dataTemplate.description} />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} >
@@ -151,9 +144,9 @@ function MenuGroup({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <div className="switch d-inline m-r-10">
-                            <ImageUpload imageBase64={handleImageChange}/>
-                        </div>
+                            <div className="switch d-inline m-r-10">
+                                <ImageUpload ref={imageUploadRef} imageBase64={handleImageChange} defaultImage={dataTemplate.menu_image}/>
+                            </div>
 
                     </Col>
                 </Form.Group>
@@ -162,4 +155,4 @@ function MenuGroup({updateFormData,setFormValidate}) {
     );
 }
 
-export default MenuGroup;
+export default NavGroup;

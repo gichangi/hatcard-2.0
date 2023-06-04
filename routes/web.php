@@ -13,13 +13,18 @@ use Illuminate\Support\Facades\Route;
     |
     */
 
+
 Route::get('/', function () {
+    return Inertia('landing/LandingPage');
+});
+Route::get('/login', function () {
     return Inertia('auth/signin/SignIn');
 })->name('login');
 
 Route::get('/landing', function () {
     return Inertia('landing/LandingPage');
 });
+
 Route::get('/vsp', function () {
     return Inertia('landing/VspPage');
 });
