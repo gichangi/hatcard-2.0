@@ -27,6 +27,9 @@ Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::clas
 Route::middleware('auth:api')->group(function(){
     Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'index']);
     Route::post('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'store']);
+    Route::delete('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'destroy']);
+    Route::get('/menu-child-items/{id}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'childItems']);
+    Route::post('/menu-groups/order', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'orderItems']);
     Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
     Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
     Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);

@@ -38,3 +38,14 @@
     color: #fff;
     font-size: 1em;
 }
+/*.MuiDataGrid-main{
+    color:blue !important
+}*/
+
+.MuiDataGrid-main > div {
+    color:rgba(130, 130, 130, 0) !important
+
+}
+.MuiDataGrid-virtualScrollerContent{
+    color:rgb(83, 83, 83) !important
+}

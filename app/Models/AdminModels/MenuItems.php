@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class MenuItems extends Model
 {
-    use HasApiTokens;Use UsesUuid;
+    use HasApiTokens;Use UsesUuid; Use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -20,8 +22,9 @@ class MenuItems extends Model
     protected $keyType = 'string';
     public $incrementing = false;
     protected $table="menu_items";
+    protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name', 'description','menu_image', 'menu_type','menu_icon','menu_category','order_id', 'parent_id','menu_group_id', 'status', 'created_by','last_updated_by'
+        'name', 'description','menu_image','menu_icon','menu_type','menu_url','menu_category','order_id', 'parent_id', 'status', 'created_by','last_updated_by'
     ];
 
     /**

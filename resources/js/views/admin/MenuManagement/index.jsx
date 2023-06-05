@@ -5,17 +5,25 @@ import {useEffect, useState} from "react";
 import Navigation from "./Navigation";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
+import NavGroupOrder from "./Navigation/NavGroupOrder";
 
 function index(props) {
-    const [showMenuItemPage, setShowMenuItemPage]= useState(false);
-    const [menuDetails, setMenuDetails] = useState(null)
-    const pageSwitch = (menu_details = null) =>{
-        if (menu_details !== null){
-            setMenuDetails(menu_details)
+    const [menuDetails, setMenuDetails] = useState(null);
+    const [showGroupOrderPage,setShowGroupOrderPage]=useState(false);
+    const [showMenuGrid,setShowMenuGrid]=useState(true);
+    const pageSwitch = (menu_details = '') =>{
+        if(menu_details === 'group_order'){
+            setShowGroupOrderPage(!showGroupOrderPage);
+            setShowMenuGrid(false);
+        }else if (menu_details !== '' && menu_details !== 'group_order'){
+            setMenuDetails(menu_details);
+            setShowMenuGrid(!showMenuGrid);
+            setShowGroupOrderPage(false);
         }else{
-            setMenuDetails(null)
+            setShowMenuGrid(!showMenuGrid);
+            setShowGroupOrderPage(false);
         }
-        setShowMenuItemPage(!showMenuItemPage);
+
     }
     return (
         <Box
@@ -31,12 +39,16 @@ function index(props) {
         >
             <Paper elevation={0}>
                 {/*PageSwitch is used here to pass the menu details from the selected row*/}
-                {!showMenuItemPage &&
+                {showMenuGrid && !showGroupOrderPage  &&
                     <NavItemGrid pageSwitch={pageSwitch}  />
                 }
                 {/*Page switch allow to reset the display to show grid by passing null*/}
-                { showMenuItemPage &&
+                { !showMenuGrid && !showGroupOrderPage  &&
                     <Navigation menuDetails={menuDetails} pageSwitch={pageSwitch} />
+                }
+                {/*Show page to order groups*/}
+                { showGroupOrderPage &&
+                    <NavGroupOrder pageSwitch={pageSwitch}/>
                 }
             </Paper>
         </Box>

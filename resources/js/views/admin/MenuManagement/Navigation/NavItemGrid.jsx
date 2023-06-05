@@ -11,6 +11,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
 function NavItemGrid(props) {
     const[menuItems, setMenuItems] = useState([]);
@@ -18,9 +20,17 @@ function NavItemGrid(props) {
     const [rowSelection, setRowSelection] = useState({});
     //Or, optionally, you can get a reference to the underlying table instance
     const tableInstanceRef = useRef(null);
+    const MySwal = withReactContent(Swal);
 
+    const sweetAlertHandler = (alert) => {
+        MySwal.fire({
+            title: alert.title,
+            text: alert.text,
+            type: alert.type
+        });
+    };
 
-    useEffect(()=>{
+    const fetchMenuItems = () =>{
         let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
         if(localStore !== 1){
             let headers =  {
@@ -32,10 +42,11 @@ function NavItemGrid(props) {
                 setMenuItems(menus);
                 ///setMenuColumns(Object.keys(menus[0]))
             })
-        }else{
-
         }
+    }
 
+    useEffect(()=>{
+        fetchMenuItems();
     },[]);
 
 
@@ -89,6 +100,27 @@ function NavItemGrid(props) {
         console.log(tableInstanceRef.current.getState().sorting);
     }
 
+    const menuDelete = (row) =>{
+        console.log('row')
+        console.log(row)
+        console.log('row')
+        let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
+        if(localStore !== 1){
+            let headers =  {
+                "Accept": "application/json",
+                "Authorization": `Bearer ${localStore.token}`
+            };
+            apiFetch('delete',headers,'/api/menu-items',{id:row.id}).then(res=>{
+                if(res.data.message.type === 'success'){
+                    MySwal.fire('', `You have successfully deleted: ${row.name} !`, 'success').then(()=>{
+                        fetchMenuItems();
+                    })
+                }else{
+                    MySwal.fire('', 'An error occurred while saving the data', 'error');
+                }
+            })
+        }
+    }
 
 
 
@@ -137,41 +169,49 @@ function NavItemGrid(props) {
                         }}
                         enableRowActions
                         positionActionsColumn="last"
-                        renderRowActionMenuItems={({row, closeMenu}) => [
-                            <MenuItem key={1}
-                                      onClick={() => {
-                                          console.info('View Profile', row.original.name);
-                                          props.pageSwitch(row.original);
-                                          closeMenu();
-                                      }}
-                                      sx={{
-                                          width:'140px'
-                                      }}
-                            >
-                                <VisibilityIcon/>&nbsp; View
-                            </MenuItem>,
-                            <MenuItem key={2} onClick={() => {
-                                console.info('Remove', row);
-                                closeMenu();
-                            }}>
-                                <DeleteIcon/> &nbsp; Delete
-                            </MenuItem>,
-                            <MenuItem key={3} onClick={() => {
-                                console.info('Share', row);
-                                closeMenu();
-                            }}>
-                                {row.original.status === 'active' &&
-                                    <>
-                                        <DoDisturbIcon/>&nbsp; Disable
-                                    </>
-                                }
-                                {row.original.status !== 'active' &&
-                                    <>
-                                        <DoDisturbIcon/>&nbsp; Enable
-                                    </>
-                                }
-                            </MenuItem>
-                        ]}
+                        renderRowActionMenuItems={({row, closeMenu}) => {
+                            let dropDownItems = [
+                                <MenuItem key={1}
+                                          onClick={() => {
+                                              console.info('View Profile', row.original.name);
+                                              props.pageSwitch(row.original);
+                                              closeMenu();
+                                          }}
+                                          sx={{
+                                              width:'140px'
+                                          }}
+                                >
+                                    <VisibilityIcon/>&nbsp; View
+                                </MenuItem>,
+                                <MenuItem key={2} onClick={() => {
+                                    console.info('Remove', row);
+                                    menuDelete(row.original);
+                                    closeMenu();
+                                }}>
+                                    <DeleteIcon/> &nbsp; Delete
+                                </MenuItem>,
+                                <MenuItem key={3} onClick={() => {
+                                    closeMenu();
+                                }}>
+                                    {row.original.status === 'active' &&
+                                        <>
+                                            <DoDisturbIcon/>&nbsp; Disable
+                                        </>
+                                    }
+                                    {row.original.status !== 'active' &&
+                                        <>
+                                            <DoDisturbIcon/>&nbsp; Enable
+                                        </>
+                                    }
+                                </MenuItem>
+                            ];
+                            if(row.original.menu_category === 'system'){
+                                //Remove delete and disable from dropdown options
+                                dropDownItems.pop();
+                                dropDownItems.pop();
+                            }
+                            return dropDownItems;
+                        }}
                         initialState={{
                             pagination: {
                                 pageSize: 5,
@@ -202,6 +242,19 @@ function NavItemGrid(props) {
                                     }}
                                 >
                                     Menu
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    startIcon={<AddCircleIcon />}
+                                    onClick={() => {
+                                        props.pageSwitch('group_order');
+                                    }}
+                                    sx={{
+                                        fontWeight:'bolder',
+                                        backgroundColor:'rgb(15, 105, 125)'
+                                    }}
+                                >
+                                    Order Groups
                                 </Button>
                             </Box>
                         )}

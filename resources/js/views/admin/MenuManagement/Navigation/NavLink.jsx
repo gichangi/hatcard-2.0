@@ -1,10 +1,12 @@
 import Grid from "@mui/material/Grid";
 import {Col, Form, Row} from "react-bootstrap";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import ImageUpload from "../../../../components/Image/ImageUpload";
 import {FormHelperText, MenuItem, Select, Typography} from "@mui/material";
 import {apiFetch} from "../../../../assets/api/utils";
 import IconPicker from "../../../../components/IconPicker";
+import _ from "lodash";
+
 
 
 const validate = (values) => {
@@ -38,32 +40,36 @@ const validate = (values) => {
     if (values.menu_icon === null ||values.menu_icon === '' ) {
         errors.menu_icon = 'Required';
     }
-    console.log(values.menu_url)
-    console.log(errors)
-    console.log(values.menu_url)
     return errors;
 };
 
 
-function NavLink({updateFormData,setFormValidate}) {
+function NavLink({updateFormData,setFormValidate,formData}) {
+    const imageUploadRef = useRef(null);
     const [defaultSwitch, setDefaultSwitch] = useState(true);
     const [parentName, setParentName] = useState("");
     const [parentId,setParentId] = useState("");
+    const [menuItems,setMenuItems] = useState([]);
     const [menuGroups,setMenuGroups] = useState([]);
     const [tempVal,setTempVal] = useState("");
     const [formErrors, setFormErrors] = useState({});
     const [dataTemplate,setDataTemplate]=useState({
-        parent_id:null,
-        name:null,
-        description:null,
-        menu_icon:'fa fa-wrench',
-        menu_image:null,
-        menu_url:null,
-        menu_type:'item',
-        menu_category:'custom-sub-folder',
-        order_id:10,
-        status:'active'
+        data:{
+            parent_id:null,
+            name:null,
+            description:null,
+            menu_icon:'fa fa-wrench',
+            menu_image:null,
+            menu_url:null,
+            menu_type:'item',
+            menu_category:'custom',
+            order_id:1,
+            status:'active'
+        },
+        childItems: []
     });
+
+
 
     const updateFormHelperText = () =>{
         setFormErrors(validate(dataTemplate));
@@ -76,40 +82,62 @@ function NavLink({updateFormData,setFormValidate}) {
         updateFormData(dataTemplate);
     };
     const handleChange = (e)=>{
-        /*   dataTemplate = tempTT;*/
         e.preventDefault();
-        dataTemplate[e.target.id] = e.target.value === ''?null:e.target.value;
+        dataTemplate.data[e.target.id] = e.target.value === ''?null:e.target.value;
         setDataTemplate(dataTemplate);
         setTempVal(e.target.value);
 
         updateFormData(dataTemplate)
     }
     useEffect(()=>{
+        setFormValidate({"validate":validate,'updateFormHelperText':updateFormHelperText})
         let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
         let headers = {
             "Accept": "application/json",
             "Authorization": `Bearer ${autStore.token}`
         }
-        apiFetch('GET',headers,'/api/menu-groups',{}).then(res=>{
-            setMenuGroups(res.data.menu_groups);
-            setFormValidate({"validate":validate,'updateFormHelperText':updateFormHelperText})
+        apiFetch('GET',headers,'/api/menu-items',{}).then(res=>{
+            setMenuItems(res.data.menu_items)
         })
-
     },[]);
+    useEffect(()=>{
+        if(formData!=null) {
+            setDataTemplate({
+                data: {
+                    id: formData.id,
+                    name: formData.name,
+                    description: formData.description,
+                    menu_url: formData.menu_url,
+                    menu_image: formData.menu_image,
+                    menu_icon:formData.menu_icon,
+                    parent_id:formData.parent_id,
+                    menu_type: 'item',
+                    menu_category: formData.menu_category,
+                    order_id: formData.order_id,
+                    status: formData.status
+                },
+                childItems: []
+            });
+            setMenuGroups(menuItems);
+            setParentName(_.find(menuItems, {id:formData.parent_id}).name);
+            setParentId(formData.parent_id);
+        }
+
+    },[menuItems]);
 
     const handleImageChange = (base64) => {
         setTempVal(base64);
-        dataTemplate.menu_image = base64;
+        dataTemplate.data.menu_image = base64;
         updateFormData(dataTemplate)
     }
     const handleIconChange = (icon) =>{
         setTempVal(icon);
-        dataTemplate.menu_icon = icon;
+        dataTemplate.data.menu_icon = icon;
         updateFormData(dataTemplate)
     }
     const handleParentChange = (event,node) => {
         event.preventDefault();
-        dataTemplate.parent_id = node.props.value;
+        dataTemplate.data.parent_id = node.props.value;
         setParentName(node.props.name);
         setParentId(node.props.value);
         updateFormData(dataTemplate)
@@ -177,7 +205,7 @@ function NavLink({updateFormData,setFormValidate}) {
                             </Grid>
                             <Grid item xs={10} sx={{border:'solid 2px #eee',marginLeft:'12px',height:'50px'}}>
                                 <Typography variant="h5" component="div" gutterBottom sx={{color:'rgb(79, 79, 79)',paddingTop:'15px', fontSize:'14px'}}>
-                                    {dataTemplate.menu_icon}
+                                    {dataTemplate.data.menu_icon}
                                 </Typography>
                             </Grid>
                         </Grid>
@@ -195,7 +223,7 @@ function NavLink({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <Form.Control type="text" placeholder="URL" onChange={handleChange} />
+                        <Form.Control type="text" placeholder="URL" onChange={handleChange} value={dataTemplate.data.menu_url} />
                     </Col>
                 </Form.Group>
 
@@ -209,7 +237,7 @@ function NavLink({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <Form.Control type="text" placeholder="Title" onChange={handleChange} />
+                        <Form.Control type="text" placeholder="Title" onChange={handleChange} value={dataTemplate.data.name} />
                     </Col>
                 </Form.Group>
 
@@ -223,7 +251,7 @@ function NavLink({updateFormData,setFormValidate}) {
                         }
                     </Form.Label>
                     <Col sm={9}>
-                        <Form.Control as="textarea" rows="3" onChange={handleChange} />
+                        <Form.Control as="textarea" rows="3" onChange={handleChange} value={dataTemplate.data.description} />
                     </Col>
                 </Form.Group>
                 <Form.Group as={Row} >
@@ -237,7 +265,7 @@ function NavLink({updateFormData,setFormValidate}) {
                         </div>
                     </Col>
                 </Form.Group>
-                <Form.Group as={Row} controlId="menu_url">
+                <Form.Group as={Row} controlId="menu_icon">
                     <Form.Label as="legend" column sm={3}>
                         Image
                         {formErrors.menu_icon &&
@@ -248,7 +276,7 @@ function NavLink({updateFormData,setFormValidate}) {
                     </Form.Label>
                     <Col sm={9}>
                         <div className="switch d-inline m-r-10">
-                            <ImageUpload imageBase64={handleImageChange}/>
+                            <ImageUpload ref={imageUploadRef} imageBase64={handleImageChange} defaultImage={dataTemplate.data.menu_image}/>
                         </div>
 
                     </Col>

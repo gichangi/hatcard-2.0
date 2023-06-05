@@ -31,6 +31,7 @@ return new class extends Migration
             $table->uuid('created_by')->nullable();
             $table->uuid('last_updated_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

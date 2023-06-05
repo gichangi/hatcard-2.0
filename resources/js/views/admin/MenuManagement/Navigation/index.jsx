@@ -42,13 +42,13 @@ function Index({menuDetails,pageSwitch}) {
     const updateFormData = (childForm) =>{
         setTempVa(JSON.stringify(childForm))
         setFormData(childForm);
-        setEnableSubmit(formValidation(childForm))
+        setEnableSubmit(formValidation(childForm.data))
     }
 
     const handleSubmit = () =>{
         //Check if form data has null values if no null then submit if null show
         ///console.log(formData)
-        if(formValidation && Object.keys(formValidate.validate(formData)).length === 0){
+        if(formValidation && Object.keys(formValidate.validate(formData.data)).length === 0){
             let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
             let headers = {
                 "Accept": "application/json",
@@ -66,7 +66,7 @@ function Index({menuDetails,pageSwitch}) {
             })
         }else{
             formValidate.updateFormHelperText();
-            sweetAlertHandler({ title: 'Good job!', type: 'error', text: 'You clicked the button!' });
+            MySwal.fire('', 'Check form for missing/wrong data', 'error');
         }
 
     }
@@ -96,9 +96,9 @@ function Index({menuDetails,pageSwitch}) {
             case 'Group':
                 return <NavGroup  updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
             case 'Collapse':
-                return <NavCollapse updateFormData={updateFormData} setFormValidate={setFormValidate}/>
-            case 'Link':
-                return <NavLink updateFormData={updateFormData} setFormValidate={setFormValidate} />
+                return <NavCollapse updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
+            case 'Item':
+                return <NavLink updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
             default:
                 return null
         }
