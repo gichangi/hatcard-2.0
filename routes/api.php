@@ -33,4 +33,10 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
     Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
     Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);
+    Route::prefix('organisations')->group(function () {
+        Route::get('/',[\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class,'index']);
+        Route::post('/',[\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class,'store']);
+    });
+
+
 });

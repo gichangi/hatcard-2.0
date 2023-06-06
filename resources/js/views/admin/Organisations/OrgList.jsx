@@ -1,57 +1,38 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
-import {apiFetch} from "../../../../assets/api/utils";
-import {connect} from "react-redux";
-import MaterialReactTable from 'material-react-table';
+import {useEffect, useState, useMemo, useRef} from "react";
+import {apiFetch} from "../../../assets/api/utils";
 import {Col, Row} from "react-bootstrap";
-import Card from "../../../../components/Card/MainCard";
-import '../custom-css.css'
+import MaterialReactTable from "material-react-table";
+import {Button, MenuItem} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import Box from "@mui/material/Box";
-import {Button, IconButton, MenuItem, Tooltip} from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import withReactContent from "sweetalert2-react-content";
-import Swal from "sweetalert2";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-function NavItemGrid(props) {
-    const[menuItems, setMenuItems] = useState([]);
-    //optionally, you can manage any/all of the table state yourself
-    const [rowSelection, setRowSelection] = useState({});
-    //Or, optionally, you can get a reference to the underlying table instance
+
+function OrgList(props) {
+    const [organisations,setOrganisations] = useState([]);
     const tableInstanceRef = useRef(null);
-    const MySwal = withReactContent(Swal);
+    const [rowSelection, setRowSelection] = useState({});
 
-    const sweetAlertHandler = (alert) => {
-        MySwal.fire({
-            title: alert.title,
-            text: alert.text,
-            type: alert.type
-        });
-    };
 
-    const fetchMenuItems = () =>{
+    const fetchOrganisations = () =>{
         let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
         if(localStore !== 1){
             let headers =  {
                 "Accept": "application/json",
                 "Authorization": `Bearer ${localStore.token}`
             };
-            apiFetch('get',headers,'/api/menu-items',{}).then(res=>{
-                let menus = res.data.menu_items;
-                setMenuItems(menus);
-                ///setMenuColumns(Object.keys(menus[0]))
+            apiFetch('get',headers,'/api/organisations',{}).then(res=>{
+                setOrganisations(res.data.organisations);
             })
         }
     }
 
+
     useEffect(()=>{
-        fetchMenuItems();
+        fetchOrganisations();
     },[]);
-
-
-
-
 
     const columns = useMemo(
         () => [
@@ -60,25 +41,8 @@ function NavItemGrid(props) {
                 header: 'Name'
             },
             {
-                accessorKey: 'menu_type',
-                header: 'Type',
-                filterFn: 'equals',
-                filterSelectOptions: [
-                    { text: 'Group', value: 'Group' },
-                    { text: 'Collapse', value: 'Collapse' },
-                    { text: 'Item', value: 'Item' },
-                ],
-                filterVariant: 'select',
-            },
-            {
-                accessorKey: 'menu_category',
-                header: 'Category',
-                filterFn: 'equals',
-                filterSelectOptions: [
-                    { text: 'System', value: 'System' },
-                    { text: 'Custom', value: 'Custom' }
-                ],
-                filterVariant: 'select',
+                accessorKey: 'description',
+                header: 'Description'
             },
             {
                 accessorKey: 'status',
@@ -94,46 +58,13 @@ function NavItemGrid(props) {
     );
 
 
-
-    useEffect(() => {
-        //do something when the row selection changes
-    }, [rowSelection]);
-
-
-
-    const someEventHandler = () => {
-        //read the table state during an event from the table instance ref
-        console.log(tableInstanceRef.current.getState().sorting);
-    }
-
-    const menuDelete = (row) =>{
-        let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
-        if(localStore !== 1){
-            let headers =  {
-                "Accept": "application/json",
-                "Authorization": `Bearer ${localStore.token}`
-            };
-            apiFetch('delete',headers,'/api/menu-items',{id:row.id}).then(res=>{
-                if(res.data.message.type === 'success'){
-                    MySwal.fire('', `You have successfully deleted: ${row.name} !`, 'success').then(()=>{
-                        fetchMenuItems();
-                    })
-                }else{
-                    MySwal.fire('', 'An error occurred while saving the data', 'error');
-                }
-            })
-        }
-    }
-
-
-
     return (
         <div>
             <Row>
                 <Col>
                     <MaterialReactTable
                         columns={columns}
-                        data={menuItems}
+                        data={organisations}
                         enableColumnActions={false}
                         onRowSelectionChange={setRowSelection} //hoist internal state to your own state (optional)
                         state={{ rowSelection }} //manage your own state, pass it back to the table (optional)
@@ -188,7 +119,6 @@ function NavItemGrid(props) {
                                 </MenuItem>,
                                 <MenuItem key={2} onClick={() => {
                                     console.info('Remove', row);
-                                    menuDelete(row.original);
                                     closeMenu();
                                 }}>
                                     <DeleteIcon/> &nbsp; Delete
@@ -248,24 +178,7 @@ function NavItemGrid(props) {
                                         }
                                     }}
                                 >
-                                    Menu
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    startIcon={<AddCircleIcon />}
-                                    onClick={() => {
-                                        props.pageSwitch('group_order');
-                                    }}
-                                    sx={{
-                                        fontWeight:'bolder',
-                                        backgroundColor:'rgb(15, 105, 125)',
-                                        "&:hover": {
-                                            background: "rgb(153, 46, 98)",
-                                            color: "white"
-                                        }
-                                    }}
-                                >
-                                    Order Groups
+                                    Organisation
                                 </Button>
                             </Box>
                         )}
@@ -279,9 +192,4 @@ function NavItemGrid(props) {
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        reduxStore: state
-    };
-};
-export default connect(mapStateToProps)(NavItemGrid);
+export default OrgList;

@@ -44,5 +44,8 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/menu-management/menu', function () {
         return Inertia('admin/menu-management/menu');
     });
+    Route::get('/admin/organisations', function () {
+        return Inertia('admin/Organisations');
+    });
 });
 
