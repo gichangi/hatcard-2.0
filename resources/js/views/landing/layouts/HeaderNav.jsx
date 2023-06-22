@@ -63,6 +63,11 @@ function HeaderNav(props) {
                                     About
                                 </a>
                             </li>
+                            <li className="nav-item">
+                                <a className="nav-link page-scroll" href="/login" target="_blank">
+                                    Login
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

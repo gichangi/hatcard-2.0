@@ -78,7 +78,7 @@ function NavLink({updateFormData,setFormValidate,formData}) {
 
     const toggleHandler = () => {
         setDefaultSwitch((prevState) => !prevState);
-        dataTemplate.status =  defaultSwitch;
+        dataTemplate.data.status =  !defaultSwitch?"active":"inactive";
         updateFormData(dataTemplate);
     };
     const handleChange = (e)=>{
@@ -118,6 +118,7 @@ function NavLink({updateFormData,setFormValidate,formData}) {
                 },
                 childItems: []
             });
+            setDefaultSwitch(formData.status==='active'?true:false);
             setMenuGroups(menuItems);
             setParentName(_.find(menuItems, {id:formData.parent_id}).name);
             setParentId(formData.parent_id);
@@ -260,7 +261,7 @@ function NavLink({updateFormData,setFormValidate,formData}) {
                     </Form.Label>
                     <Col sm={9}>
                         <div className="switch d-inline m-r-10">
-                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={() => toggleHandler} />
+                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={toggleHandler} />
                             <Form.Label htmlFor="checked-default" className="cr" />
                         </div>
                     </Col>

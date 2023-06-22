@@ -34,9 +34,16 @@ Route::middleware('auth:api')->group(function(){
     Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
     Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);
     Route::prefix('organisations')->group(function () {
-        Route::get('/',[\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class,'index']);
-        Route::post('/',[\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class,'store']);
+        Route::controller(\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+        });
     });
-
+    Route::prefix('bi-platforms')->group(function () {
+        Route::controller(\App\Http\Controllers\AdminControllers\BIPlatforms\BIPlatformsController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+        });
+    });
 
 });

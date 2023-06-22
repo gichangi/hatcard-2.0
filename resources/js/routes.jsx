@@ -87,6 +87,11 @@ const routes = [
                 exact: true,
                 path: '/admin/organisation',
                 component: lazy(() => import('./views/admin/Organisations'))
+            },
+            {
+                exact: true,
+                path: '/admin/bi-platforms',
+                component: lazy(() => import('./views/admin/BI-Platforms'))
             }
         ]
 

@@ -47,5 +47,10 @@ Route::middleware('auth')->group(function(){
     Route::get('/admin/organisations', function () {
         return Inertia('admin/Organisations');
     });
+    Route::prefix('dashboard-platforms')->group(function () {
+        Route::get('/', function () {
+            return Inertia('admin/dashboard-platforms');
+        });
+    });
 });
 

@@ -43,6 +43,7 @@ function updateRowPosition(initialIndex, newIndex, rows) {
         }, Math.random() * 500 + 100); // simulate network latency
     });
 }
+
 const validate = (values) => {
     const errors = {};
     if(values.parent_id === null){
@@ -116,7 +117,7 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
 
     const toggleHandler = () => {
         setDefaultSwitch((prevState) => !prevState);
-        dataTemplate.data.status =  defaultSwitch;
+        dataTemplate.data.status =  !defaultSwitch?"active":"inactive";
         updateFormData(dataTemplate);
     };
     const handleChange = (e)=>{
@@ -165,6 +166,7 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
                 },
                 childItems: childItems
             });
+            setDefaultSwitch(formData.status==='active'?true:false);
             setParentName(_.find(menuGroups, {id:formData.parent_id}).name);
             setParentId(formData.parent_id);
             apiFetch('Get',headers,`/api/menu-child-items/${formData.id}`,{}).then(res =>{
@@ -295,7 +297,7 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
                     </Form.Label>
                     <Col sm={9}>
                         <div className="switch d-inline m-r-10">
-                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={() => toggleHandler} />
+                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={toggleHandler} />
                             <Form.Label htmlFor="checked-default" className="cr" />
                         </div>
                     </Col>

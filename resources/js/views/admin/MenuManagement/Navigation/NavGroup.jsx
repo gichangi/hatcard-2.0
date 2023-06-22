@@ -132,6 +132,7 @@ function NavGroup({updateFormData,setFormValidate,formData}) {
                 },
                 childItems: childItems
             });
+            setDefaultSwitch(formData.status==='active'?true:false);
             let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
             let headers = {
                 "Accept": "application/json",
@@ -151,7 +152,7 @@ function NavGroup({updateFormData,setFormValidate,formData}) {
 
     const toggleHandler = () => {
         setDefaultSwitch((prevState) => !prevState);
-        dataTemplate.status =  defaultSwitch;
+        dataTemplate.data.status =  !defaultSwitch?"active":"inactive";
         updateFormData(dataTemplate);
     };
     const handleChange = (e)=>{
@@ -204,7 +205,7 @@ function NavGroup({updateFormData,setFormValidate,formData}) {
                     </Form.Label>
                     <Col sm={9}>
                         <div className="switch d-inline m-r-10">
-                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={() => toggleHandler} />
+                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={toggleHandler} />
                             <Form.Label htmlFor="checked-default" className="cr" />
                         </div>
                     </Col>
