@@ -43,7 +43,12 @@ Route::middleware('auth:api')->group(function(){
         Route::controller(\App\Http\Controllers\AdminControllers\BIPlatforms\BIPlatformsController::class)->group(function () {
             Route::get('/', 'index');
             Route::post('/', 'store');
+            Route::post('/configs', 'saveConfiguration');
         });
     });
-
+    Route::prefix('tableau')->group(function () {
+        Route::controller(App\Http\Services\TableauServices\TableauServerServices::class)->group(function () {
+            Route::post('/check', 'credentialCheck');
+        });
+    });
 });

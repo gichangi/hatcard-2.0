@@ -22,8 +22,11 @@ class BIPlatforms extends Model
     public $incrementing = false;
     protected $table="bi_platforms";
     protected array $dates = ['deleted_at'];
+    protected  $hidden  = [
+        'config_json->credentials'
+    ];
     protected $fillable = [
-        'name', 'description','url','platform','platform_type','status','created_by','last_updated_by'
+        'name', 'description','base_url','platform','platform_type','config_json','status','config_status','created_by','last_updated_by'
     ];
 
     /**
@@ -33,7 +36,9 @@ class BIPlatforms extends Model
      */
     protected $casts = [
         'id' => 'string',
+        'config_json' => 'object'
     ];
+
     /**
      * The attributes that should be cast.
      *

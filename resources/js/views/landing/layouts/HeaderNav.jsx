@@ -64,7 +64,7 @@ function HeaderNav(props) {
                                 </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link page-scroll" href="/login" target="_blank">
+                                <a className="nav-link page-scroll" href="/login">
                                     Login
                                 </a>
                             </li>

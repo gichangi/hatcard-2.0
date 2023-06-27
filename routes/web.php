@@ -35,22 +35,25 @@ Route::middleware('auth')->group(function(){
     Route::get('/sample-page', function () {
         return Inertia('extra/SamplePage');
     });
-    Route::get('/admin/menu-management', function () {
-        return Inertia('admin/MenuManagement');
-    });
-    Route::get('/admin/users', function () {
-        return Inertia('admin/MenuManagement');
-    });
-    Route::get('/admin/menu-management/menu', function () {
-        return Inertia('admin/menu-management/menu');
-    });
-    Route::get('/admin/organisations', function () {
-        return Inertia('admin/Organisations');
-    });
-    Route::prefix('dashboard-platforms')->group(function () {
-        Route::get('/', function () {
-            return Inertia('admin/dashboard-platforms');
+    Route::prefix('admin')->group(function (){
+        Route::get('menu-management', function () {
+            return Inertia('admin/menu-management');
+        });
+        Route::get('users', function () {
+            return Inertia('admin/menu-management');
+        });
+        Route::get('menu-management/menu', function () {
+            return Inertia('admin/menu-management/menu');
+        });
+        Route::get('organisations', function () {
+            return Inertia('admin/organisations');
+        });
+        Route::prefix('bi-platforms')->group(function () {
+            Route::get('/', function () {
+                return Inertia('admin/bi-platforms');
+            });
         });
     });
+
 });
 

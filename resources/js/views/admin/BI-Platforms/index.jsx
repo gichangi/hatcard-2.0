@@ -4,6 +4,8 @@ import Paper from "@mui/material/Paper";
 import Navigation from "../MenuManagement/Navigation";
 import PlatformList from "./PlatformList";
 import PlatformAdd from "./PlatformAdd";
+import TableauServerConfig from "./Tableau/TableauServerConfig";
+import TableauOnlineConfig from "./Tableau/TableauOnlineConfig";
 
 
 function Index(props) {
@@ -50,7 +52,17 @@ function Index(props) {
                 setReComp(<PlatformList pageSwitch={pageSwitch}/>);
                 break;
             case 'config':
-                setReComp(<PlatformAdd details={rowData} pageSwitch={pageSwitch}/>);
+                switch (rowData.platform_type) {
+                    case 'tableau_server':
+                        setReComp(<TableauServerConfig configDetails={rowData} pageSwitch={pageSwitch}/>);
+                        break;
+                    case 'tableau_online':
+                        setReComp(<TableauOnlineConfig configDetails={rowData} pageSwitch={pageSwitch}/>);
+                        break;
+                    case 'power_bi_premium':
+                        setReComp(<TableauServerConfig configDetails={rowData} pageSwitch={pageSwitch}/>);
+                        break;
+                }
                 break;
             default:
                 setReComp(<PlatformList pageSwitch={pageSwitch}/>);

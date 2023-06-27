@@ -9,34 +9,8 @@ import {Button, FormHelperText, MenuItem, Select, Typography} from "@mui/materia
 import ReplyIcon from "@mui/icons-material/Reply";
 import Box from "@mui/material/Box";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import {BI_Platforms_List} from "../../../assets/const/Constants";
 
-const platforms = [
-    {
-        value:'power_bi',
-        name:'Power BI',
-        children:[
-            {
-                value:'power_bi_premium',
-                name:'Premium'
-            }
-        ]
-    },
-    {
-        value:'tableau',
-        name:'Tableau',
-        children:[
-            {
-                value:'server',
-                name:'Server'
-            },
-            {
-                value:'online',
-                name:'Online'
-            }
-
-        ]
-    },
-]
 
 const validate = (values) => {
     const errors = {};
@@ -57,8 +31,8 @@ const validate = (values) => {
     if (!values.platform_type) {
         errors.platform_type = 'Required';
     }
-    if (!values.url) {
-        errors.url = 'Required';
+    if (!values.base_url) {
+        errors.base_url = 'Required';
     }
     return errors;
 };
@@ -76,7 +50,9 @@ function PlatformAdd({pageSwitch, rowData}) {
         description: null,
         platform:null,
         platform_type:null,
-        status:'Active'
+        base_url:null,
+        status:'Active',
+        config_status:'Pending'
     });
 
     useEffect(()=>{
@@ -87,12 +63,13 @@ function PlatformAdd({pageSwitch, rowData}) {
                 description: rowData.description,
                 platform:rowData.platform,
                 platform_type:rowData.platform_type,
-                url:rowData.url,
-                status:rowData.status
+                base_url:rowData.base_url,
+                status:rowData.status,
+                config_status:rowData.config_status
             });
             setPlatform(rowData.platform);
 
-            setPlatformChildren((_.find(platforms,{value:rowData.platform}).children));
+            setPlatformChildren((_.find(BI_Platforms_List,{value:rowData.platform}).children));
             setPlatformType(rowData.platform_type);
             setDefaultSwitch(rowData.status==='Active'?true:false);
         }
@@ -122,7 +99,7 @@ function PlatformAdd({pageSwitch, rowData}) {
             case 'platform':
                 setPlatform(e.target.value);
                 setPlatformType('');
-                setPlatformChildren(_.find(platforms,{value:e.target.value}).children)
+                setPlatformChildren(_.find(BI_Platforms_List,{value:e.target.value}).children)
                 break;
             case 'platform_type':
                 setPlatformType(e.target.value);
@@ -235,7 +212,7 @@ function PlatformAdd({pageSwitch, rowData}) {
                                             if (selected.length === 0) {
                                                 return <>Select Platform</>;
                                             }
-                                            return _.find(platforms, {value:formData.platform}).name;
+                                            return _.find(BI_Platforms_List, {value:formData.platform}).name;
                                         }}
                                         MenuProps={{
                                             sx: {
@@ -259,7 +236,7 @@ function PlatformAdd({pageSwitch, rowData}) {
                                             },
                                         }}
                                     >
-                                        {platforms.map((p)=>(
+                                        {BI_Platforms_List.map((p)=>(
                                             <MenuItem value={p.value}>{p.name}</MenuItem>
                                         ))}
                                     </Select>
@@ -314,17 +291,17 @@ function PlatformAdd({pageSwitch, rowData}) {
                                     </Select>
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} controlId="url">
+                            <Form.Group as={Row} controlId="base_url">
                                 <Form.Label  column sm={3}>
                                     Url
-                                    {formErrors.url &&
+                                    {formErrors.base_url &&
                                         <>
-                                            <FormHelperText sx={{color:'red'}}>{formErrors.url}</FormHelperText>
+                                            <FormHelperText sx={{color:'red'}}>{formErrors.base_url}</FormHelperText>
                                         </>
                                     }
                                 </Form.Label>
                                 <Col sm={9}>
-                                    <Form.Control type="text" placeholder="URL" onChange={handleChange} value={formData.url} />
+                                    <Form.Control type="text" placeholder="URL" onChange={handleChange} value={formData.base_url} />
                                 </Col>
                             </Form.Group>
                             <Form.Group as={Row} >

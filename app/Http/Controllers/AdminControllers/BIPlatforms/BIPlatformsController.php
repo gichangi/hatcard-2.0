@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\AdminControllers\BIPlatforms;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\TableauServices\TableauServerServices;
 use App\Models\AdminModels\BIPlatforms;
 use App\Models\AdminModels\Organisation;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
@@ -14,10 +16,11 @@ class BIPlatformsController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index()
     {
-        //
-        $platforms = BIPlatforms::all();
+        //use the collection to hide credentials
+        $platforms = PlatformResource::collection(BIPlatforms::get()->toArray());
         return response()->json(['platforms'=> $platforms],200);
     }
 
@@ -52,6 +55,38 @@ class BIPlatformsController extends Controller
             return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
         }
     }
+
+    /**
+     * Display the specified resource.
+     */
+    public function saveConfiguration(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+
+
+            $platform = BIPlatforms::find($request->id);
+
+            $config =  json_decode(json_encode($request->config));
+
+            switch ($platform->platform_type){
+                case 'tableau_server':
+                    $tableau_service = new TableauServerServices();
+
+                    $config->credentials = $tableau_service->getCredentials($config)['credentials'];
+                    break;
+            }
+            $platform->config_status = 'Configured';
+            $platform->config_json = json_encode($config);
+            $platform->last_updated_by =Auth::id();
+            $platform->save();
+            return response()->json(['message'=>['type'=>'success'],200]);
+        }catch ( QueryException $e){
+            dd($e);
+            return response()->json(['message'=>['type'=>'error','message'=>$e],200]);
+        }
+
+    }
+
 
     /**
      * Display the specified resource.

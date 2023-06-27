@@ -15,10 +15,12 @@ return new class extends Migration
             $table->uuid('id');
             $table->string('name');
             $table->longText('description')->nullable();
-            $table->string('url');
+            $table->string('base_url');
             $table->string('platform'); //ie tableau
             $table->string('platform_type'); // public, server , hosted
-            $table->enum('status',['Active','Archived','Pending Configuration']);
+            $table->enum('status',['Active','Archived']);
+            $table->enum('config_status',['Pending','Configured']);
+            $table->json('config_json')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('last_updated_by')->nullable();
             $table->timestamps();

@@ -8,7 +8,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
+import _ from 'lodash';
 
 function PlatformList(props) {
     const[platforms,setPlatforms] = useState([]);
@@ -23,7 +23,9 @@ function PlatformList(props) {
                 "Authorization": `Bearer ${localStore.token}`
             };
             apiFetch('get',headers,'/api/bi-platforms',{}).then(res=>{
-                setPlatforms(res.data.platforms);
+                //Read only resource since we are receiving a collection
+                console.log(_.map(res.data.platforms, 'resource'))
+                setPlatforms(_.map(res.data.platforms, 'resource'));
             })
         }
     },[]);
@@ -38,7 +40,7 @@ function PlatformList(props) {
                 header: 'Description'
             },
             {
-                accessorKey: 'url',
+                accessorKey: 'base_url',
                 header: 'URL'
             },
             {
@@ -52,6 +54,10 @@ function PlatformList(props) {
             {
                 accessorKey: 'status',
                 header: 'Status',
+            },
+            {
+                accessorKey: 'config_status',
+                header: 'Configuration',
             },
             {
                 accessorFn: (row) => new Date(row.updated_at).toLocaleDateString('en-GB'), //alternate way
