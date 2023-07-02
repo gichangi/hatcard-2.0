@@ -65,6 +65,11 @@ const routes = [
         routes: [
             {
                 exact: true,
+                path: '/explore',
+                component: lazy(() => import('./views/menu-cards'))
+            },
+            {
+                exact: true,
                 path: '/sample-page',
                 component: lazy(() => import('./views/extra/SamplePage'))
             },
@@ -92,6 +97,11 @@ const routes = [
                 exact: true,
                 path: '/admin/bi-platforms',
                 component: lazy(() => import('./views/admin/BI-Platforms'))
+            },
+            {
+                exact: true,
+                path: '/admin/bi-dashboards',
+                component: lazy(() => import('./views/admin/BI-Dashboards'))
             }
         ]
 

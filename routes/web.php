@@ -31,10 +31,15 @@ Route::get('/vsp', function () {
 Route::get('/pms', function () {
     return Inertia('landing/ProgressiveModelPage');
 });
+
+
+
+
 Route::middleware('auth')->group(function(){
     Route::get('/sample-page', function () {
         return Inertia('extra/SamplePage');
     });
+
     Route::prefix('admin')->group(function (){
         Route::get('menu-management', function () {
             return Inertia('admin/menu-management');
@@ -45,6 +50,7 @@ Route::middleware('auth')->group(function(){
         Route::get('menu-management/menu', function () {
             return Inertia('admin/menu-management/menu');
         });
+
         Route::get('organisations', function () {
             return Inertia('admin/organisations');
         });
@@ -53,6 +59,13 @@ Route::middleware('auth')->group(function(){
                 return Inertia('admin/bi-platforms');
             });
         });
+        Route::prefix('bi-dashboards')->group(function () {
+            Route::get('/', function () {
+                return Inertia('admin/BI-Dashboards/index');
+            });
+        });
+
+
     });
 
 });

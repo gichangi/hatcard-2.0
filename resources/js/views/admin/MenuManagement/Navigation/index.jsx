@@ -76,7 +76,7 @@ function Index({menuDetails,pageSwitch}) {
     }
     const handleChange = (event,node) => {
         event.preventDefault();
-        setMenuComponent(node.props.name);
+        setMenuComponent(node.props.value);
         setMenuType(event.target.value);
         setMenuTypeName(node.props.name)
     };
@@ -92,6 +92,7 @@ function Index({menuDetails,pageSwitch}) {
     },[]);
 
     const switchMenuComponent = () =>{
+        console.log(menuComponent)
         switch (menuComponent){
             case 'Group':
                 return <NavGroup  updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
@@ -159,9 +160,9 @@ function Index({menuDetails,pageSwitch}) {
                                         },
                                     }}
                                 >
-                                    <MenuItem value={'group'}  name={'Group'}>Group</MenuItem>
-                                    <MenuItem value={'collapse'} name={'Collapse'}>Collapse</MenuItem>
-                                    <MenuItem value={'item'} name={'Link'}>Link</MenuItem>
+                                    <MenuItem value={'Group'}  name={'Group'}>Group</MenuItem>
+                                    <MenuItem value={'Collapse'} name={'Collapse'}>Collapse</MenuItem>
+                                    <MenuItem value={'Item'} name={'Link'}>Link</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

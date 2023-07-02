@@ -24,6 +24,7 @@ const AdminLayout = ({ children }) => {
   });
 
   useEffect(() => {
+
     if (windowSize.width > 992 && windowSize.width <= 1024 && layout !== 'horizontal') {
       dispatch({ type: actionType.COLLAPSE_MENU });
     }

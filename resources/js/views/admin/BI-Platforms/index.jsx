@@ -9,41 +9,9 @@ import TableauOnlineConfig from "./Tableau/TableauOnlineConfig";
 
 
 function Index(props) {
-    const [rowData, setRowData] = useState(null);
-    const [showList,setShowList]=useState(true);
-    const [renderItem, setRenderItem] = useState(1);
 
-/*    const checkoutSteps = [PlatformAdd,PlatformList]
-
-    const Checkout = ({step}) => {
-
-        const ToRender = checkoutSteps[step]
-
-        return (
-            <ToRender pageSwitch={pageSwitch}/>
-        )
-    }
-
-
-    const HeaderComponent = (comp = 1) => {
-        console.log('comp')
-        console.log(comp)
-        console.log('comp')
-        return (
-            <div>
-                <Checkout step={renderItem}  pageSwitch={pageSwitch}/>
-            </div>
-        )
-    }
-
-    useEffect(()=>{
-        HeaderComponent(0)
-    },[]);*/
 
     const pageSwitch = (action,rowData) =>{
-        console.log("ddddddddd");
-        console.log(rowData);
-        console.log("ddddddddd");
         switch (action) {
             case 'add':
                 setReComp(<PlatformAdd rowData={rowData} pageSwitch={pageSwitch}/>);

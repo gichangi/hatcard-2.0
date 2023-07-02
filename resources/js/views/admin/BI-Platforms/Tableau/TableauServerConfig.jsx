@@ -53,7 +53,7 @@ function TableauServerConfig({configDetails, pageSwitch}) {
         if (configDetails){
 
             if(configDetails.config_status !== 'Pending'){
-                setConfigJson(configDetails.config_json)
+                setConfigJson(JSON.parse(configDetails.config_json))
             }
             setPlatformType(_.find(_.find(BI_Platforms_List,{value:configDetails.platform}).children, {value:configDetails.platform_type}).name)
         }
@@ -149,6 +149,7 @@ function TableauServerConfig({configDetails, pageSwitch}) {
                                     fontWeight: '700',
                                 }}
                             >
+
                                 <Form.Group as={Row} controlId="base_url">
                                     <Form.Label className="form-label col-form-label col-sm-3" column sm={3}>
                                         Name

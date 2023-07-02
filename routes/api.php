@@ -22,7 +22,7 @@ Route::post('/register', [\App\Http\Controllers\UserManagement\UserController2::
 Route::post('/login', [\App\Http\Controllers\UserManagement\AuthController::class, 'login']);
 Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::class, 'all_users']);
 
-
+    Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
 
 Route::middleware('auth:api')->group(function(){
     Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'index']);
@@ -30,8 +30,9 @@ Route::middleware('auth:api')->group(function(){
     Route::delete('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'destroy']);
     Route::get('/menu-child-items/{id}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'childItems']);
     Route::post('/menu-groups/order', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'orderItems']);
-    Route::get('/menu-tree', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
-    Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
+    Route::get('/menu-tree/{id?}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
+    Route::get('/menu-cards/{id?}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationCard']);
+
     Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);
     Route::prefix('organisations')->group(function () {
         Route::controller(\App\Http\Controllers\AdminControllers\Organisation\OrganisationController::class)->group(function () {
@@ -41,7 +42,7 @@ Route::middleware('auth:api')->group(function(){
     });
     Route::prefix('bi-platforms')->group(function () {
         Route::controller(\App\Http\Controllers\AdminControllers\BIPlatforms\BIPlatformsController::class)->group(function () {
-            Route::get('/', 'index');
+            Route::get('/{platform_type?}/{config_status?}', 'index');
             Route::post('/', 'store');
             Route::post('/configs', 'saveConfiguration');
         });
@@ -49,6 +50,8 @@ Route::middleware('auth:api')->group(function(){
     Route::prefix('tableau')->group(function () {
         Route::controller(App\Http\Services\TableauServices\TableauServerServices::class)->group(function () {
             Route::post('/check', 'credentialCheck');
+            Route::post('/projects', 'getProjects');
+            Route::post('/workbooks', 'fetchWorkbooks');
         });
     });
 });

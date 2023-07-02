@@ -4,15 +4,24 @@ import { Link } from 'react-router-dom';
 
 import navigation from '../../../menu-items';
 import { BASE_TITLE, BASENAME } from '../../../config/constant';
+import {useLocation, withRouter} from "react-router-dom";
+
 
 const Breadcrumb = () => {
+  let { state } = useLocation();
   const [main, setMain] = useState([]);
   const [item, setItem] = useState([]);
+  const [showBreadcrumb, setShowBreadcrumb] = useState(true);
 
   useEffect(() => {
+    console.log('hhd')
+    console.log(item.type)
+    console.log(state)
+    console.log('hhd')
     navigation.items.map((item, index) => {
       if (item.type && item.type === 'group') {
         getCollapse(item, index);
+        setShowBreadcrumb(false)
       }
       return false;
     });
@@ -41,7 +50,7 @@ const Breadcrumb = () => {
   if (main && main.type === 'collapse') {
     mainContent = (
       <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-        <Link to="#">{main.title}</Link>
+        <Link to="#">{main.title} ss</Link>
       </ListGroup.Item>
     );
   }
@@ -50,32 +59,37 @@ const Breadcrumb = () => {
     title = item.title;
     itemContent = (
       <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-        <Link to="#">{title}</Link>
+        <Link to="#">{title} </Link>
       </ListGroup.Item>
     );
 
     if (item.breadcrumbs !== false) {
       breadcrumbContent = (
-        <div className="page-header">
-          <div className="page-block">
-            <div className="row align-items-center">
-              <div className="col-md-12">
-                <div className="page-header-title">
-                  {/*<h5 className="m-b-10">{title}</h5>*/}
+          <>
+            {!state &&
+                <div className="page-header">
+                  <div className="page-block">
+                    <div className="row align-items-center">
+                      <div className="col-md-12">
+                        <div className="page-header-title">
+                          {/*<h5 className="m-b-10">{title}</h5>*/}
+                        </div>
+
+                        <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
+                          <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
+                            <Link to="/">
+                              <i className="feather icon-home"/>
+                            </Link>
+                          </ListGroup.Item>
+                          {mainContent}
+                          {itemContent}
+                        </ListGroup>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
-                  <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-                    <Link to="/">
-                      <i className="feather icon-home" />
-                    </Link>
-                  </ListGroup.Item>
-                  {mainContent}
-                  {itemContent}
-                </ListGroup>
-              </div>
-            </div>
-          </div>
-        </div>
+            }
+          </>
       );
     }
 

@@ -17,10 +17,10 @@ class BIPlatformsController extends Controller
      * Display a listing of the resource.
      */
 
-    public function index()
+    public function index(String $platform_type= '%' , String $config_status='%')
     {
         //use the collection to hide credentials
-        $platforms = PlatformResource::collection(BIPlatforms::get()->toArray());
+        $platforms = PlatformResource::collection(BIPlatforms::where([['platform_type','Like',$platform_type],['config_status','Like',$config_status]])->get()->toArray());
         return response()->json(['platforms'=> $platforms],200);
     }
 

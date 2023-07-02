@@ -8,7 +8,9 @@
         public function toArray($request): array
         {
             if (isset($this['config_json'])){
-                $this['config_json']->credentials = null;
+                if(isset($this['config_json']->credentials)){
+                    $this['config_json']->credentials = null;
+                }
             }
             return (array) $this;
         }

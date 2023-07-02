@@ -119,15 +119,27 @@ class MenuItemController extends Controller
         DB::commit();
         return response()->json(['message' => ['type'=>'success']], 200);
     }
+    //Provide nested object for navigation menu
+    public function navigationCard(string $id = null): \Illuminate\Http\JsonResponse
+    {
 
+        //pull all menu items
+        $MenuTree = MenuItems::with('children')
+            ->select('id','name as title','menu_type as type','description','menu_category as category','menu_url as url','menu_icon as icon','order_id','menu_image as image')
+            ->where('parent_id',$id)
+            ->orderBy('order_id')
+            ->get();
+        return response()->json(['navigation_menu_items' => $MenuTree], 200);
+    }
 
     //Provide nested object for navigation menu
-    public function navigationTree(): \Illuminate\Http\JsonResponse
+    public function navigationTree(string $id = null): \Illuminate\Http\JsonResponse
     {
+
         //pull all menu items
         $MenuTree = MenuItems::with('children')
             ->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','order_id')
-            ->where('parent_id',null)
+            ->where('parent_id',$id)
             ->orderBy('order_id')
             ->get();
         return response()->json(['navigation_menu_items' => $MenuTree], 200);

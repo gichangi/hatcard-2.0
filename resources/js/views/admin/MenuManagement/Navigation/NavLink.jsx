@@ -14,9 +14,11 @@ const validate = (values) => {
     const errors = {};
 
     if(values.menu_url !== null){
-        if(!httpRegex.test(values.menu_url)){
+/*        if(!httpRegex.test(values.menu_url)){
             errors.menu_url = 'Enter a valid link URL';
-        }
+        }*/
+        //errors.menu_url = 'Enter a valid link URL';
+
     }else if(values.menu_url === null){
         errors.menu_url = 'Link URL is required';
     }
@@ -26,8 +28,8 @@ const validate = (values) => {
         errors.parent = 'Select valid parent'
     }
     if (!values.name) {
-        errors.name = 'Required';
-    } else if (values.name.length > 10) {
+        errors.name = 'Requiredx';
+    } else if (values.name.length > 200) {
         errors.name = 'Must be 200 characters or less';
     }
 
@@ -96,35 +98,39 @@ function NavLink({updateFormData,setFormValidate,formData}) {
             "Accept": "application/json",
             "Authorization": `Bearer ${autStore.token}`
         }
+        let menu_items;
         apiFetch('GET',headers,'/api/menu-items',{}).then(res=>{
-            setMenuItems(res.data.menu_items)
+            console.log('res.data.menu_items')
+            console.log(res.data.menu_items)
+            console.log('res.data.menu_items')
+            menu_items = res.data.menu_items;
+            setMenuItems(res.data.menu_items);
+            setMenuGroups(res.data.menu_items);
+        }).then(()=>{
+            if(formData!=null) {
+                setDataTemplate({
+                    data: {
+                        id: formData.id,
+                        name: formData.name,
+                        description: formData.description,
+                        menu_url: formData.menu_url,
+                        menu_image: formData.menu_image,
+                        menu_icon:formData.menu_icon,
+                        parent_id:formData.parent_id,
+                        menu_type: 'item',
+                        menu_category: formData.menu_category,
+                        order_id: formData.order_id,
+                        status: formData.status
+                    },
+                    childItems: []
+                });
+                setDefaultSwitch(formData.status==='active'?true:false);
+
+                setParentName(_.find(menu_items, {id:formData.parent_id}).name);
+                setParentId(formData.parent_id);
+            }
         })
     },[]);
-    useEffect(()=>{
-        if(formData!=null) {
-            setDataTemplate({
-                data: {
-                    id: formData.id,
-                    name: formData.name,
-                    description: formData.description,
-                    menu_url: formData.menu_url,
-                    menu_image: formData.menu_image,
-                    menu_icon:formData.menu_icon,
-                    parent_id:formData.parent_id,
-                    menu_type: 'item',
-                    menu_category: formData.menu_category,
-                    order_id: formData.order_id,
-                    status: formData.status
-                },
-                childItems: []
-            });
-            setDefaultSwitch(formData.status==='active'?true:false);
-            setMenuGroups(menuItems);
-            setParentName(_.find(menuItems, {id:formData.parent_id}).name);
-            setParentId(formData.parent_id);
-        }
-
-    },[menuItems]);
 
     const handleImageChange = (base64) => {
         setTempVal(base64);
