@@ -133,14 +133,16 @@ class TableauServerServices extends Controller
         try{
             $server = BIPlatforms::find($id);
             $ip = gethostbyname(parse_url($server->base_url, PHP_URL_HOST));
+            $server_config = json_decode($server['config_json']);
+
             $client = new Client([
                 'base_uri' => $server->base_url,
                 'verify' => false
             ]);
-            $url = $server->proxy.'/'.$server->base_url.'/trusted?'
-                . 'username=' . $server->username
+            $url = $server_config->proxy.'/'.$server->base_url.'/trusted?'
+                . 'username=' . $server_config->username
                 . '&server='.$ip
-                . '&target_site=' . $server->target_site;
+                . '&target_site=' . $server_config->target_site;
 
             $response = $client->request('POST', $url, [
                 'headers' => [
@@ -205,55 +207,8 @@ class TableauServerServices extends Controller
 
 
 
-    public function getWorkbooks($id){
-        error_log('Started');
-        try{
-            $server = BIPlatforms::find($id);
-            //$server = TableauConfigurations::all()->where('server_id','=',$id)->first();
-            $server_config = json_decode($server['config_json']);
 
-
-            $site_id=  $server_config->credentials->site->id;
-            $token= $server_config->credentials->token;
-            $api_url=$server_config->base_url.$server_config->uri_prefix;
-            $base_url=$server_config->base_url;
-
-            $url = $api_url
-                . '/sites'
-                . '/' . $site_id
-                . '/workbooks?pageSize=1000';
-            error_log('workbooks fetch start');
-            $fetch_workbooks_response = $this->get_response($server_config->base_url,$url,$token,"Workbooks");
-            error_log('workbooks fetch end');
-            if($fetch_workbooks_response['message']["status"]=="error"){
-                return response($fetch_workbooks_response);
-            }
-            $fetch_workbooks=$fetch_workbooks_response['response']['workbooks']->workbook;
-
-            if(sizeof($fetch_workbooks)>=1){
-                $projects=array();
-                $workbooks=array();
-                $views=array();
-                foreach($fetch_workbooks as $record){
-                    $key = array_search($record->project->id, array_column($projects, 'id'));
-                    if($key === false){
-                        array_push($projects,array("name"=>$record->project->name,"id"=>$record->project->id));
-                    }
-                }
-                return response()->json(['message'=>['type'=>'success','projects'=>$projects],200]);
-
-               // return response(["status"=>"success","message"=>"".json_encode(compact('projects')).""]);
-            }else{
-                return response(["status"=>"error","message"=>"Error has occurred during fetch of tableau resources"]);
-            }
-        }catch(\Exception $e){
-            error_log('Request Exception: '.$e );
-            $message=array("status"=>"error","message"=>"".$e->getMessage()."");
-            return response(["status"=>"error","message"=>"".json_encode(compact('message')).""]);
-        }
-
-    }
-    function getWorkbookViews($base_url,$api_url,$site_id,$token,$workbook_id,$project_id){
+    function getWorkbookViews2($base_url,$api_url,$site_id,$token,$workbook_id,$project_id){
         $message=array("status"=>"error","message"=>"Error occurred during fetch of workbook views.");
         $url = $api_url
             . '/sites'
@@ -322,55 +277,102 @@ class TableauServerServices extends Controller
 
 
 
-    public function fetchWorkbooks(Request $request){
-       dd($request);
-    }
 
     //Tableau Resources
-    public function getProjects(Request $request){
-        error_log('Started');
+    public function getProjects(Request $request): \Illuminate\Http\JsonResponse
+    {
+        error_log('Started fetching projects');
         try{
             $server = BIPlatforms::find($request->id);
-            //$server = TableauConfigurations::all()->where('server_id','=',$id)->first();
             $server_config = json_decode($server['config_json']);
-
-            $site_id=  $server_config->credentials->site->id;
-            $token= $server_config->credentials->token;
+            $credentials = $this->getCredentials($server_config)['credentials'];
+            $site_id=  $credentials->site->id;
+            $token= $credentials->token;
             $api_url=$server_config->base_url.$server_config->uri_prefix;
-            $base_url=$server_config->base_url;
 
             $url = $api_url
                 . '/sites'
                 . '/' . $site_id
-                . '/workbooks?pageSize=1000';
-            error_log('workbooks fetch start');
-            $fetch_workbooks_response = $this->get_response($server_config->base_url,$url,$token,"Workbooks");
-            error_log('workbooks fetch end');
-            if($fetch_workbooks_response['message']["status"]=="error"){
-                return response($fetch_workbooks_response);
-            }
-            $fetch_workbooks=$fetch_workbooks_response['response']['workbooks']->workbook;
+                . '/projects?pageSize=1000';
+            error_log('projects fetch start');
+            $projects_response = $this->get_response($server_config->base_url,$url,$token,"Projects");
 
-            if(sizeof($fetch_workbooks)>=1){
-                $projects=array();
-                $workbooks=array();
-                $views=array();
-                foreach($fetch_workbooks as $record){
-                    $key = array_search($record->project->id, array_column($projects, 'id'));
-                    if($key === false){
-                        array_push($projects,array("name"=>$record->project->name,"id"=>$record->project->id));
-                    }
-                }
-                return response()->json(['message'=>['type'=>'success','projects'=>$projects],200]);
-
-                // return response(["status"=>"success","message"=>"".json_encode(compact('projects')).""]);
+            if($projects_response['message']["status"]=="error"){
+                return response()->json(['message'=>['type'=>'error','message'=>$projects_response['message']],200]);
             }else{
-                return response(["status"=>"error","message"=>"Error has occurred during fetch of tableau resources"]);
+                return response()->json(['message'=>['type'=>'success','projects'=>$projects_response['response']['projects']->project],200]);
             }
         }catch(\Exception $e){
             error_log('Request Exception: '.$e );
-            $message=array("status"=>"error","message"=>"".$e->getMessage()."");
-            return response(["status"=>"error","message"=>"".json_encode(compact('message')).""]);
+            return response()->json(['message'=>['type'=>'error','message'=>$e->getMessage()],200]);
+        }
+    }
+
+    //Get workbooks using both server id and projects
+    public function getWorkbooks(Request $request): \Illuminate\Http\JsonResponse
+    {
+        error_log('Started fetching projects');
+        try{
+            $server = BIPlatforms::find($request->id);
+            $server_config = json_decode($server['config_json']);
+            $credentials = $this->getCredentials($server_config)['credentials'];
+            $site_id=  $credentials->site->id;
+            $token= $credentials->token;
+            $api_url=$server_config->base_url.$server_config->uri_prefix;
+            $project_filter = '';
+            //get all if no project name provided
+            if(isset($request->project)){
+                $project_filter = '&filter=projectName:eq:'.$request->project;
+            }
+            $url = $api_url
+                . '/sites'
+                . '/' . $site_id
+                . '/workbooks?pageSize=1000'
+                .$project_filter
+            ;
+            error_log('workbooks fetch start');
+            $workbooks_response = $this->get_response($server_config->base_url,$url,$token,"Workbooks");
+
+            if($workbooks_response['message']["status"]=="error"){
+                return response()->json(['message'=>['type'=>'error','message'=>$workbooks_response['message']],200]);
+            }else{
+                return response()->json(['message'=>['type'=>'success','workbooks'=>$workbooks_response['response']['workbooks']->workbook],200]);
+            }
+        }catch(\Exception $e){
+            error_log('Request Exception: '.$e );
+            return response()->json(['message'=>['type'=>'error','message'=>$e->getMessage()],200]);
+        }
+    }
+
+    //Get workbooks using both server id and projects
+    public function getWorkbookViews(Request $request): \Illuminate\Http\JsonResponse
+    {
+        error_log('Started fetching projects');
+        try{
+            $server = BIPlatforms::find($request->id);
+            $server_config = json_decode($server['config_json']);
+            $credentials = $this->getCredentials($server_config)['credentials'];
+            $site_id=  $credentials->site->id;
+            $token= $credentials->token;
+            $api_url=$server_config->base_url.$server_config->uri_prefix;
+            $url = $api_url
+                . '/sites'
+                . '/' . $site_id
+                . '/workbooks'
+                . '/' . $request->workbook
+                . '/views';
+
+            error_log('views fetch start');
+            $views_response = $this->get_response($server_config->base_url,$url,$token,"Workbooks");
+
+            if($views_response['message']["status"]=="error"){
+                return response()->json(['message'=>['type'=>'error','message'=>$views_response['message']],200]);
+            }else{
+                return response()->json(['message'=>['type'=>'success','views'=>$views_response['response']['views']->view],200]);
+            }
+        }catch(\Exception $e){
+            error_log('Request Exception: '.$e );
+            return response()->json(['message'=>['type'=>'error','message'=>$e->getMessage()],200]);
         }
     }
 
@@ -379,8 +381,42 @@ class TableauServerServices extends Controller
 
 
 
-
-
+    public function getViewImage(Request $request): \Illuminate\Http\JsonResponse
+    {
+        error_log('Started fetching projects');
+        try{
+            $server = BIPlatforms::find($request->id);
+            $server_config = json_decode($server['config_json']);
+            $credentials = $this->getCredentials($server_config)['credentials'];
+            $site_id=  $credentials->site->id;
+            $token= $credentials->token;
+            $url = $server_config->base_url.$server_config->uri_prefix.'/sites/'.$site_id."/views/".$request->view."/image";
+            // preview image
+            $client = new Client([
+                'base_uri' => $server_config->base_url,
+                'verify' => false
+            ]);
+            try{
+                $response = $client->request('GET', $url, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'X-Tableau-auth' => $token,
+                    ],
+                ]);
+                if ($response->getStatusCode() === 200) {
+                    $image = base64_encode($response->getBody());
+                    return response()->json(['message'=>['type'=>'success','image'=>'data:image/png;base64,'.$image],200]);
+                }else{
+                    return response()->json(['message'=>['type'=>'error','message'=>"error occurred while fetching the image"],200]);
+                }
+            }catch(\GuzzleHttp\Exception\RequestException $e){
+                return response()->json(['message'=>['type'=>'error','message'=>$e->getMessage()],200]);
+            }
+        }catch(\Exception $e){
+            error_log('Request Exception: '.$e );
+            return response()->json(['message'=>['type'=>'error','message'=>$e->getMessage()],200]);
+        }
+    }
 
 
 

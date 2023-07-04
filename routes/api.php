@@ -47,11 +47,20 @@ Route::middleware('auth:api')->group(function(){
             Route::post('/configs', 'saveConfiguration');
         });
     });
+    Route::prefix('bi-dashboards')->group(function () {
+        Route::controller(\App\Http\Controllers\AdminControllers\BIDashboards\BIDashboardsController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+        });
+    });
+
     Route::prefix('tableau')->group(function () {
         Route::controller(App\Http\Services\TableauServices\TableauServerServices::class)->group(function () {
             Route::post('/check', 'credentialCheck');
             Route::post('/projects', 'getProjects');
-            Route::post('/workbooks', 'fetchWorkbooks');
+            Route::post('/workbooks', 'getWorkbooks');
+            Route::post('/workbook-views', 'getWorkbookViews');
+            Route::post('/workbook-view-image', 'getViewImage');
         });
     });
 });

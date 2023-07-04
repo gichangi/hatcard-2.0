@@ -17,6 +17,7 @@
         "@fonticonpicker/react-fonticonpicker": "^1.2.0",
         "@inertiajs/react": "^1.0.3",
         "@mui/icons-material": "^5.11.16",
+        "@mui/lab": "^5.0.0-alpha.115",
         "@mui/material": "^5.12.2",
         "@mui/x-data-grid-generator": "^6.6.0",
         "@mui/x-data-grid-pro": "^6.6.0",

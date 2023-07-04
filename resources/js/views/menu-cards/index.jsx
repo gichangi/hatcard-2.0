@@ -26,6 +26,7 @@ function Index(props) {
         console.log(state);
         apiFetch('get',{},`/api/menu-cards/${state.id}`,{}).then(res=>{
             console.log(res.data.navigation_menu_items)
+            setCardItems(res.data.navigation_menu_items)
         })
     },[props])
 

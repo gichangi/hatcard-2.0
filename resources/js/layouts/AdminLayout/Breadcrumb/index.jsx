@@ -14,10 +14,6 @@ const Breadcrumb = () => {
   const [showBreadcrumb, setShowBreadcrumb] = useState(true);
 
   useEffect(() => {
-    console.log('hhd')
-    console.log(item.type)
-    console.log(state)
-    console.log('hhd')
     navigation.items.map((item, index) => {
       if (item.type && item.type === 'group') {
         getCollapse(item, index);

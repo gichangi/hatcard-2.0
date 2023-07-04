@@ -26,9 +26,8 @@ function List(props) {
                 "Authorization": `Bearer ${localStore.token}`
             };
             apiFetch('get',headers,'/api/bi-dashboards',{}).then(res=>{
-                //Read only resource since we are receiving a collection
-                console.log(_.map(res.data.dashboards, 'resource'))
-                setDashboards(_.map(res.data.dashboards, 'resource'));
+                console.log(res.data.dashboards)
+                setDashboards(res.data.dashboards);
             })
         }
     },[]);
@@ -43,11 +42,11 @@ function List(props) {
                 header: 'Description'
             },
             {
-                accessorKey: 'parent',
+                accessorKey: 'parent_menu_uid',
                 header: 'Parent'
             },
             {
-                id: 'server',
+                accessorKey: 'server_uid',
                 header: 'Server'
             },
             {

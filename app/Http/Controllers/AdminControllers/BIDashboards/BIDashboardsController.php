@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers\AdminControllers\BIDashboards;
 
+use App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController;
 use App\Http\Controllers\Controller;
 use App\Models\AdminModels\BIDashboards;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use Throwable;
 
 class BIDashboardsController extends Controller
 {
@@ -14,8 +19,8 @@ class BIDashboardsController extends Controller
     public function index()
     {
         //Fetch all dashboards
-        $dashbords = BIDashboards::all();
-        return response()->json(['dashboards'=> $dashbords],200);
+        $dashboards = BIDashboards::all();
+        return response()->json(['dashboards'=> $dashboards],200);
     }
 
     /**
@@ -31,7 +36,43 @@ class BIDashboardsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $id = array_key_exists("id",$request->all())?$request->id:null;
+            $dashboard = BIDashboards::updateOrCreate(['id'=>$id],$request->all());
+            //if item id is null then add created by else only update last updated by
+            if($id == null) {
+                $dashboard->created_by = Auth::id();
+            }
+            $dashboard->last_updated_by =Auth::id();
+            $dashboard->save();
+
+            if($dashboard->save()){
+                $content = new Request();
+                $content->data = [
+                    "id" => $dashboard->id,
+                    "name" => $request->name,
+                    "description" => $request->description,
+                    "menu_url" =>  "/dashboards/view/",
+                    "menu_image"=> $request->config_json['preview_image'],
+                    "menu_icon"=> "fa fa-bar-chart",
+                    "parent_id"=>$request->parent_menu_uid,
+                    "menu_type" => 'item',
+                    "menu_category" => "dashboard",
+                    "order_id" => 0,
+                    "status" => 'active'
+                ];
+                $content->childItems = [];
+
+
+
+                $menuController = new MenuItemController();
+                $menuController->store($content);
+            }
+            dd($dashboard);
+            return response()->json(['message' => ['type'=>'success']], 200);
+        }catch (QueryException $e){
+            return response()->json(["message"=>["type"=>"errord","message"=>$e]],200);
+        }
     }
 
     /**

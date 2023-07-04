@@ -102,6 +102,11 @@ const routes = [
                 exact: true,
                 path: '/admin/bi-dashboards',
                 component: lazy(() => import('./views/admin/BI-Dashboards'))
+            },
+            {
+                exact: true,
+                path: '/dashboards/view',
+                component: lazy(() => import('./views/dashboards/Tableau/ViewTableauServer'))
             }
         ]
 
