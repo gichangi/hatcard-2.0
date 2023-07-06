@@ -16,10 +16,12 @@ class BIDashboardsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(string $id = null)
     {
         //Fetch all dashboards
-        $dashboards = BIDashboards::all();
+
+        $dashboards = BIDashboards::where('id','like','%'.$id.'%')
+            ->get();
         return response()->json(['dashboards'=> $dashboards],200);
     }
 
@@ -64,11 +66,9 @@ class BIDashboardsController extends Controller
                 $content->childItems = [];
 
 
-
                 $menuController = new MenuItemController();
                 $menuController->store($content);
             }
-            dd($dashboard);
             return response()->json(['message' => ['type'=>'success']], 200);
         }catch (QueryException $e){
             return response()->json(["message"=>["type"=>"errord","message"=>$e]],200);
@@ -78,9 +78,10 @@ class BIDashboardsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(BIDashboards $bIDashboards)
+    public function show(string $id)
     {
-        //
+        $dashboard = BIDashboards::find($id);
+        return response()->json(['dashboard'=> $dashboard],200);
     }
 
     /**

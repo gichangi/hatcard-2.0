@@ -5,6 +5,7 @@ namespace App\Models\AdminModels;
 use App\Http\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Passport\HasApiTokens;
 
@@ -25,7 +26,7 @@ class BIDashboards extends Model
         'config_json->credentials'
     ];
     protected $fillable = [
-        'name', 'description','parent_menu_uid','server_uid','config_json','status','created_by','last_updated_by'
+        'name', 'description','parent_menu_uid','dashboard_type','server_uid','config_json','status','created_by','last_updated_by'
     ];
 
     /**
@@ -43,4 +44,8 @@ class BIDashboards extends Model
      *
      * @var array<string, string>
      */
+    public function server():HasOne
+    {
+        return $this->hasOne(BIPlatforms::class,'id','server_uid');
+    }
 }

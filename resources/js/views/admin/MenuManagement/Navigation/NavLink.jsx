@@ -100,9 +100,6 @@ function NavLink({updateFormData,setFormValidate,formData}) {
         }
         let menu_items;
         apiFetch('GET',headers,'/api/menu-items',{}).then(res=>{
-            console.log('res.data.menu_items')
-            console.log(res.data.menu_items)
-            console.log('res.data.menu_items')
             menu_items = res.data.menu_items;
             setMenuItems(res.data.menu_items);
             setMenuGroups(res.data.menu_items);

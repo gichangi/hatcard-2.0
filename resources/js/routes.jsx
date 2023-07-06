@@ -106,7 +106,7 @@ const routes = [
             {
                 exact: true,
                 path: '/dashboards/view',
-                component: lazy(() => import('./views/dashboards/Tableau/ViewTableauServer'))
+                component: lazy(() => import('./views/dashboards'))
             }
         ]
 

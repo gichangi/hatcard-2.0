@@ -44,10 +44,9 @@ const NavBar = () => {
           <span />
         </Link>
         <Link to="#" className="b-brand">
-          <div className="b-bg">
-            <i className="feather icon-trending-up" />
-          </div>
-          <span className="b-title">Datta Able</span>
+          <span className="b-title">
+            PHC<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>-VSP</span>
+          </span>
         </Link>
         {/* <Link to='#' className={moreClass.join(' ')} onClick={() => setMoreToggle(!moreToggle)}>
                     <i className="feather icon-more-vertical"/>

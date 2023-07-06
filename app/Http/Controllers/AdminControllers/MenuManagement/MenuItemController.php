@@ -50,8 +50,17 @@ class MenuItemController extends Controller
 
             //Check for item id. If id is present update if non create
             $itemId = array_key_exists("id",$request->data)?$request->data['id']:null;
-            //Use update or create method
-            $navItem = MenuItems::updateOrCreate(['id'=>$itemId],$request->data);
+            $navItem = new MenuItems();
+            $search = MenuItems::find($itemId);
+
+            if(MenuItems::find($itemId) === null){
+                //Use update or create method
+                $navItem = MenuItems::create($request->data);
+            }else{
+                //Use update or create method
+                $navItem = MenuItems::updateOrCreate(['id'=>$itemId],$request->data);
+            }
+
             //if item id is null then add created by else only update last updated by
             if($itemId == null) {
                 $navItem->created_by = Auth::id();

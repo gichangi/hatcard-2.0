@@ -84,12 +84,15 @@ function TabServerAdd({details,pageSwitch}) {
         name:null,
         description:null,
         parent_menu_uid:'',
+        dashboard_type:'tableau_server',
         server_uid:'',
         config_json:{
             project_id: '',
             workbook_id:'',
             view_id:'',
-            preview_image:''
+            view_content_url:'',
+            preview_image:'',
+
         },
         status:'Active'
     });
@@ -143,8 +146,10 @@ function TabServerAdd({details,pageSwitch}) {
         dashboard.config_json.workbook_id = node.props.value;
         dashboard.config_json.view_id = '';
         setDashboard(dashboard);
-        setTempVal('dd');
         apiFetch('POST',{},'/api/tableau/workbook-views',{id:dashboard.server_uid,workbook:node.props.value}).then(res=>{
+            console.log("viewsview-u")
+            console.log(res.data.message.views)
+            console.log("viewsview-u")
             setViews(res.data.message.views);
         })
         setEnableSubmit(formValidation(dashboard))
@@ -152,6 +157,7 @@ function TabServerAdd({details,pageSwitch}) {
     const handleViewChange = (event,node) => {
         event.preventDefault();
         dashboard.config_json.view_id = node.props.value;
+        dashboard.config_json.view_content_url = node.props.contentUrl.replace('/sheets/','/');
 
         apiFetch('POST',{},'/api/tableau/workbook-view-image',{id:dashboard.server_uid,view:node.props.value}).then(res=>{
             if(res.data.message.type !== 'success'){
@@ -418,7 +424,7 @@ function TabServerAdd({details,pageSwitch}) {
                                             }}
                                         >
                                             {views.map((p)=>(
-                                                <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
+                                                <MenuItem key={p.id} value={p.id}  name={p.name} contentUrl={p.contentUrl}>{p.name}</MenuItem>
                                             ))}
                                         </Select>
                                     </Col>

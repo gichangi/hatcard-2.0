@@ -35,7 +35,6 @@ function Index(props) {
             default:
                 setReComp(<PlatformList pageSwitch={pageSwitch}/>);
         }
-
     }
     const [reComp, setReComp] = useState(<PlatformList pageSwitch={pageSwitch}/>)
     return (

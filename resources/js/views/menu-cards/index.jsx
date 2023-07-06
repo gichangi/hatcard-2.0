@@ -23,11 +23,16 @@ function Index(props) {
     let { state } = useLocation();
     const [cardItems, setCardItems] = useState([])
     useEffect(()=>{
-        console.log(state);
-        apiFetch('get',{},`/api/menu-cards/${state.id}`,{}).then(res=>{
-            console.log(res.data.navigation_menu_items)
-            setCardItems(res.data.navigation_menu_items)
-        })
+        const elements = document.getElementsByClassName('breadcrumb');
+        while(elements.length > 0){
+            elements[0].parentNode.removeChild(elements[0]);
+        }
+        if(state !== undefined){
+            apiFetch('get',{},`/api/menu-cards/${state.id}`,{}).then(res=>{
+                setCardItems(res.data.navigation_menu_items)
+            })
+        }
+
     },[props])
 
 
@@ -39,7 +44,7 @@ function Index(props) {
                         <Grid item xs={2} sm={3} md={3} key={i.id} >
 
                             {/*<Link to={{ pathname: '/explore', state: { id: i.id}}}>*/}
-                            <Link to={{ pathname: `${i.type!='item'?'/explore':i.url}`, state: { id: i.id}}}>
+                            <Link to={{ pathname: `${i.type!='item'?'/explore':i.url}`, state: { id: i.id,category:i.category}}}>
                             <Item>
                                 <Card sx={{height:'100%'}}>
                                     <CardMedia

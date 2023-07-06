@@ -49,7 +49,8 @@ Route::middleware('auth:api')->group(function(){
     });
     Route::prefix('bi-dashboards')->group(function () {
         Route::controller(\App\Http\Controllers\AdminControllers\BIDashboards\BIDashboardsController::class)->group(function () {
-            Route::get('/', 'index');
+            Route::get('/{id?}', 'index');
+            Route::get('/find/{id}', 'show');
             Route::post('/', 'store');
         });
     });
@@ -61,6 +62,7 @@ Route::middleware('auth:api')->group(function(){
             Route::post('/workbooks', 'getWorkbooks');
             Route::post('/workbook-views', 'getWorkbookViews');
             Route::post('/workbook-view-image', 'getViewImage');
+            Route::post('/view-url', 'generateUrl');
         });
     });
 });

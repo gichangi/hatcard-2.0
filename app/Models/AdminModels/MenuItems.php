@@ -24,7 +24,7 @@ class MenuItems extends Model
     protected $table="menu_items";
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name', 'description','menu_image','menu_icon','menu_type','menu_url','menu_category','order_id', 'parent_id', 'status', 'created_by','last_updated_by'
+        'id','name', 'description','menu_image','menu_icon','menu_type','menu_url','menu_category','order_id', 'parent_id', 'status', 'created_by','last_updated_by'
     ];
 
     /**
