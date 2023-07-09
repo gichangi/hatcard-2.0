@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('server_uid')->nullable();
             $table->string('dashboard_type');
             $table->string('parent_menu_uid'); //ie tableau
+            $table->boolean('set_home_page')->default(false);
             $table->enum('status',['Active','Archived']);
             $table->json('config_json')->nullable();
             $table->uuid('created_by')->nullable();

@@ -134,7 +134,6 @@ function TabPubAdd({details,pageSwitch}) {
 
     const handleSubmit = () =>{
         if(formValidation && Object.keys(validate(dashboard)).length === 0){
-            console.log(dashboard)
             apiFetch('POST',{},'/api/bi-dashboards',dashboard).then(res=>{
                 console.log(res.data)
                 if(res.data.message.type === 'success'){
@@ -146,7 +145,6 @@ function TabPubAdd({details,pageSwitch}) {
                 }
             })
         }else{
-            updateFormHelperText();
             MySwal.fire('', 'Check form for missing/wrong data', 'error');
         }
     }

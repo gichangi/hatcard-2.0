@@ -10,6 +10,7 @@ import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Link from "@mui/material/Link";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import { Dropdown, DropdownMenuItem, DropdownNestedMenuItem } from "../../../components/Dropdown";
 import {ArrowRight} from "@mui/icons-material";
 
@@ -254,6 +255,13 @@ function List(props) {
                                                     Embedding
                                                 </DropdownMenuItem>
                                             ]}
+                                        />,
+                                        <DropdownNestedMenuItem
+                                            label="HTML"
+                                            rightIcon={<AssignmentIcon />}
+                                            onClick={() => {
+                                                props.pageSwitch('html_dashboard');
+                                            }}
                                         />
                                     ]}
                                 />

@@ -8,6 +8,7 @@ import Paper from "@mui/material/Paper";
 import List from "./List";
 import TabServerAdd from "./Tableau/Server/TabServerAdd";
 import TabPubAdd from "./Tableau/Public/TabPubAdd";
+import HTMLDashboard from "./HTMLDashboard";
 
 function Index() {
     const pageSwitch = (action,rowData = null) =>{
@@ -21,11 +22,14 @@ function Index() {
             case 'tableau_public':
                 setReComp(<TabPubAdd configDetails={rowData} pageSwitch={pageSwitch}/>);
                 break;
+            case 'html_dashboard':
+                setReComp(<HTMLDashboard configDetails={rowData} pageSwitch={pageSwitch} />);
+                break;
             case 'power_bi_premium':
                 setReComp(<TableauServerConfig configDetails={rowData} pageSwitch={pageSwitch}/>);
                 break;
             default:
-                setReComp(<PlatformList pageSwitch={pageSwitch}/>);
+                setReComp(<List pageSwitch={pageSwitch}/>);
         }
 
     }

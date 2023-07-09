@@ -67,6 +67,10 @@ function ViewTableau({id}) {
     }
 
     useEffect(() => {
+        const elements = document.getElementsByClassName('breadcrumb');
+        while(elements.length > 0){
+            elements[0].parentNode.removeChild(elements[0]);
+        }
         const observer = new ResizeObserver(entries => {
             setWidth(entries[0].contentRect.width)
             setHeight(ref.current.clientHeight)

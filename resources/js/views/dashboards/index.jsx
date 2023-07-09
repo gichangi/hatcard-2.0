@@ -6,6 +6,7 @@ import PlatformList from "../admin/BI-Platforms/PlatformList";
 import TableauServerConfig from "../admin/BI-Platforms/Tableau/TableauServerConfig";
 import TableauOnlineConfig from "../admin/BI-Platforms/Tableau/TableauOnlineConfig";
 import ViewTableau from "./Tableau/ViewTableau";
+import ViewHtmlDashboard from "./HTML/ViewHTMLDashboard";
 
 function Index(props) {
     let { state } = useLocation();
@@ -13,17 +14,23 @@ function Index(props) {
     useEffect(()=>{
         apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
             console.log(res.data.dashboard)
-            pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id)
+            pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
         })
     },[])
 
-    const pageSwitch = (category,id) =>{
+    const pageSwitch = (category,id,dashboard) =>{
         switch (category) {
             case 'tableau_server':
                 setReComp(<ViewTableau id={id}/>);
                 break;
             case 'tableau_public':
                 setReComp(<ViewTableau id={id}/>);
+                break;
+            case 'html_page':
+                setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
+                break;
+            case 'e':
+                setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
                 break;
             default:
                 setReComp(<>Empty</>);
