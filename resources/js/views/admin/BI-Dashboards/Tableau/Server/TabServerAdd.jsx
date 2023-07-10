@@ -147,9 +147,6 @@ function TabServerAdd({details,pageSwitch}) {
         dashboard.config_json.view_id = '';
         setDashboard(dashboard);
         apiFetch('POST',{},'/api/tableau/workbook-views',{id:dashboard.server_uid,workbook:node.props.value}).then(res=>{
-            console.log("viewsview-u")
-            console.log(res.data.message.views)
-            console.log("viewsview-u")
             setViews(res.data.message.views);
         })
         setEnableSubmit(formValidation(dashboard))

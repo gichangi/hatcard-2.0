@@ -48,4 +48,8 @@ class BIDashboards extends Model
     {
         return $this->hasOne(BIPlatforms::class,'id','server_uid');
     }
+    public function menu():HasOne
+    {
+        return $this->hasOne(MenuItems::class,'id','parent_menu_uid')->select('name','id');
+    }
 }

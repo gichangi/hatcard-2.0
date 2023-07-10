@@ -23,6 +23,7 @@ function Index(props) {
     let { state } = useLocation();
     const [cardItems, setCardItems] = useState([])
     useEffect(()=>{
+        console.log("menu cards")
         const elements = document.getElementsByClassName('breadcrumb');
         while(elements.length > 0){
             elements[0].parentNode.removeChild(elements[0]);

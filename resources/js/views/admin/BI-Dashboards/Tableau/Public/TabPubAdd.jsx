@@ -68,7 +68,7 @@ function TabPubAdd({details,pageSwitch}) {
     const [servers, setServers]=useState([]);
     const [image, setImage] = useState('');
     const [selectedMenu, setSelectedMenu] = useState([]);
-
+    const [parentMenu, setParentMenu] = useState();
     const [formErrors, setFormErrors] = useState({});
     const [defaultSwitch, setDefaultSwitch] = useState(true);
     const [tempVal,setTempVal] = useState("");
@@ -92,6 +92,9 @@ function TabPubAdd({details,pageSwitch}) {
     useEffect(()=>{
         if(details){
             setDashboard(details)
+            setParentMenu(details.parent_menu_uid)
+        }else{
+            setParentMenu([])
         }
     },[]);
 
@@ -104,9 +107,6 @@ function TabPubAdd({details,pageSwitch}) {
             dashboard[e.target.id] = e.target.value === ''?null:e.target.value;
         }
         setDashboard(dashboard);
-        console.log("dashboard)")
-        console.log(dashboard)
-        console.log("dashboard")
         setTempVal(e.target.value);
         setEnableSubmit(formValidation(dashboard))
     }
@@ -159,7 +159,6 @@ function TabPubAdd({details,pageSwitch}) {
             <Card.Header style={{
                 padding:`25px`
             }}>
-                {dashboard.parent_menu_uid}
                 <Grid container item xs={6}
                       direction="row"
                       justifyContent="flex-start"
@@ -263,7 +262,9 @@ function TabPubAdd({details,pageSwitch}) {
                                             <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                         </>
                                     }
-                                    <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems}  />
+                                    {parentMenu &&
+                                        <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems} defaultSelected={[parentMenu]}/>
+                                    }
                                 </Col>
                             </Form.Group>
                         </Item>

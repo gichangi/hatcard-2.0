@@ -52,6 +52,8 @@ Route::middleware('auth:api')->group(function(){
             Route::get('/{id?}', 'index');
             Route::get('/find/{id}', 'show');
             Route::post('/', 'store');
+            Route::delete('/','destroy');
+            Route::post('/archive','archive');
         });
     });
 

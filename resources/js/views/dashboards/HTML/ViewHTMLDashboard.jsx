@@ -42,9 +42,13 @@ function ViewHtmlDashboard({id,details}) {
         }
         let aColl = document.getElementsByClassName('pcoded-content')
         changeColor(aColl, 'white');
+
         const observer = new ResizeObserver(entries => {
-            setWidth(entries[0].contentRect.width)
-            setHeight(ref.current.clientHeight)
+            if(ref.current !== null){
+                setWidth(entries[0].contentRect.width)
+                setHeight(ref.current.clientHeight)
+            }
+
         })
         observer.observe(ref.current)
         return () => ref.current && observer.unobserve(ref.current)

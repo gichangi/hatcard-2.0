@@ -72,8 +72,10 @@ function ViewTableau({id}) {
             elements[0].parentNode.removeChild(elements[0]);
         }
         const observer = new ResizeObserver(entries => {
-            setWidth(entries[0].contentRect.width)
-            setHeight(ref.current.clientHeight)
+            if(ref.current !== null){
+                setWidth(entries[0].contentRect.width)
+                setHeight(ref.current.clientHeight)
+            }
         })
         observer.observe(ref.current)
         return () => ref.current && observer.unobserve(ref.current)

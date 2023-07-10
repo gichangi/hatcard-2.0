@@ -11,8 +11,10 @@ import ViewHtmlDashboard from "./HTML/ViewHTMLDashboard";
 function Index(props) {
     let { state } = useLocation();
     const [reComp, setReComp] = useState(<>Empty</>)
+    const [currentDashboard, setCurrentDashboard] = useState(null)
     useEffect(()=>{
         apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
+            console.log("res.data.dashboard")
             console.log(res.data.dashboard)
             pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
         })
@@ -26,10 +28,7 @@ function Index(props) {
             case 'tableau_public':
                 setReComp(<ViewTableau id={id}/>);
                 break;
-            case 'html_page':
-                setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
-                break;
-            case 'e':
+            case 'html_dashboard':
                 setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
                 break;
             default:

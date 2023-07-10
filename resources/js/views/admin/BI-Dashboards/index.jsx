@@ -20,13 +20,13 @@ function Index() {
                 setReComp(<TabServerAdd details={rowData} pageSwitch={pageSwitch}/>);
                 break;
             case 'tableau_public':
-                setReComp(<TabPubAdd configDetails={rowData} pageSwitch={pageSwitch}/>);
+                setReComp(<TabPubAdd details={rowData} pageSwitch={pageSwitch}/>);
                 break;
             case 'html_dashboard':
-                setReComp(<HTMLDashboard configDetails={rowData} pageSwitch={pageSwitch} />);
+                setReComp(<HTMLDashboard details={rowData} pageSwitch={pageSwitch} />);
                 break;
             case 'power_bi_premium':
-                setReComp(<TableauServerConfig configDetails={rowData} pageSwitch={pageSwitch}/>);
+                setReComp(<TableauServerConfig details={rowData} pageSwitch={pageSwitch}/>);
                 break;
             default:
                 setReComp(<List pageSwitch={pageSwitch}/>);

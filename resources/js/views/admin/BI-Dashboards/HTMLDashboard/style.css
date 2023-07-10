@@ -1,0 +1,9 @@
+
+    /* one way */
+.tox-notifications-container{
+    visibility: hidden;
+}
+/* another way */
+.tox-notifications-container{
+    display: none;
+}

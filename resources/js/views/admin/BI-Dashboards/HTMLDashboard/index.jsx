@@ -1,14 +1,13 @@
-import {useRef, useState} from 'react';
-import { render } from 'react-dom';
+import {useEffect, useRef, useState} from 'react';
 import { Editor } from "@tinymce/tinymce-react";
 import '../../../../assets/tinymce/tinymce.min.js';
-import DeleteIcon from '@mui/icons-material/Delete';
+import './style.css';
 import {apiFetch} from "../../../../assets/api/utils";
 import {styled} from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
-import {Col, Form, Row} from "react-bootstrap";
-import {Button, FormHelperText} from "@mui/material";
+import {Card, Col, Form, Row} from "react-bootstrap";
+import {Button, FormHelperText, Typography} from "@mui/material";
 import CustomMenuTree from "../../../../components/MenuTree/CustomMenuTree";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Box from "@mui/material/Box";
@@ -32,6 +31,12 @@ const validate = (values) => {
     if (!values.parent_menu_uid) {
         errors.parent_menu_uid = 'Required';
     }
+    if (!values.config_json.preview_image) {
+        errors.preview_image = 'Required';
+    }
+    if (!values.config_json.html_code) {
+        errors.html_code = 'Required';
+    }
     return errors;
 };
 
@@ -46,14 +51,16 @@ const Item = styled(Paper)(({ theme }) => ({
 function Index({details,pageSwitch}) {
     const editorRef = useRef(null);
     const imageUploadRef = useRef(null);
-    const [editorContent, setEditorContent] = useState("");
+    const [editorContent, setEditorContent] = useState(null);
+    const [temps, setTemps] = useState(null);
+    const [parentMenu, setParentMenu] = useState();
     const [formErrors, setFormErrors] = useState({});
-    const [enableSubmit, setEnableSubmit] = useState(true)
+    const [enableSubmit, setEnableSubmit] = useState(false)
     const [dashboard, setDashboard]=useState({
         name:null,
         description:null,
-        parent_menu_uid:'',
-        dashboard_type:'html_page',
+        parent_menu_uid:null,
+        dashboard_type:'html_dashboard',
         config_json:{
             html_code:'',
             preview_image:''
@@ -61,12 +68,15 @@ function Index({details,pageSwitch}) {
         status:'Active'
     });
 
-
-    const log = () => {
-        if (editorRef.current) {
-            console.log(editorRef.current.getContent());
+    useEffect(()=>{
+        if(details !== undefined && details !== null){
+            setDashboard(details)
+            setEditorContent(details.config_json.html_code);
+            setParentMenu(details.parent_menu_uid)
+        }else{
+            setParentMenu([])
         }
-    };
+    },[])
 
     const formValidation = (dashboard = dashboard)=>{
         return Object.keys(validate(dashboard)).length === 0;
@@ -74,7 +84,6 @@ function Index({details,pageSwitch}) {
 
     const handleSubmit = () => {
         dashboard.config_json.html_code = editorRef.current.getContent()
-        console.log(dashboard)
         if(formValidation && Object.keys(validate(dashboard)).length === 0){
             apiFetch('POST',{},'/api/bi-dashboards',dashboard).then(res=>{
                 console.log(res.data)
@@ -96,21 +105,39 @@ function Index({details,pageSwitch}) {
         e.preventDefault();
         dashboard[e.target.id] = e.target.value === ''?null:e.target.value;
         setDashboard(dashboard);
-       // setEnableSubmit(formValidation(dashboard))
+        setTemps(e.target.value);
+        setEnableSubmit(formValidation(dashboard))
     }
     const setSelectedItems = (items) => {
         dashboard.parent_menu_uid = items[0];
         setDashboard(dashboard)
-        //setEnableSubmit(formValidation(dashboard))
+        setEnableSubmit(formValidation(dashboard))
     }
     const handleImageChange = (base64) => {
         dashboard.config_json.preview_image = base64;
         setDashboard(dashboard)
-        //setEnableSubmit(formValidation(dashboard))
+        setEnableSubmit(formValidation(dashboard))
     }
+    const handleEditorChange = (text) =>{
+        dashboard.config_json.html_code = text;
+        setDashboard(dashboard)
+        setEnableSubmit(formValidation(dashboard))
+    }
+
     return (
         <>
+            <Grid container item xs={6}
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="center"
+            >
+                <Grid item xs={6}                    >
+                    <Card.Title as="h5"><Typography sx={{fontSize:'18px',color:'#992E62', fontWeight:'bolder'}}>HTML Dashboard</Typography></Card.Title>
+                </Grid>
+
+            </Grid>
             <Grid container spacing={2}>
+
                 <Grid item xs={6}>
                     <Item>
                         <Form>
@@ -144,7 +171,7 @@ function Index({details,pageSwitch}) {
                             <Form.Group as={Row} controlId="image">
                                 <Col sm={12}>
                                     <Form.Label as="legend" column sm={12}>
-                                        Select Preview Image
+                                        Preview Image
                                         {formErrors.preview_image &&
                                             <>
                                                 <FormHelperText sx={{color:'red'}}>{formErrors.preview_image}</FormHelperText>
@@ -173,27 +200,39 @@ function Index({details,pageSwitch}) {
                                         <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                     </>
                                 }
-                                <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems}  />
+                                {parentMenu &&
+                                    <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems} defaultSelected={[parentMenu]}/>
+                                }
+
+
                             </Col>
                         </Form.Group>
                     </Item>
                 </Grid>
                 <Grid item xs={12}>
                     <Item>
+                        {formErrors.html_code &&
+                            <>
+                                <FormHelperText sx={{color:'red'}}>{formErrors.html_code}</FormHelperText>
+                            </>
+                        }
                         <Editor
                             /*tinymceScriptSrc='../../../../assets/tinymce/tinymce.min.js'*/
+                            apiKey='7d40xxgpm87kfu0rjpjxgzpo79uoa8hpr5lvyixjyqu9ki3z'
                             ref={editorRef}
                             disabled={false}
-                            initialValue='test initialValue'
+                            initialValue={editorContent}
                             inline={false}
                             plugins=''
                             tagName='div'
                             textareaName=''
                             toolbar=''
-                            value=''
+                            onEditorChange={(newText) => handleEditorChange(newText)}
                             outputFormat='html'
                             onInit={(evt, editor) => editorRef.current = editor}
                             init={{
+                                extended_valid_elements: '+*[*]',
+                                valid_children : "+body[style],+body[br]",
                                 height: '80vh',
                                 menubar: true,
                                 plugins: [
@@ -207,27 +246,6 @@ function Index({details,pageSwitch}) {
                                     'removeformat | help',
                                 content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'+
                                     '.ampforwp-copy-content-button {color:red,background:blue}',
-/*                                setup: function (editor) {
-                                    editor.ui.registry.addButton("saveBTN", {
-                                        icon: 'comment-add',
-                                        text: "Save",
-                                        classes: 'ampforwp-copy-content-button ',
-                                        onAction: onSaveClick
-                                    });
-                                    editor.ui.registry.addButton("backBTN", {
-                                        icon: 'undo',
-                                        text: "Back",
-                                        onAction: onPageSwitch
-                                    });
-                                },
-                                toolbar1: "saveBTN| backBTN",
-                                toolbar_groups: {
-                                    formatting: {
-                                        icon: 'bold',
-                                        tooltip: 'Formatting',
-                                        items: 'bold italic underline | superscript subscript'
-                                    }
-                                }*/
                             }}
                         />
                     </Item>

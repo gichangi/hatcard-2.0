@@ -7,6 +7,8 @@ import TreeItem from "@mui/lab/TreeItem";
 import {useEffect, useState} from "react";
 import {apiFetch} from "../../assets/api/utils";
 import _ from "lodash";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
 function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
@@ -23,7 +25,8 @@ function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
                     "id":i.id,
                     order_id:i.order_id,
                     //parent_id:i.parent_id !== null || parent_id !== undefined  ? i.parent_id:null
-                    parent_id:i.parent_id
+                    parent_id:i.parent_id,
+                    menu_type:i.menu_type
                 });
             })
             setMenuItems(temp);
@@ -92,30 +95,43 @@ function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
         selectedItem(array);
         setSelected(array);
     }
-
-    const renderTree = (nodes) => (
-        <TreeItem
-            key={nodes.id}
-            nodeId={nodes.id}
-            label={
+    const treeLabel = (enabled, nodes)=>{
+        if(enabled){
+            return (
                 <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={selected.some(item => item === nodes.id)}
-                            onChange={event =>
-                                getOnChange(event.currentTarget.checked, nodes)
-                            }
-                            onClick={e => e.stopPropagation()}
-                        />
-                    }
-
+                    control={<ArrowForwardIcon fontSize="10px"/>}
                     label={<>{nodes.name}</>}
                     key={nodes.id}
                 />
-            }
+            )
+        }
+        return (
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        checked={selected.some(item => item === nodes.id)}
+                        onChange={event =>
+                            getOnChange(event.currentTarget.checked, nodes)
+                        }
+                        onClick={e => e.stopPropagation()}
+                    />
+                }
+
+                label={<>{nodes.name}</>}
+                key={nodes.id}
+            />
+        )
+    }
+
+    const renderTree = (nodes, dd = false) => (
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            label={treeLabel(dd,nodes)}
         >
             {Array.isArray(nodes.children)
-                ? nodes.children.map(n => renderTree(n))
+                ? nodes.children.map(n => {
+                    return renderTree(n,(n.menu_type === 'item'))})
                 : null}
         </TreeItem>
 

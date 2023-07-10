@@ -1,18 +1,18 @@
-import {useEffect, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {apiFetch} from "../../../assets/api/utils";
-import _ from "lodash";
 import {Col, Row} from "react-bootstrap";
 import MaterialReactTable from "material-react-table";
-import {Button, MenuItem, Typography} from "@mui/material";
+import {Button, MenuItem} from "@mui/material";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import Box from "@mui/material/Box";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Link from "@mui/material/Link";
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { Dropdown, DropdownMenuItem, DropdownNestedMenuItem } from "../../../components/Dropdown";
+import {Dropdown, DropdownMenuItem, DropdownNestedMenuItem} from "../../../components/Dropdown";
 import {ArrowRight} from "@mui/icons-material";
+import MySwal from "sweetalert2";
+import _ from 'lodash';
 
 function List(props) {
     const[dashboards,setDashboards] = useState([]);
@@ -20,20 +20,18 @@ function List(props) {
     const [rowSelection, setRowSelection] = useState({});
 
     useEffect(()=>{
-        let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
-        if(localStore !== 1){
-            let headers =  {
-                "Accept": "application/json",
-                "Authorization": `Bearer ${localStore.token}`
-            };
-            apiFetch('get',headers,'/api/bi-dashboards',{}).then(res=>{
-                console.log(res.data.dashboards)
-                setDashboards(res.data.dashboards);
-            })
-        }
+        apiFetch('get',{},'/api/bi-dashboards',{}).then(res=>{
+            setDashboards(res.data.dashboards);
+        })
     },[]);
+
     const columns = useMemo(
         () => [
+            {
+                accessorKey: 'id', //simple recommended way to define a column
+                enableHiding: false,
+                header: 'id'
+            },
             {
                 accessorKey: 'name', //simple recommended way to define a column
                 header: 'Name'
@@ -43,12 +41,12 @@ function List(props) {
                 header: 'Description'
             },
             {
-                accessorKey: 'parent_menu_uid',
-                header: 'Parent'
+                accessorKey: 'menu.name',
+                header: 'Parent Menu'
             },
             {
-                accessorKey: 'server_uid',
-                header: 'Server'
+                accessorKey: 'dashboard_type',
+                header: 'Type'
             },
             {
                 accessorKey: 'status',
@@ -61,6 +59,45 @@ function List(props) {
             }
         ],
         [],
+    );
+
+
+    const handleDeleteRow = useCallback(
+        (row) => {
+            apiFetch('delete',{},'/api/bi-dashboards/',{id:row.getValue('id')}).then(res=>{
+                console.log(res.data.message.type)
+                if(res.data.message.type === 'success'){
+                    MySwal.fire('', 'Successfully Deleted!', 'success').then(()=>{
+                        dashboards.splice(row.index, 1);
+                        setDashboards([...dashboards]);
+                    })
+                }else{
+                    MySwal.fire('', res.data.message.message, 'error');
+                }
+            })
+        },
+        [dashboards],
+    );
+    const handleDisableRow = useCallback(
+        (row) => {
+            apiFetch('post',{},'/api/bi-dashboards/archive',{id:row.getValue('id'),status:row.getValue('status') === 'Active'?'Archived':'Active'}).then(res=>{
+                console.log(res.data.message.type)
+                if(res.data.message.type === 'success'){
+                    MySwal.fire('', `Successfully ${row.getValue('status') === 'Active'?'Archived!':'Activated!'} `, 'success').then(()=>{
+                        _.map(dashboards, function(dashboard) {
+                            if(dashboard.id === row.getValue('id')){
+                                dashboard.status = row.getValue('status') === 'Active'?'Archive':'Active'
+                            }
+                            return dashboard;
+                        });
+                        setDashboards([...dashboards]);
+                    })
+                }else{
+                    MySwal.fire('', res.data.message.message, 'error');
+                }
+            })
+        },
+        [dashboards]
     );
 
     return (
@@ -110,54 +147,50 @@ function List(props) {
                         enableRowActions
                         positionActionsColumn="last"
                         renderRowActionMenuItems={({row, closeMenu}) => {
-                            let dropDownItems = [
+                            return [
                                 <MenuItem key={1}
                                           onClick={() => {
                                               console.info('View Profile', row.original.name);
-                                              props.pageSwitch('add',row.original);
-                                              closeMenu();
+                                              props.pageSwitch(row.original.dashboard_type, row.original);
                                           }}
                                           sx={{
-                                              width:'140px'
+                                              width: '140px'
                                           }}
                                 >
-                                    <VisibilityIcon/>&nbsp; View
+                                    <VisibilityIcon/>&nbsp; Edit
                                 </MenuItem>,
                                 <MenuItem key={2} onClick={() => {
                                     console.info('Remove', row);
+                                    handleDeleteRow(row)
+                                    //handleDeleteAction(row.original.id);
                                     closeMenu();
                                 }}>
                                     <DeleteIcon/> &nbsp; Delete
                                 </MenuItem>,
                                 <MenuItem key={3} onClick={() => {
+                                    handleDisableRow(row)
                                     closeMenu();
                                 }}>
-                                    {row.original.status === 'active' &&
+                                    {row.original.status.toLowerCase() === 'active' &&
                                         <>
                                             <DoDisturbIcon/>&nbsp; Disable
                                         </>
                                     }
-                                    {row.original.status !== 'active' &&
+                                    {row.original.status.toLowerCase() !== 'active' &&
                                         <>
                                             <DoDisturbIcon/>&nbsp; Enable
                                         </>
                                     }
-                                </MenuItem>,
-                                <MenuItem key={4} onClick={() => {
-                                    props.pageSwitch('config',row.original);
-                                    closeMenu();
-                                }}>
-                                    <DeleteIcon/> &nbsp; Configuration
-                                </MenuItem>,
+                                </MenuItem>
 
                             ];
-                            return dropDownItems;
                         }}
                         initialState={{
                             pagination: {
-                                pageSize: 5,
+                                pageSize: 10,
                                 pageIndex: 0
-                            }
+                            },
+                            columnVisibility: { id: false }
                         }} muiTablePaginationProps={{
                         rowsPerPageOptions: [5, 10, 20],
                         showFirstButton: false,

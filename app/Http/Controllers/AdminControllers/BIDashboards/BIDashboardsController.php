@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminControllers\BIDashboards;
 use App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController;
 use App\Http\Controllers\Controller;
 use App\Models\AdminModels\BIDashboards;
+use App\Models\AdminModels\MenuItems;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class BIDashboardsController extends Controller
     {
         //Fetch all dashboards
 
-        $dashboards = BIDashboards::where('id','like','%'.$id.'%')
+        $dashboards = BIDashboards::where('id','like','%'.$id.'%')->with('menu')
             ->get();
         return response()->json(['dashboards'=> $dashboards],200);
     }
@@ -99,12 +100,38 @@ class BIDashboardsController extends Controller
     {
         //
     }
+    /**
+     * archive the specified resource in storage.
+     */
+    public function archive(Request $request)
+    {
+        $dashboard = BIDashboards::find($request->id);
+        $dashboard->status = $request->status;
 
+        if($dashboard->save()){
+            $menu = MenuItems::find($request->id);
+            $menu->status = $request->status;
+            if($menu->save()){
+                return response()->json(['message' => ['type'=>'success']], 200);
+            }
+            return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while updating dashboard menu']], 200);
+        }
+        return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while updating dashboard']], 200);
+    }
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(BIDashboards $bIDashboards)
+    public function destroy(Request $request)
     {
         //
+        $dashboard = BIDashboards::find($request->id);
+        if($dashboard->delete()){
+            $menu = MenuItems::find($request->id);
+            if($menu->delete()){
+                return response()->json(['message' => ['type'=>'success']], 200);
+            }
+            return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while deleting dashboard menu']], 200);
+        }
+        return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while deleting dashboard']], 200);
     }
 }
