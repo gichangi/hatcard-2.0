@@ -15,6 +15,17 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" />
     <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
     <title>About PHC VSP</title>
+    <script>
+        window.global = window;
+    </script>
+    <script type="module">
+        import process from "process";
+        import EventEmitter from "events";
+        import {Buffer} from "buffer";
+        window.Buffer = Buffer;
+        window.process = process;
+        window.EventEmitter = EventEmitter;
+    </script>
     <script>var global = window</script>
     @viteReactRefresh
     @vite(['resources/js/index.jsx'])

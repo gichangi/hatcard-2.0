@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Card from '../../components/Card/MainCard';
 import {useEffect} from "react";
 
-const SamplePage = (props) => {
+const Index = (props) => {
     useEffect(()=>{
 
     },[])
@@ -13,10 +13,17 @@ const SamplePage = (props) => {
           <Col>
             <Card title="Hello Card" isOption>
               <p>
-                "dipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim venisam, quis nosstrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                "w hhe hh fff dipsum dolor dsit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Ut enim ad md inim venisam, quis nosstrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                Ut enim ad md inim venisam, quis nosstrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+                Ut enim ad md  inim venisam, quis nosstrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
                 dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
                 proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                  dess
+                  sede
+                  sddd
+                  w
+                  d
               </p>
             </Card>
           </Col>
@@ -25,6 +32,7 @@ const SamplePage = (props) => {
   );
 };
 
+/*
 
 const mapStateToProps = state => {
     return {
@@ -32,3 +40,7 @@ const mapStateToProps = state => {
     };
 };
 export default connect(mapStateToProps)(SamplePage);
+*/
+
+
+export default Index;

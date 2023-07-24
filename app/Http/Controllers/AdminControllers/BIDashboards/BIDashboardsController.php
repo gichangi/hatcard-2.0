@@ -121,7 +121,7 @@ class BIDashboardsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request): \Illuminate\Http\JsonResponse
     {
         //
         $dashboard = BIDashboards::find($request->id);

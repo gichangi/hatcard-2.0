@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminControllers\MenuManagement;
 
 use App\Http\Controllers\Controller;
 use App\Models\AdminModels\MenuItems;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -129,29 +130,71 @@ class MenuItemController extends Controller
         return response()->json(['message' => ['type'=>'success']], 200);
     }
     //Provide nested object for navigation menu
-    public function navigationCard(string $id = null): \Illuminate\Http\JsonResponse
+    public function navigationCard(string $request_id = null): \Illuminate\Http\JsonResponse
     {
-
-        //pull all menu items
-        $MenuTree = MenuItems::with('children')
+        $UserMenus =  DB::table('user_has_menus')->where('user_id', Auth::user()->id)
+            ->join('menu_items', function (JoinClause $join)use ($request_id ){
+                $join->on('user_has_menus.menu_id', '=', 'menu_items.id')
+                    ->where('menu_items.parent_id', '=', $request_id );
+            })
             ->select('id','name as title','menu_type as type','description','menu_category as category','menu_url as url','menu_icon as icon','order_id','menu_image as image')
-            ->where('parent_id',$id)
-            ->orderBy('order_id')
             ->get();
-        return response()->json(['navigation_menu_items' => $MenuTree], 200);
+        return response()->json(['navigation_menu_items' => $UserMenus], 200);
     }
+
+    //
+    function unique_multidim_array($array, $key) {
+        $temp_array = array();
+        $i = 0;
+        $key_array = array();
+
+        foreach($array as $val) {
+            if (!in_array($val[$key], $key_array)) {
+                $key_array[$i] = $val[$key];
+                $temp_array[$i] = $val;
+            }
+            $i++;
+        }
+        return $temp_array;
+    }
+
+    ///
+    public function build_tree(&$items, $parentId = null) {
+        $treeItems = [];
+        foreach ($items as $idx => $item) {
+            if((empty($parentId) && empty($item['parent_id'])) || (!empty($item['parent_id']) && !empty($parentId) && $item['parent_id'] == $parentId)) {
+                $items[$idx]['children'] = $this->build_tree($items, $items[$idx]['id']);
+                $treeItems []= $items[$idx];
+            }
+        }
+
+        return $treeItems;
+    }
+
 
     //Provide nested object for navigation menu
     public function navigationTree(string $id = null): \Illuminate\Http\JsonResponse
     {
 
+        $UserMenus =  DB::table('user_has_menus')->where('user_id', Auth::user()->id)->pluck('menu_id');
+        $menus = New MenuItems();
+        $treeArray = [];
+        foreach ($UserMenus as $item) {
+            error_log('$item -> '.$item);
+            foreach ($menus->getTree($item) as $leaf){
+                array_push($treeArray,$leaf);
+            }
+        }
+        $treeArray = $this->unique_multidim_array($treeArray,'id');
+        return response()->json(['navigation_menu_items' => $this->build_tree($treeArray)], 200);
+
         //pull all menu items
-        $MenuTree = MenuItems::with('children')
+/*        $MenuTree = MenuItems::with('children')
             ->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','order_id')
             ->where('parent_id',$id)
             ->orderBy('order_id')
             ->get();
-        return response()->json(['navigation_menu_items' => $MenuTree], 200);
+        return response()->json(['navigation_menu_items' => $MenuTree], 200);*/
     }
     //Get list of children
     public function childItems(string $id): \Illuminate\Http\JsonResponse

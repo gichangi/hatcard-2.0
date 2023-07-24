@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('status');
+            $table->uuid('parent_id')->nullable();
             $table->uuid('created_by')->nullable();
             $table->uuid('last_updated_by')->nullable();
             $table->timestamps();

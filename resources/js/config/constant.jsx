@@ -1,5 +1,5 @@
 export const BASENAME = ''; // don't add '/' at end off BASENAME
-export const BASE_URL = '/sample-page';
+export const BASE_URL = '/home';
 export const BASE_TITLE = 'HATCARD PLATFORM';
 
 export const CONFIG = {

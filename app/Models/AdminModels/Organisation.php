@@ -22,7 +22,7 @@ class Organisation extends Model
     protected $table="organisations";
     protected $dates = ['deleted_at'];
     protected $fillable = [
-        'name', 'description','status', 'created_by','last_updated_by'
+        'name', 'description','status','parent_id','created_by','last_updated_by'
     ];
 
     /**

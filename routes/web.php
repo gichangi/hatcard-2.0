@@ -36,16 +36,23 @@ Route::get('/pms', function () {
 
 
 Route::middleware('auth')->group(function(){
-    Route::get('/sample-page', function () {
-        return Inertia('extra/SamplePage');
+    Route::get('home', function () {
+        return Inertia('user-profile');
+    });
+    Route::get('profile', function () {
+        return Inertia('user-profile');
     });
 
     Route::prefix('admin')->group(function (){
+
+        Route::get('roles', function () {
+            return Inertia('admin/roles');
+        });
         Route::get('menu-management', function () {
             return Inertia('admin/menu-management');
         });
         Route::get('users', function () {
-            return Inertia('admin/menu-management');
+            return Inertia('admin/users');
         });
         Route::get('menu-management/menu', function () {
             return Inertia('admin/menu-management/menu');

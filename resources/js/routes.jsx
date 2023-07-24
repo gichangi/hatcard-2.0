@@ -65,13 +65,24 @@ const routes = [
         routes: [
             {
                 exact: true,
-                path: '/explore',
-                component: lazy(() => import('./views/menu-cards'))
+                path: '/home',
+                component: lazy(() => import('./views/extra'))
             },
             {
                 exact: true,
-                path: '/sample-page',
-                component: lazy(() => import('./views/extra/SamplePage'))
+                path: '/profile',
+                component: lazy(() => import('./views/user-profile'))
+            },
+            {
+                exact: true,
+                path: '/explore',
+                component: lazy(() => import('./views/menu-cards'))
+            },
+
+            {
+                exact: true,
+                path: '/admin/roles',
+                component: lazy(() => import('./views/admin/Roles'))
             },
             {
                 exact: true,
@@ -81,7 +92,7 @@ const routes = [
             {
                 exact: true,
                 path: '/admin/users',
-                component: lazy(() => import('./views/admin/MenuManagement'))
+                component: lazy(() => import('./views/admin/Users'))
             },
             {
                 exact: true,

@@ -47,6 +47,7 @@ function Index(props) {
                             {/*<Link to={{ pathname: '/explore', state: { id: i.id}}}>*/}
                             <Link to={{ pathname: `${i.type!='item'?'/explore':i.url}`, state: { id: i.id,category:i.category}}}>
                             <Item>
+
                                 <Card sx={{height:'100%'}}>
                                     <CardMedia
                                         component="img"

@@ -20,9 +20,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [\App\Http\Controllers\UserManagement\UserController2::class, 'register']);
 Route::post('/login', [\App\Http\Controllers\UserManagement\AuthController::class, 'login']);
-Route::get('/users', [\App\Http\Controllers\UserManagement\UserController2::class, 'all_users']);
 
-    Route::post('/user/details', [\App\Http\Controllers\UserManagement\UserController::class, 'details']);
+
+
+    Route::prefix('user')->group(function () {
+        Route::controller(\App\Http\Controllers\UserManagement\UserController::class)->group(function () {
+            Route::post('details', 'details');
+
+        });
+    });
 
 Route::middleware('auth:api')->group(function(){
     Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'index']);
@@ -31,7 +37,35 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/menu-child-items/{id}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'childItems']);
     Route::post('/menu-groups/order', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'orderItems']);
     Route::get('/menu-tree/{id?}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationTree']);
-    Route::get('/menu-cards/{id?}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationCard']);
+    Route::get('/menu-cards/{request_id?}', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'navigationCard']);
+
+
+    Route::prefix('user')->group(function () {
+        Route::controller(\App\Http\Controllers\UserManagement\UserController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+            Route::post('archive', 'archive');
+            Route::delete('/', 'destroy');
+            Route::get('/account', 'account');
+
+        });
+    });
+
+    Route::prefix('account')->group(function () {
+        Route::controller(\App\Http\Controllers\UserManagement\UserController::class)->group(function () {
+            Route::get('/', 'account');
+            Route::post('/', 'password');
+        });
+    });
+
+    Route::prefix('roles')->group(function () {
+        Route::controller(\App\Http\Controllers\UserManagement\RoleController::class)->group(function () {
+            Route::get('/', 'index');
+            Route::post('/', 'store');
+            Route::delete('/', 'destroy');
+            Route::get('/permissions', 'getPermissions');
+        });
+    });
 
     Route::get('/menu-groups', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'getMenuGroups']);
     Route::prefix('organisations')->group(function () {

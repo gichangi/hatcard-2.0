@@ -11,42 +11,34 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 
-function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
+function CustomMenuTree({title="Menu Tree",menuTreeItems=[],orderField, numberOfItems, selectedItem, defaultSelected = [], selectLevels=[]}) {
     const [menuItems, setMenuItems] = useState([]);
     const [menuTree, setMenuTree] = useState([]);
-    const [selected, setSelected] = useState(defaultSelected);
+    const [selected, setSelected] = useState([]);
 
     useEffect(()=>{
-        apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
-            let temp = [];
-            res.data.menu_items.forEach(i =>{
-                temp.push({
-                    "name":i.name,
-                    "id":i.id,
-                    order_id:i.order_id,
-                    //parent_id:i.parent_id !== null || parent_id !== undefined  ? i.parent_id:null
-                    parent_id:i.parent_id,
-                    menu_type:i.menu_type
-                });
-            })
-            setMenuItems(temp);
-            const result = _.orderBy(temp,'order_id','desc').reduce((acc, item) => {
-                acc.set(item.id, item)
-                let parent = [];
-                if(item.parent_id  === null){
-                    parent = acc.get('root')
-                }else{
-                    parent = acc.get(item.parent_id).children ??= [];
-                }
-                parent.push(item)
+        setSelected(defaultSelected)
+        setMenuItems(menuTreeItems);
+        setMenuTree([..._.orderBy(transformToTree(menuTreeItems),orderField,'asc')]);
 
-                return acc
-            }, new Map([['root', []]])).get('root')
-            setMenuTree([...result]);
+    },[menuTreeItems]);
 
-        })
 
-    },[]);
+    const  transformToTree = (data) => {
+        const grouped = _.groupBy(_.orderBy(data,orderField,'asc'), (item) => item.parent_id);
+        function childrenOf(parent_id , level = 0) {
+            return (grouped[parent_id] || []).map((item) => ({
+                id:item.id,
+                name:item.name,
+                parent_id:item.parent_id,
+                [orderField]:item[orderField],
+                level: level+1,
+                children: childrenOf(item.id, level+1 )
+            }));
+        }
+
+        return childrenOf(null);
+    }
 
     function getChildById(node, id,parent_level) {
         let array = [];
@@ -95,13 +87,24 @@ function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
         selectedItem(array);
         setSelected(array);
     }
+    const menuIcons = (menu_type) =>{
+        if(['group','collapse'].includes(menu_type)){
+            return (
+                <></>
+            )
+        }
+        return (
+            <ArrowForwardIcon fontSize="100px"/>
+        )
+    }
     const treeLabel = (enabled, nodes)=>{
-        if(enabled){
+        if(selectLevels.length >=1 &&  !selectLevels.includes(nodes.level)){
             return (
                 <FormControlLabel
-                    control={<ArrowForwardIcon fontSize="10px"/>}
+                    control={menuIcons(nodes.menu_type)}
                     label={<>{nodes.name}</>}
                     key={nodes.id}
+                    sx={{marginTop:'7px',marginLeft:'1px'}}
                 />
             )
         }
@@ -131,7 +134,11 @@ function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
         >
             {Array.isArray(nodes.children)
                 ? nodes.children.map(n => {
-                    return renderTree(n,(n.menu_type === 'item'))})
+                    if(selectLevels.length === 0 ){
+                        return renderTree(n,true)
+                    }
+                    return renderTree(n,(selectLevels.includes(n.level)=== true?false:true))
+                })
                 : null}
         </TreeItem>
 
@@ -139,7 +146,7 @@ function CustomMenuTree({numberOfItems, selectedItem, defaultSelected = []}) {
     );
     return (
         <>
-            <Typography id="demo-radio-buttons-group-label"  style={{color:'#fff',fontWeight:'bold',marginTop:'10px',padding:'10px', backgroundColor:"rgb(15, 105, 125)",fontSize:'18px', marginBottom:'5px'}}>Select Menu</Typography>
+            <Typography id="demo-radio-buttons-group-label"  style={{color:'#fff',fontWeight:'bold',marginTop:'10px',padding:'10px', backgroundColor:"rgb(15, 105, 125)",fontSize:'18px', marginBottom:'5px'}}>{title}</Typography>
             {menuTree.length >0 &&
                 <TreeView
                     defaultCollapseIcon={<ExpandMoreIcon />}

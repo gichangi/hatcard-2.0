@@ -64,6 +64,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function TabPubAdd({details,pageSwitch}) {
+    const [menuTreeItems, setMenuTreeItems] = useState([]);
     const imageUploadRef = useRef(null);
     const [servers, setServers]=useState([]);
     const [image, setImage] = useState('');
@@ -88,7 +89,22 @@ function TabPubAdd({details,pageSwitch}) {
     });
 
 
+    useEffect(()=>{
+        apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
+            let temp = [];
+            res.data.menu_items.forEach(i =>{
+                temp.push({
+                    name:i.name,
+                    id:i.id,
+                    order_id:i.order_id,
+                    parent_id:i.parent_id,
+                    menu_type:i.menu_type
+                });
+            })
+            setMenuTreeItems(temp);
+        })
 
+    },[]);
     useEffect(()=>{
         if(details){
             setDashboard(details)
@@ -263,7 +279,7 @@ function TabPubAdd({details,pageSwitch}) {
                                         </>
                                     }
                                     {parentMenu &&
-                                        <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems} defaultSelected={[parentMenu]}/>
+                                        <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  defaultSelected={[parentMenu]} />
                                     }
                                 </Col>
                             </Form.Group>

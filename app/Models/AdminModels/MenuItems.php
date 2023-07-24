@@ -45,4 +45,25 @@ class MenuItems extends Model
     {
         return $this->hasMany(self::class, 'parent_id')->with('children')->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','parent_id','order_id')->where('status','active')->orderBy('order_id');
     }
+
+    public function getTree(string $id, array $tree = []): array
+    {
+        error_log('id -> '.$id);
+        $lowestLevel = MenuItems::where('id', $id)->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','order_id','parent_id')->first();
+
+        if (!$lowestLevel) {
+            return $tree;
+        }
+
+        $tree[] = $lowestLevel->toArray();
+
+        if ($lowestLevel->parent_id !== null) {
+            $tree = MenuItems::getTree($lowestLevel->parent_id, $tree);
+        }
+
+        return [...$tree];
+
+    }
+
+
 }

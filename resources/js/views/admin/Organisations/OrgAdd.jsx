@@ -12,12 +12,22 @@ import {apiFetch} from "../../../assets/api/utils";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import _ from "lodash";
+import CustomMenuTree from "../../../components/MenuTree/CustomMenuTree";
+import Paper from "@mui/material/Paper";
 
 
 const DataGrid = styled(MuiDataGrid)(({ theme }) => ({
     "& .MuiDataGrid-columnHeaders": { display: "none" },
     "& .MuiDataGrid-virtualScroller": { marginTop: "0!important" },
     "& .root":{height:'100px'}
+}));
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+    height:'100%'
 }));
 
 const validate = (values) => {
@@ -34,12 +44,12 @@ const validate = (values) => {
         errors.description = 'Must be 1000 characters or less';
     }
 
-
     return errors;
 };
 
 
 function OrgAdd({pageSwitch, rowData}) {
+    const [menuTreeItems, setMenuTreeItems] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [defaultSwitch, setDefaultSwitch] = useState(true);
     const [tempVal,setTempVal] = useState("");
@@ -56,6 +66,7 @@ function OrgAdd({pageSwitch, rowData}) {
             setOrgForm({
                 id:rowData.id,
                 name:rowData.name,
+                parent_id:rowData.parent_id,
                 description: rowData.description,
                 status:rowData.status
             });
@@ -108,6 +119,30 @@ function OrgAdd({pageSwitch, rowData}) {
             MySwal.fire('', 'Check form for missing/wrong data', 'error');
         }
     }
+
+    useEffect(()=>{
+        apiFetch('GET',{},'/api/organisations',{}).then(res=>{
+            let orgs = [];
+
+            res.data.organisations.forEach(i =>{
+                orgs.push({
+                    id:i.id,
+                    name:i.name,
+                    date_created:i.created_at,
+                    parent_id:i.parent_id
+                });
+            })
+            setMenuTreeItems(orgs);
+        })
+
+    },[]);
+
+    const setSelectedItems = (items) => {
+        orgForm.parent_id = items[0];
+        setTempVal(items[0]);
+        setEnableSubmit(formValidation(orgForm))
+    }
+
     return (
         <Card
             style={{
@@ -130,48 +165,65 @@ function OrgAdd({pageSwitch, rowData}) {
                 </Grid>
             </Card.Header>
             <Card.Body>
-                <Grid container>
+                <Grid container spacing={1}>
                     <Grid item xs={6}>
-                        <Form>
-                            <Form.Group as={Row} controlId="name">
-                                <Form.Label  column sm={3}>
-                                    Organisation
-                                    {formErrors.name &&
-                                        <>
-                                            <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
-                                        </>
-                                    }
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control type="text" placeholder="Title" onChange={handleChange} value={orgForm.name} />
-                                </Col>
-                            </Form.Group>
+                        <Item>
+                            <Form>
+                                <Form.Group as={Row} controlId="name">
+                                    <Form.Label  column sm={3}>
+                                        Organisation
+                                        {formErrors.name &&
+                                            <>
+                                                <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
+                                            </>
+                                        }
+                                    </Form.Label>
+                                    <Col sm={9}>
+                                        <Form.Control type="text" placeholder="Title" onChange={handleChange} value={orgForm.name} />
+                                    </Col>
+                                </Form.Group>
 
-                            <Form.Group as={Row} controlId="description">
-                                <Form.Label as="legend" column sm={3}>
-                                    Description
-                                    {formErrors.description &&
+                                <Form.Group as={Row} controlId="description">
+                                    <Form.Label as="legend" column sm={3}>
+                                        Description
+                                        {formErrors.description &&
+                                            <>
+                                                <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
+                                            </>
+                                        }
+                                    </Form.Label>
+                                    <Col sm={9}>
+                                        <Form.Control as="textarea" rows="3" onChange={handleChange} value={orgForm.description} />
+                                    </Col>
+                                </Form.Group>
+                                <Form.Group as={Row} >
+                                    <Form.Label as="legend" column sm={3}>
+                                        Status
+                                    </Form.Label>
+                                    <Col sm={9}>
+                                        <div className="switch d-inline m-r-10">
+                                            <Form.Control type="checkbox"  id="checked-default" checked={defaultSwitch}  onChange={toggleHandler} />
+                                            <Form.Label htmlFor="checked-default" className="cr" />
+                                        </div>
+                                    </Col>
+                                </Form.Group>
+                            </Form>
+                        </Item>
+
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Item>
+                            <Form.Group as={Row} controlId="parent_menu_uid">
+                                <Col sm={12}>
+                                    {formErrors.parent_menu_uid &&
                                         <>
-                                            <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
+                                            <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                         </>
                                     }
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <Form.Control as="textarea" rows="3" onChange={handleChange} value={orgForm.description} />
+                                    <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'date_created'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  />
                                 </Col>
                             </Form.Group>
-                            <Form.Group as={Row} >
-                                <Form.Label as="legend" column sm={3}>
-                                    Status
-                                </Form.Label>
-                                <Col sm={9}>
-                                    <div className="switch d-inline m-r-10">
-                                        <Form.Control type="checkbox"  id="checked-default" checked={defaultSwitch}  onChange={toggleHandler} />
-                                        <Form.Label htmlFor="checked-default" className="cr" />
-                                    </div>
-                                </Col>
-                            </Form.Group>
-                        </Form>
+                        </Item>
                     </Grid>
                 </Grid>
             </Card.Body>

@@ -51,7 +51,6 @@ class OrganisationController extends Controller
             $organisation->save();
             return response()->json(['message' => ['type'=>'success']], 200);
         }catch (Throwable $e){
-            dd($e);
             return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
         }
     }

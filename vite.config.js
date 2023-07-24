@@ -4,6 +4,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import * as esbuild from "esbuild";
 import laravel from "laravel-vite-plugin";
+import GlobalPolyFill from "@esbuild-plugins/node-globals-polyfill";
 
 const sourceJSPattern = /\/resources\/js\/.*\.jsx$/;
 const rollupPlugin = (matchers) => ({
@@ -30,6 +31,27 @@ export default defineConfig({
         }),
         react(/*{ fastRefresh: false }*/)
     ],
+    optimizeDeps: {
+        esbuildOptions: {
+            define: {
+                global: "globalThis",
+            },
+            plugins: [
+                GlobalPolyFill({
+                    process: true,
+                    buffer: true,
+                }),
+            ],
+        },
+    },
+/*    resolve: {
+        alias: {
+            process: "process/browser",
+            stream: "stream-browserify",
+            zlib: "browserify-zlib",
+            util: "util",
+        },
+    },*/
 /*    build: {
         rollupOptions: {
             plugins: [
