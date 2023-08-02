@@ -96,10 +96,28 @@ class BIDashboardsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, BIDashboards $bIDashboards)
+    public function setHomepage(Request $request): \Illuminate\Http\JsonResponse
     {
-        //
+
+        $dashboards = BIDashboards::query()->update(['set_home_page' => false]);
+        $dashboard = BIDashboards::find($request->id);
+        $dashboard->set_home_page = true;
+
+        if($dashboard->save()){
+            return response()->json(['message' => ['type'=>'success']], 200);
+        }
+        return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while updating dashboard']], 200);
     }
+
+
+    public function getHomepage(): \Illuminate\Http\JsonResponse
+    {
+
+        $dashboard = BIDashboards::where('set_home_page', true)->first();
+        return response()->json(['dashboard'=> $dashboard], 200);
+    }
+
+
     /**
      * archive the specified resource in storage.
      */

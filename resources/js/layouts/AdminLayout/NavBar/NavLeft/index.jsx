@@ -23,11 +23,12 @@ const NavLeft = () => {
 
   return (
     <>
-      <ListGroup as="ul" bsPrefix=" " className="navbar-nav mr-auto">
-        <ListGroup.Item as="li" bsPrefix=" " className={navItemClass.join(' ')}>
-          <a style={{'color':'#0F697D', 'fontFamily':"Noto Sans",'fontSize': "4vh", 'textAlign': "center", fontWeight:'bolder',marginLeft:'30%', width:'100%'}}  className="noble-ui-logo d-block mb-2">
+      <ListGroup as="ul" bsPrefix=" " className="navbar-nav mr-auto" style={{ width:'80%'}}>
+        <ListGroup.Item as="li" bsPrefix=" " className={navItemClass.join(' ')} style={{textAlign:'right',width:'100%'}}>
+          {/*<a style={{'color':'#0F697D', 'fontFamily':"Noto Sans",'fontSize': "3vh", 'textAlign': "center", fontWeight:'bolder',marginLeft:'auto', width:'100%'}}  className="noble-ui-logo d-block mb-2">
+          */}<a style={{fontFamily:"Noto Sans",fontSize: "4vh", 'textAlign': "center", fontWeight:'bolder', width:'100%'}}  className="noble-ui-logo d-block mb-2">
             {/*Comprehensive Access and Review Dashboard*/}
-            Primary Health Care - Vital Signs Profile
+            Comprehensive Access and Review Dashboard Portals
           </a>
         </ListGroup.Item>
       </ListGroup>

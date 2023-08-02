@@ -19,6 +19,56 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
+        //Organisations Permissions
+        $permission=Permission::create(["name"=>"View-Administration-Organisations-Menu"]);
+        $permission=Permission::create(["name"=>"Organisations-view"]);
+        $permission=Permission::create(["name"=>"Organisations-create"]);
+        $permission=Permission::create(["name"=>"Organisations-edit"]);
+        $permission=Permission::create(["name"=>"Organisations-delete"]);
+        //Roles Permissions
+        $permission=Permission::create(["name"=>"View-Administration-Roles-Menu"]);
+        $permission=Permission::create(["name"=>"Roles-view"]);
+        $permission=Permission::create(["name"=>"Roles-create"]);
+        $permission=Permission::create(["name"=>"Roles-edit"]);
+        $permission=Permission::create(["name"=>"Roles-delete"]);
+        //User Permissions
+        $permission=Permission::create(["name"=>"View-Administration-Users-Menu"]);
+        $permission=Permission::create(["name"=>"Users-view"]);
+        $permission=Permission::create(["name"=>"Users-create"]);
+        $permission=Permission::create(["name"=>"Users-edit"]);
+        $permission=Permission::create(["name"=>"Users-delete"]);
+
+        //Sidebar Permissions
+        $permission=Permission::create(["name"=>"View-Sidebar-Menu"]);
+        $permission=Permission::create(["name"=>"Sidebar-view"]);
+        $permission=Permission::create(["name"=>"Sidebar-create"]);
+        $permission=Permission::create(["name"=>"Sidebar-edit"]);
+        $permission=Permission::create(["name"=>"Sidebar-delete"]);
+
+        //Bi-Platforms Permissions
+        $permission=Permission::create(["name"=>"View-Embedding"]);
+        $permission=Permission::create(["name"=>"Bi-Platforms-view"]);
+        $permission=Permission::create(["name"=>"Bi-Platforms-create"]);
+        $permission=Permission::create(["name"=>"Bi-Platforms-edit"]);
+        $permission=Permission::create(["name"=>"Bi-Platforms-delete"]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         //Embedding Block
         $permission=Permission::create(["name"=>"View-Embedding"]);
         $permission=Permission::create(["name"=>"Embedding-Servers"]);
@@ -61,33 +111,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
         //Administration
         $permission=Permission::create(["name"=>"View-Administration-Menu"]);
-        //Organisations Permissions
-        $permission=Permission::create(["name"=>"View-Administration-Organisations-Menu"]);
-        $permission=Permission::create(["name"=>"Administration-Organisations-view"]);
-        $permission=Permission::create(["name"=>"Administration-Organisations-create"]);
-        $permission=Permission::create(["name"=>"Administration-Organisations-edit"]);
-        $permission=Permission::create(["name"=>"Administration-Organisations-delete"]);
-        //Roles Permissions
-        $permission=Permission::create(["name"=>"View-Administration-Roles-Menu"]);
-        $permission=Permission::create(["name"=>"Administration-Roles-view"]);
-        $permission=Permission::create(["name"=>"Administration-Roles-create"]);
-        $permission=Permission::create(["name"=>"Administration-Roles-edit"]);
-        $permission=Permission::create(["name"=>"Administration-Roles-delete"]);
-        //User Permissions
-        $permission=Permission::create(["name"=>"View-Administration-Users-Menu"]);
-        $permission=Permission::create(["name"=>"Administration-Users-view"]);
-        $permission=Permission::create(["name"=>"Administration-Users-create"]);
-        $permission=Permission::create(["name"=>"Administration-Users-edit"]);
-        $permission=Permission::create(["name"=>"Administration-Users-delete"]);
+
         //Configurations
         $permission=Permission::create(["name"=>"View-System-Configuration-Menu"]);
-        //Sidebar Menu Items
-        $permission=Permission::create(["name"=>"View-Configuration-Sidebar-Menu"]);
-        $permission=Permission::create(["name"=>"Configuration-Sidebar-Menu-view"]);
-        $permission=Permission::create(["name"=>"Configuration-Sidebar-Menu-create"]);
-        $permission=Permission::create(["name"=>"Configuration-Sidebar-Menu-edit"]);
-        $permission=Permission::create(["name"=>"Configuration-Sidebar-Menu-archive"]);
-        $permission=Permission::create(["name"=>"Configuration-Sidebar-Menu-delete"]);
+
         //Statistics
         $permission=Permission::create(["name"=>"View-Administration-Statistics-Menu"]);
         $permission=Permission::create(["name"=>"Administration-Statistics-visits"]);

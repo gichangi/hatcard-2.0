@@ -7,6 +7,7 @@ import App from './Apps';
 import {Provider} from "react-redux";
 import store from "./store";
 import './index.scss';
+import 'font-awesome/css/font-awesome.min.css';
 
 createInertiaApp({
     resolve: name => {

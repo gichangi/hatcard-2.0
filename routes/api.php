@@ -83,11 +83,14 @@ Route::middleware('auth:api')->group(function(){
     });
     Route::prefix('bi-dashboards')->group(function () {
         Route::controller(\App\Http\Controllers\AdminControllers\BIDashboards\BIDashboardsController::class)->group(function () {
-            Route::get('/{id?}', 'index');
+            Route::post('/archive','archive');
+            Route::post('/default','setHomepage');
+            Route::get('/homepage','getHomepage');
             Route::get('/find/{id}', 'show');
+            Route::get('/{id?}', 'index');
             Route::post('/', 'store');
             Route::delete('/','destroy');
-            Route::post('/archive','archive');
+
         });
     });
 

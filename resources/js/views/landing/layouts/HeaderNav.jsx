@@ -7,8 +7,8 @@ function HeaderNav(props) {
         <>
             <nav className="navbar landing-nav navbar-expand-lg navbar-light navbar-default navbar-fixed-top past-main" role="navigation">
                 <div className="container">
-                    <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder'}}>
-                        <img src={vspFaviconIcon} alt="Vital Signs Profile" /> Vital Signs Profile
+                    <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder', fontSize:'28px',color:'rgb(164, 34, 98)'}}>
+                        <img src={vspFaviconIcon} alt="Vital Signs Profile" />CARD
                     </a>
                     <button
                         className="navbar-toggler"
@@ -34,7 +34,7 @@ function HeaderNav(props) {
                                     Important
                                 </a>
                             </li>*/}
-                            <li className="nav-item dropdown">
+{/*                            <li className="nav-item dropdown">
                                 <Link
                                     className="nav-link dropdown-toggle"
                                     to="#"
@@ -53,13 +53,13 @@ function HeaderNav(props) {
                                     <Link to="/pms" className="dropdown-item">
                                         Progress Module Scores
                                     </Link>
-      {/*                              <Link to="#" className="dropdown-item">
+                                    <Link to="#" className="dropdown-item">
                                         Level 3
-                                    </Link>*/}
+                                    </Link>
                                 </div>
-                            </li>
+                            </li>*/}
                             <li className="nav-item">
-                                <a className="nav-link page-scroll" href="https://www.improvingphc.org/about-phcpi" target="_blank">
+                                <a className="nav-link page-scroll" href="https://www.usaid.gov/nigeria" target="_blank">
                                     About
                                 </a>
                             </li>

@@ -138,6 +138,7 @@ class MenuItemController extends Controller
                     ->where('menu_items.parent_id', '=', $request_id );
             })
             ->select('id','name as title','menu_type as type','description','menu_category as category','menu_url as url','menu_icon as icon','order_id','menu_image as image')
+            ->orderBy('order_id', 'desc')
             ->get();
         return response()->json(['navigation_menu_items' => $UserMenus], 200);
     }
@@ -175,7 +176,6 @@ class MenuItemController extends Controller
     //Provide nested object for navigation menu
     public function navigationTree(string $id = null): \Illuminate\Http\JsonResponse
     {
-
         $UserMenus =  DB::table('user_has_menus')->where('user_id', Auth::user()->id)->pluck('menu_id');
         $menus = New MenuItems();
         $treeArray = [];

@@ -52,6 +52,7 @@ function Index({details,pageSwitch}) {
     const editorRef = useRef(null);
     const imageUploadRef = useRef(null);
     const [editorContent, setEditorContent] = useState(null);
+    const [menuTreeItems, setMenuTreeItems] = useState([]);
     const [temps, setTemps] = useState(null);
     const [parentMenu, setParentMenu] = useState();
     const [formErrors, setFormErrors] = useState({});
@@ -81,7 +82,21 @@ function Index({details,pageSwitch}) {
     const formValidation = (dashboard = dashboard)=>{
         return Object.keys(validate(dashboard)).length === 0;
     }
-
+    useEffect(()=>{
+        apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
+            let temp = [];
+            res.data.menu_items.forEach(i =>{
+                temp.push({
+                    name:i.name,
+                    id:i.id,
+                    order_id:i.order_id,
+                    parent_id:i.parent_id,
+                    menu_type:i.menu_type
+                });
+            })
+            setMenuTreeItems(temp);
+        })
+    },[])
     const handleSubmit = () => {
         dashboard.config_json.html_code = editorRef.current.getContent()
         if(formValidation && Object.keys(validate(dashboard)).length === 0){
@@ -200,8 +215,10 @@ function Index({details,pageSwitch}) {
                                         <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                     </>
                                 }
+
                                 {parentMenu &&
-                                    <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems} defaultSelected={[parentMenu]}/>
+                                    <CustomMenuTree title={"Menu Tree"} menuTreeItems={menuTreeItems} orderField={'created_at'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]} defaultSelected={[parentMenu]}  />
+
                                 }
 
 

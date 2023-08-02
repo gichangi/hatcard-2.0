@@ -220,7 +220,7 @@ function OrgAdd({pageSwitch, rowData}) {
                                             <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                         </>
                                     }
-                                    <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'date_created'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  />
+                                    <CustomMenuTree title={"Organisation Tree"} menuTreeItems={menuTreeItems} orderField={'date_created'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  />
                                 </Col>
                             </Form.Group>
                         </Item>

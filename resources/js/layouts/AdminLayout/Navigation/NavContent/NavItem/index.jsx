@@ -55,14 +55,28 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
     subContent = (
         //Gichangi customization
         //Customize here for change in colorclassName={'dashboardClass'}
+        <>
+          {item.category==='dashboard'&&
+              <CustomNavLink to={{ pathname: '/dashboards/view', state: { id: item.id}}} style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet'}}>
+                {showIcon &&
+                    <NavIcon  items={item} />
+                }
+                {itemTitle} {/*{item.category}*/}
 
-      <CustomNavLink to={item.url} className={`${customClass} custom-menu-item nav-link ${item.category === 'dashboard'?'dashboard-link':''}`} exact={true} target={itemTarget}>
-        {showIcon &&
-            <NavIcon  items={item} />
-        }
-        {itemTitle}
-        <NavBadge items={item} />
-      </CustomNavLink>
+              </CustomNavLink>
+          }
+          {item.category !=='dashboard' &&
+            <CustomNavLink to={item.url} className={`${customClass} custom-menu-item nav-link ${item.category === 'dashboard'?'dashboard-link':''}`} exact={true} target={itemTarget}>
+              {showIcon &&
+                  <NavIcon  items={item} />
+              }
+
+              {itemTitle}
+              <NavBadge items={item} />
+            </CustomNavLink>
+          }
+        </>
+
     );
   }
   let mainContent = '';

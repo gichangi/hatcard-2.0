@@ -13,6 +13,8 @@ import {Dropdown, DropdownMenuItem, DropdownNestedMenuItem} from "../../../compo
 import {ArrowRight} from "@mui/icons-material";
 import MySwal from "sweetalert2";
 import _ from 'lodash';
+import CheckIcon from '@mui/icons-material/Check';
+
 
 function List(props) {
     const[dashboards,setDashboards] = useState([]);
@@ -100,6 +102,16 @@ function List(props) {
         [dashboards]
     );
 
+    const setDefault = (row)=>{
+        apiFetch('post',{},'/api/bi-dashboards/default',{id:row.getValue('id')}).then(res=>{
+            console.log(res.data.message.type)
+            if(res.data.message.type === 'success'){
+                MySwal.fire('', `Successfully set as homepage`, 'success');
+            }else{
+                MySwal.fire('', res.data.message.message, 'error');
+            }
+        })
+    }
     return (
         <div>
             <Row>
@@ -148,6 +160,18 @@ function List(props) {
                         positionActionsColumn="last"
                         renderRowActionMenuItems={({row, closeMenu}) => {
                             return [
+                                <MenuItem key={1}
+                                          onClick={() => {
+                                              console.info('Set default', row.original.name);
+                                              setDefault(row)
+                                          }}
+                                          sx={{
+                                              width: '140px'
+                                          }}
+                                >
+                                    <CheckIcon />&nbsp; Default
+                                </MenuItem>,
+
                                 <MenuItem key={1}
                                           onClick={() => {
                                               console.info('View Profile', row.original.name);

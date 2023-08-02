@@ -15,7 +15,9 @@ export const renderRoutes = (routes = []) => (
                 const Guard = route.guard || Fragment;
                 const Layout = route.layout || Fragment;
                 const Component = route.component;
-
+                console.log('permission');
+                console.log(route.permission)
+                console.log('permission')
                 return (
                     <Route
                         key={i}
@@ -64,11 +66,13 @@ const routes = [
         guard: AuthGuard,
         routes: [
             {
+                permission:['view-homepage'],
                 exact: true,
                 path: '/home',
-                component: lazy(() => import('./views/extra'))
+                component: lazy(() => import('./views/homepage'))
             },
             {
+                permission:['view-homepage'],
                 exact: true,
                 path: '/profile',
                 component: lazy(() => import('./views/user-profile'))
@@ -80,6 +84,7 @@ const routes = [
             },
 
             {
+                permission:['Roles-view','Roles-create','Roles-edit','Roles-delete'],
                 exact: true,
                 path: '/admin/roles',
                 component: lazy(() => import('./views/admin/Roles'))
@@ -90,31 +95,37 @@ const routes = [
                 component: lazy(() => import('./views/admin/MenuManagement'))
             },
             {
+                permission:['Users-view','Users-create','Users-edit','Users-delete'],
                 exact: true,
                 path: '/admin/users',
                 component: lazy(() => import('./views/admin/Users'))
             },
             {
+                permission:['Sidebar-view','Sidebar-create','Sidebar-edit','Sidebar-delete'],
                 exact: true,
-                path: '/admin/menu-management/menuitem',
+                path: '/admin/sidebar/menuitem',
                 component: lazy(() => import('./views/admin/MenuManagement/Navigation'))
             },
             {
+                permission:['Organisations-view','Organisations-create','Organisations-edit','Organisations-delete'],
                 exact: true,
                 path: '/admin/organisation',
                 component: lazy(() => import('./views/admin/Organisations'))
             },
             {
+                permission:['Bi-Platforms-view','Bi-Platforms-create','Bi-Platforms-edit','Bi-Platforms-delete'],
                 exact: true,
                 path: '/admin/bi-platforms',
                 component: lazy(() => import('./views/admin/BI-Platforms'))
             },
             {
+                permission:['Bi-Dashboards-view','Bi-Dashboards-create','Bi-Dashboards-edit','Bi-Dashboards-delete'],
                 exact: true,
                 path: '/admin/bi-dashboards',
                 component: lazy(() => import('./views/admin/BI-Dashboards'))
             },
             {
+                permission:['Bi-Dashboards-view'],
                 exact: true,
                 path: '/dashboards/view',
                 component: lazy(() => import('./views/dashboards'))

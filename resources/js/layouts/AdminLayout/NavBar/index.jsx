@@ -53,7 +53,7 @@ const NavBar = () => {
                 </Link> */}
       </div>
       {/*Top bar navigation Items*/}
-      <div className={collapseClass.join(' ')} style={{backgroundColor:'white'}}>
+      <div className={collapseClass.join(' ')}>
         <NavLeft />
         <NavRight />
       </div>

@@ -7,10 +7,54 @@ import TableauServerConfig from "../admin/BI-Platforms/Tableau/TableauServerConf
 import TableauOnlineConfig from "../admin/BI-Platforms/Tableau/TableauOnlineConfig";
 import ViewTableau from "./Tableau/ViewTableau";
 import ViewHtmlDashboard from "./HTML/ViewHTMLDashboard";
+import Box from '@mui/material/Box';
+import CircularProgress, {
+    circularProgressClasses,
+} from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+
+function FacebookCircularProgress(props) {
+    return (
+        <Grid container spacing={2} direction="row" justifyContent="center" alignItems="center" sx={{height:"90vh"}}>
+            <Grid item xs={4} >
+                <Box sx={{ position: 'relative' }}>
+                    <CircularProgress
+                        variant="determinate"
+                        sx={{
+                            color: (theme) =>
+                                theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+                        }}
+                        size={500}
+                        thickness={4}
+                        {...props}
+                        value={100}
+                    />
+                    <CircularProgress
+                        variant="indeterminate"
+                        disableShrink
+                        sx={{
+                            color: (theme) => (theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8'),
+                            animationDuration: '550ms',
+                            position: 'absolute',
+                            left: 0,
+                            [`& .${circularProgressClasses.circle}`]: {
+                                strokeLinecap: 'round',
+                            },
+                        }}
+                        size={500}
+                        thickness={4}
+                        {...props}
+                    />
+                </Box>
+            </Grid>
+        </Grid>
+
+    );
+}
 
 function Index(props) {
     let { state } = useLocation();
-    const [reComp, setReComp] = useState(<>Empty</>)
+    const [reComp, setReComp] = useState(<FacebookCircularProgress />)
     const [currentDashboard, setCurrentDashboard] = useState(null)
     useEffect(()=>{
         apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
@@ -32,7 +76,7 @@ function Index(props) {
                 setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
                 break;
             default:
-                setReComp(<>Empty</>);
+                setReComp(<FacebookCircularProgress />);
         }
     }
 

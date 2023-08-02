@@ -14,7 +14,7 @@
     <!-- Google Fonts Style -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" />
     <script type="module" src="https://public.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"></script>
-    <title>About PHC VSP</title>
+    <title>CARD</title>
     <script>
         window.global = window;
     </script>

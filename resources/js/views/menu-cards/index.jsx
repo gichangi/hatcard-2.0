@@ -14,7 +14,7 @@ const Item = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
-    height:'100%'
+    height:'40vh'
 }));
 
 
@@ -39,7 +39,7 @@ function Index(props) {
 
     return (
         <div>
-            <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start">
+            <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start" sx={{height:"90vh"}}>
                 {cardItems.map((i) => (
 
                         <Grid item xs={2} sm={3} md={3} key={i.id} >
@@ -49,12 +49,18 @@ function Index(props) {
                             <Item>
 
                                 <Card sx={{height:'100%'}}>
-                                    <CardMedia
-                                        component="img"
-                                        height="auto"
-                                        image={`${i.image}`}
-                                        alt="Paella dish"
-                                    />
+                                    <CardMedia sx={{height:'25vh'}}>
+                                        <img
+                                            height={'auto'}
+                                            src={`${i.image}`}
+                                            alt={'Loading...'}
+                                            style={{
+                                                width: 'auto',
+                                                height: '100%',
+                                                alignSelf: 'center',
+                                            }}
+                                        />
+                                    </CardMedia>
                                     <CardContent>
                                         <Typography gutterBottom variant="h6" component="div" sx={{color:'#0F697D',fontWeight:'bold'}}>
                                             {i.title}
