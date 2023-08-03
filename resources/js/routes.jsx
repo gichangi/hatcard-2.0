@@ -15,9 +15,6 @@ export const renderRoutes = (routes = []) => (
                 const Guard = route.guard || Fragment;
                 const Layout = route.layout || Fragment;
                 const Component = route.component;
-                console.log('permission');
-                console.log(route.permission)
-                console.log('permission')
                 return (
                     <Route
                         key={i}
