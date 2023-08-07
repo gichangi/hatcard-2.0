@@ -30,6 +30,12 @@ Route::post('/login', [\App\Http\Controllers\UserManagement\AuthController::clas
         });
     });
 
+Route::prefix('data')->group(function () {
+    Route::controller(\App\Http\Controllers\PublicControllers\DataController::class)->group(function () {
+        Route::get('progressive-model', 'progressiveModelData');
+    });
+});
+
 Route::middleware('auth:api')->group(function(){
     Route::get('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'index']);
     Route::post('/menu-items', [\App\Http\Controllers\AdminControllers\MenuManagement\MenuItemController::class, 'store']);
@@ -85,6 +91,7 @@ Route::middleware('auth:api')->group(function(){
         Route::controller(\App\Http\Controllers\AdminControllers\BIDashboards\BIDashboardsController::class)->group(function () {
             Route::post('/archive','archive');
             Route::post('/default','setHomepage');
+            Route::post('/public','enablePublic');
             Route::get('/homepage','getHomepage');
             Route::get('/find/{id}', 'show');
             Route::get('/{id?}', 'index');

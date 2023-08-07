@@ -110,6 +110,21 @@ class BIDashboardsController extends Controller
     }
 
 
+    /**
+     * Enable dashboard to be view from public
+     */
+    public function enablePublic(Request $request): \Illuminate\Http\JsonResponse
+    {
+
+        $dashboard = BIDashboards::find($request->id);
+        $dashboard->public_access = !$dashboard->public_access;
+
+        if($dashboard->save()){
+            return response()->json(['message' => ['type'=>'success']], 200);
+        }
+        return response()->json(['message' => ['type'=>'error','message'=>'Error occurred while updating dashboard']], 200);
+    }
+
     public function getHomepage(): \Illuminate\Http\JsonResponse
     {
 

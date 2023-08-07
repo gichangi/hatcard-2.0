@@ -56,13 +56,18 @@ function Index(props) {
     let { state } = useLocation();
     const [reComp, setReComp] = useState(<FacebookCircularProgress />)
     const [currentDashboard, setCurrentDashboard] = useState(null)
+    const[currentId, setCurrentId] = useState(null)
     useEffect(()=>{
-        apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
-            console.log("res.data.dashboard")
-            console.log(res.data.dashboard)
-            pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
-        })
-    },[])
+        if(state !== undefined && currentId !== state.id){
+            apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
+                console.log("res.data.dashboard")
+                console.log(res.data.dashboard)
+                pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
+            })
+            setCurrentId(state.id)
+        }
+
+    },[state])
 
     const pageSwitch = (category,id,dashboard) =>{
         switch (category) {

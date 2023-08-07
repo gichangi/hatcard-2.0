@@ -14,6 +14,8 @@ import {ArrowRight} from "@mui/icons-material";
 import MySwal from "sweetalert2";
 import _ from 'lodash';
 import CheckIcon from '@mui/icons-material/Check';
+import PublicIcon from '@mui/icons-material/Public';
+import PublicOffIcon from '@mui/icons-material/PublicOff';
 
 
 function List(props) {
@@ -53,6 +55,11 @@ function List(props) {
             {
                 accessorKey: 'status',
                 header: 'Status',
+            },
+            {
+                accessorFn: (row) => row.public_access?"True":"False", //al
+                id: 'public_access',
+                header: 'Public Access',
             },
             {
                 accessorFn: (row) => new Date(row.updated_at).toLocaleDateString('en-GB'), //alternate way
@@ -112,6 +119,18 @@ function List(props) {
             }
         })
     }
+    const setPublic = (row)=>{
+        apiFetch('post',{},'/api/bi-dashboards/public',{id:row.getValue('id')}).then(res=>{
+            console.log(res.data.message.type)
+            if(res.data.message.type === 'success'){
+                MySwal.fire('', `Successfully updated`, 'success');
+            }else{
+                MySwal.fire('', res.data.message.message, 'error');
+            }
+        })
+    }
+
+
     return (
         <div>
             <Row>
@@ -159,7 +178,7 @@ function List(props) {
                         enableRowActions
                         positionActionsColumn="last"
                         renderRowActionMenuItems={({row, closeMenu}) => {
-                            return [
+                            let actionArray =[
                                 <MenuItem key={1}
                                           onClick={() => {
                                               console.info('Set default', row.original.name);
@@ -169,10 +188,35 @@ function List(props) {
                                               width: '140px'
                                           }}
                                 >
-                                    <CheckIcon />&nbsp; Default
+                                    <CheckIcon />&nbsp; Defaults
+                                </MenuItem>,
+                                <MenuItem key={2}
+                                          onClick={() => {
+                                              console.info('row.original.public_access',row.original.public_access);
+                                             // setDefault(row)
+                                              setPublic(row)
+                                          }}
+                                          sx={{
+                                              width: '140px'
+                                          }}
+                                >
+                                    {row.original.public_access &&
+                                        <>
+                                            <PublicOffIcon />&nbsp; Public
+
+                                        </>
+                                    }
+                                    {!row.original.public_access &&
+                                        <>
+                                            <PublicIcon  />&nbsp; Public
+                                        </>
+                                    }
+
+
+
                                 </MenuItem>,
 
-                                <MenuItem key={1}
+                                <MenuItem key={3}
                                           onClick={() => {
                                               console.info('View Profile', row.original.name);
                                               props.pageSwitch(row.original.dashboard_type, row.original);
@@ -183,7 +227,7 @@ function List(props) {
                                 >
                                     <VisibilityIcon/>&nbsp; Edit
                                 </MenuItem>,
-                                <MenuItem key={2} onClick={() => {
+                                <MenuItem key={4} onClick={() => {
                                     console.info('Remove', row);
                                     handleDeleteRow(row)
                                     //handleDeleteAction(row.original.id);
@@ -191,7 +235,7 @@ function List(props) {
                                 }}>
                                     <DeleteIcon/> &nbsp; Delete
                                 </MenuItem>,
-                                <MenuItem key={3} onClick={() => {
+                                <MenuItem key={5} onClick={() => {
                                     handleDisableRow(row)
                                     closeMenu();
                                 }}>
@@ -206,8 +250,12 @@ function List(props) {
                                         </>
                                     }
                                 </MenuItem>
+                            ]
 
-                            ];
+                            if(row.original.set_home_page){
+                                actionArray.shift()
+                            }
+                            return actionArray;
                         }}
                         initialState={{
                             pagination: {

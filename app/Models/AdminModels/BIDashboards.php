@@ -26,7 +26,7 @@ class BIDashboards extends Model
         'config_json->credentials'
     ];
     protected $fillable = [
-        'name', 'description','parent_menu_uid','dashboard_type','server_uid','config_json','set_home_page','status','created_by','last_updated_by'
+        'name', 'description','parent_menu_uid','dashboard_type','server_uid','config_json','set_home_page','public_access','status','created_by','last_updated_by'
     ];
 
     /**
