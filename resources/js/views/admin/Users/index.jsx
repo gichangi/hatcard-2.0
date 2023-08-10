@@ -7,9 +7,9 @@ import { connect } from "react-redux";
 import {  fetchUsers} from './../../../actions/user';
 
 function Index(props) {
+    console.log("want to know where I am")
     const [reComp, setReComp] = useState()
     useEffect(() => {
-
         loadUsers()
 
     }, []); //componentDidMount to get module menus
@@ -56,22 +56,15 @@ function Index(props) {
 }
 
 const mapStateToProps = (state, ownProps) => {
-
+    console.log(state)
     return {
-
         userItem: state.users.list,
-
     };
-
 };
 
-
-
-const mapActionToProps = {
-
-    fetchUsersAll: fetchUsers,
-
-};
+const mapActionToProps = dispatch =>({
+    fetchUsersAll: () => dispatchEvent(fetchUsers()),
+});
 
 export default connect(mapStateToProps, mapActionToProps)(Index);
 //export default Index; fetchUsers

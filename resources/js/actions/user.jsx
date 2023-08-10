@@ -26,14 +26,13 @@ export const fetchUsers = () => (dispatch) => {
         .get(`/api/menu-items`)
 
         .then((response) => {
-                console.log("response.data")
-                console.log(response.data)
-               console.log("response.data")
+               //  console.log("response.data")
+
             dispatch({
 
                 type: ACTION_TYPES.FETCH_USERS,
 
-                payload: response.data,
+                payload: "testing response from the action store",
 
             });
 
