@@ -1,7 +1,7 @@
 import axios from "axios";
 
 //import { url as baseUrl } from "../api";
-
+import {apiFetch} from "./../assets/api/utils";
 import * as ACTION_TYPES from "./types";
 
 /**
@@ -21,35 +21,19 @@ import * as ACTION_TYPES from "./types";
 
 export const fetchUsers = () => (dispatch) => {
 
-    axios
-
-        .get(`/api/menu-items`)
-
-        .then((response) => {
-               //  console.log("response.data")
-
+    apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
+        if(res.data){
             dispatch({
-
                 type: ACTION_TYPES.FETCH_USERS,
-
-                payload: "testing response from the action store",
+                payload: res.data,
 
             });
-
-        })
-
-        .catch((error) => {
-
-
+        }else{
             dispatch({
-
                 payload: "Something went wrong, please try again",
-
             });
-
-
-
-        });
+        }
+    })
 
 };
 
