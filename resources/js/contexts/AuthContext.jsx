@@ -9,7 +9,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 import {Redirect, useHistory} from "react-router-dom";
 import {apiFetch} from "../assets/api/utils";
-import {fetchMenu } from './../actions/menu'
+
 
 const initialState = {
     isLoggedIn: false,
@@ -37,10 +37,10 @@ export const reducer = (state, action) => {
             };
         }
         case UPDATE_MENU:{
-            const { menuItems } = action.payload;
+            const { list } = action.payload;
             return {
                 ...state,
-                menuItems
+                list
             };
         }
         default: {
@@ -87,7 +87,6 @@ export function updateMenuItemsAction(navMenuItems){
     }
 }
 export function updateMenuAction(navMenuItems){
-    console.log('my code is here')
     return {
         "type": "UPDATE_MENU",
         "payload": {
@@ -123,9 +122,6 @@ export const AuthProvider = ({ children, props }) => {
     const storeDispatch = useDispatch();
     const history = useHistory();
     const currentMenu= useSelector(state => state.menus.list)
-    useEffect(() => {
-        dispatch(fetchMenu())
-    }, [dispatch]); //componentDidMount to get module menus
 
     const emailPasswordSignIn = (email, password) => {
         return apiFetch('post',{ "Accept": "application/json" },'/api/login',{email:email,password:password}).then((response) => {
@@ -153,8 +149,8 @@ export const AuthProvider = ({ children, props }) => {
                     //Update redux state
                    storeDispatch(updateAuthState(authStoreData))
                    storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
-                   storeDispatch(updateMenuAction(res.data.navigation_menu_items));
-                    dispatch(updateMenuAction(res.data.navigation_menu_items));
+                   storeDispatch(updateMenuAction(res.data.navigation_menu_items));//update store
+                    dispatch(updateMenuAction(res.data.navigation_menu_items));//update menu state by action
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                 }).catch(error =>{
@@ -201,16 +197,16 @@ export const AuthProvider = ({ children, props }) => {
 
         (async () => {
             console.log("authprovider")
-            dispatch(fetchMenu('FETCH_MENU'))
             //check for cookies values if not push to login
             let authStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
             if(authStore!== 1){
                 let menuItems = await fetchMenuItems(authStore.token);
                 if(menuItems.message === 'success'){
                     dispatch(updateAuthState(authStore));
-                    dispatch(updateMenuItemsAction(menuItems.data));
+                    dispatch(updateMenuItemsAction(menuItems.data))
+                    dispatch(updateMenuAction(menuItems.data));//update menu state
                     storeDispatch(updateAuthState(authStore));
-                    dispatch(fetchMenu())
+                    storeDispatch(updateMenuAction(menuItems.data));//update menu state
                     storeDispatch(updateMenuItemsAction(menuItems.data))
                     localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{
