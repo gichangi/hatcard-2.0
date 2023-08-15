@@ -5,27 +5,24 @@ import {apiFetch} from "./../assets/api/utils";
 import * as ACTION_TYPES from "./types";
 
 /**
-
  * @Actions
 
- *  User Operations
+ *  Menu Operations
 
  * returns API response from server => payload: response || error
-
- * =================================
-
- * @method POST => register() -> register a new User
 
  */
 
 
-export const fetchUsers = () => (dispatch) => {
+export const fetchMenu = () => (dispatch) => {
 
     apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
+        console.log('code is here')
+        console.log(res.data)
         if(res.data){
             dispatch({
-                type: ACTION_TYPES.FETCH_USERS,
-                payload: res.data,
+                type: ACTION_TYPES.FETCH_MENU,
+                payload: 'navigation got here',
 
             });
         }else{

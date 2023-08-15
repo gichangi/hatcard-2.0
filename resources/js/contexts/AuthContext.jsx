@@ -1,13 +1,15 @@
 import {createContext, useEffect, useReducer, useState} from 'react';
 import {
     LARAVEL_STATE_CHANGED,
-    UPDATE_NAV_MENU_ITEMS, USER_STATE_CHANGED
+    UPDATE_NAV_MENU_ITEMS, USER_STATE_CHANGED,
+    UPDATE_MENU
 } from '../store/actions';
 import Loader from '../components/Loader/Loader';
 import axios from 'axios';
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Redirect, useHistory} from "react-router-dom";
 import {apiFetch} from "../assets/api/utils";
+
 
 const initialState = {
     isLoggedIn: false,
@@ -32,6 +34,13 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 navMenuItems
+            };
+        }
+        case UPDATE_MENU:{
+            const { list } = action.payload;
+            return {
+                ...state,
+                list
             };
         }
         default: {
@@ -77,7 +86,14 @@ export function updateMenuItemsAction(navMenuItems){
         }
     }
 }
-
+export function updateMenuAction(navMenuItems){
+    return {
+        "type": "UPDATE_MENU",
+        "payload": {
+            menuItems:navMenuItems
+        }
+    }
+}
  async function  fetchMenuItems (token){
     // create a promise for the axios request
     try{
@@ -101,10 +117,11 @@ export function updateMenuItemsAction(navMenuItems){
  }
 
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children, props }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const storeDispatch = useDispatch();
     const history = useHistory();
+    const currentMenu= useSelector(state => state.menus.list)
 
     const emailPasswordSignIn = (email, password) => {
         return apiFetch('post',{ "Accept": "application/json" },'/api/login',{email:email,password:password}).then((response) => {
@@ -132,6 +149,8 @@ export const AuthProvider = ({ children }) => {
                     //Update redux state
                    storeDispatch(updateAuthState(authStoreData))
                    storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
+                   storeDispatch(updateMenuAction(res.data.navigation_menu_items));//update store
+                    dispatch(updateMenuAction(res.data.navigation_menu_items));//update menu state by action
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                     alert("here");
@@ -185,8 +204,10 @@ export const AuthProvider = ({ children }) => {
                 let menuItems = await fetchMenuItems(authStore.token);
                 if(menuItems.message === 'success'){
                     dispatch(updateAuthState(authStore));
-                    dispatch(updateMenuItemsAction(menuItems.data));
+                    dispatch(updateMenuItemsAction(menuItems.data))
+                    dispatch(updateMenuAction(menuItems.data));//update menu state
                     storeDispatch(updateAuthState(authStore));
+                    storeDispatch(updateMenuAction(menuItems.data));//update menu state
                     storeDispatch(updateMenuItemsAction(menuItems.data))
                     localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{

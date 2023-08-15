@@ -69,7 +69,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
 
 
-        //Embedding Block
+/*         //Embedding Block
         $permission=Permission::create(["name"=>"View-Embedding"]);
         $permission=Permission::create(["name"=>"Embedding-Servers"]);
         $permission=Permission::create(["name"=>"Embedding-Servers-view"]);
@@ -117,7 +117,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         //Statistics
         $permission=Permission::create(["name"=>"View-Administration-Statistics-Menu"]);
-        $permission=Permission::create(["name"=>"Administration-Statistics-visits"]);
+        $permission=Permission::create(["name"=>"Administration-Statistics-visits"]); */
 
 
         //Super admin Role
