@@ -134,6 +134,7 @@ export const AuthProvider = ({ children }) => {
                    storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
+                    alert("here");
                 }).catch(error =>{
                     console.log("error fetching menu Items");
                     console.log(error)

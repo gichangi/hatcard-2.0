@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import './assets/css/styles.scss';
-import Breadcrumb from '../../layouts/AdminLayout/Breadcrumb';
+
 import BalanceIcon from '@mui/icons-material/Balance';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import capacityIcon from './assets/images/capacity-icon.png';
@@ -18,7 +18,6 @@ import PageFooter from "./layouts/PageFooter";
 const LandingPage = () => {
   return (
     <React.Fragment>
-      <Breadcrumb />
       <div className="wrapper">
         <div>
           <HeaderNav/>

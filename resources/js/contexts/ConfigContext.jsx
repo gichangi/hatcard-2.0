@@ -13,7 +13,6 @@ const { Provider } = ConfigContext;
 const ConfigProvider = ({ children }) => {
   let trigger = [];
   let open = [];
-
   const [state, dispatch] = useReducer((state, action) => {
     switch (action.type) {
       case actionType.BOX_LAYOUT:

@@ -1,5 +1,4 @@
 import React from 'react';
-import Breadcrumb from "../../layouts/AdminLayout/Breadcrumb";
 import HeaderNav from "./layouts/HeaderNav";
 import TableauViz from "./TableauViz";
 import PageFooter from "./layouts/PageFooter";
@@ -7,7 +6,6 @@ import PageFooter from "./layouts/PageFooter";
 function ProgressiveModelPage(props) {
     return (
         <React.Fragment>
-            <Breadcrumb />
             <div className="wrapper">
                 <div>
                     <HeaderNav/>

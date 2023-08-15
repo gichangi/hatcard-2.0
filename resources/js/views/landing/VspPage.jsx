@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 
 import './assets/css/styles.scss';
-import Breadcrumb from '../../layouts/AdminLayout/Breadcrumb';
 import TableauViz from "./TableauViz";
 import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
@@ -14,7 +13,6 @@ const VspPage = (props) => {
 
   return (
     <React.Fragment>
-      <Breadcrumb />
       <div className="wrapper">
         <div>
           <HeaderNav/>

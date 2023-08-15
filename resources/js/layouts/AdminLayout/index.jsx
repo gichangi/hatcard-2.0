@@ -44,7 +44,7 @@ const AdminLayout = ({ children }) => {
   if (layout === 'horizontal' && subLayout === 'horizontal-2') {
     mainClass = [...mainClass, 'container'];
   }
-
+  console.log("here2")
   let common = (
     <>
       <Navigation />
@@ -68,6 +68,7 @@ const AdminLayout = ({ children }) => {
   );
 
   if (windowSize.width < 992) {
+    console.log("here3")
     let outSideClass = ['nav-outside'];
     if (collapseMenu) {
       outSideClass = [...outSideClass, 'mob-backdrop'];

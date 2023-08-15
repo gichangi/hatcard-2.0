@@ -5,6 +5,9 @@ import {useEffect, useState} from "react";
 import {apiFetch} from "../../assets/api/utils";
 import ViewTableau from "../dashboards/Tableau/ViewTableau";
 import ViewHtmlDashboard from "../dashboards/HTML/ViewHTMLDashboard";
+import AdminLayout from '../../layouts/AdminLayout';
+import Breadcrumb from "../../layouts/AdminLayout/Breadcrumb";
+
 
 const Index = (props) => {
     const [reComp, setReComp] = useState(<>Empty</>)
@@ -32,6 +35,7 @@ const Index = (props) => {
 
     return (
         <div>
+            <Breadcrumb />
             {reComp}
         </div>
     );
