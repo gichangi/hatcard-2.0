@@ -24,6 +24,29 @@ export default defineConfig({
           usePolling:true
       }
     },*/
+    css: {
+        preprocessorOptions: {
+            scss: {
+                charset: false
+            },
+            less: {
+                charset: false,
+            },
+        },
+        charset: false,
+        postcss: {
+            plugins: [{
+                postcssPlugin: 'internal:charset-removal',
+                AtRule: {
+                    charset: (atRule) => {
+                        if (atRule.name === 'charset') {
+                            atRule.remove();
+                        }
+                    }
+                }
+            }],
+        },
+    },
     plugins: [
         laravel({
             input: ['resources/css/app.css', 'resources/js/index.jsx'],
