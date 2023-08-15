@@ -50,6 +50,7 @@ const NavContent = ({ navigation }) => {
   };
 
   const navItems = navigation.map((item) => {
+      console.log(item)
     switch (item.type) {
       case 'group':
         return <NavGroup layout={layout} key={'nav-group-' + item.id} group={item} />;
