@@ -151,9 +151,9 @@ export const AuthProvider = ({ children, props }) => {
                    storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                    storeDispatch(updateMenuAction(res.data.navigation_menu_items));//update store
                     dispatch(updateMenuAction(res.data.navigation_menu_items));//update menu state by action
+                   console.log("state menu set 1")
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
-                    alert("here");
                 }).catch(error =>{
                     console.log("error fetching menu Items");
                     console.log(error)
@@ -204,11 +204,11 @@ export const AuthProvider = ({ children, props }) => {
                 let menuItems = await fetchMenuItems(authStore.token);
                 if(menuItems.message === 'success'){
                     dispatch(updateAuthState(authStore));
-                    dispatch(updateMenuItemsAction(menuItems.data))
-                    dispatch(updateMenuAction(menuItems.data));//update menu state
+                    dispatch(updateMenuItemsAction(menuItems.data.navigation_menu_items))
+                    dispatch(updateMenuAction(menuItems.data.navigation_menu_items));//update menu state
                     storeDispatch(updateAuthState(authStore));
-                    storeDispatch(updateMenuAction(menuItems.data));//update menu state
-                    storeDispatch(updateMenuItemsAction(menuItems.data))
+                    storeDispatch(updateMenuAction(menuItems.data.navigation_menu_items));//update menu state
+                    storeDispatch(updateMenuItemsAction(menuItems.data.navigation_menu_items))
                     localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{
                     dispatch(resetAuthContext());

@@ -2,7 +2,7 @@ import { Suspense, Fragment, lazy } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Loader from './components/Loader/Loader';
-/*import AdminLayout from './layouts/AdminLayout';*/
+import AdminLayout from './layouts/AdminLayout';
 
 import GuestGuard from './components/Auth/GuestGuard';
 import AuthGuard from './components/Auth/AuthGuard';
@@ -15,7 +15,6 @@ export const renderRoutes = (routes = []) => (
                 const Guard = route.guard || Fragment;
                 const Layout = route.layout || Fragment;
                 const Component = route.component;
-                console.log("here1")
                 return (
                     <Route
                         key={i}
@@ -58,7 +57,7 @@ const routes = [
         path: '/login',
         component: lazy(() => import('./views/auth/signin/SignIn'))
     },
-/*    {
+    {
         path: '*',
         layout: AdminLayout,
         guard: AuthGuard,
@@ -130,7 +129,7 @@ const routes = [
             }
         ]
 
-    }*/
+    }
 ];
 
 export default routes;

@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import { FirebaseProvider } from './contexts/FirebaseContext';
@@ -10,15 +9,15 @@ import routes, { renderRoutes } from './routes';
 import { BASENAME } from './config/constant';
 
 const App = () => {
-  return (
-    <>
+    return (
+        <>
 
 
-      <Router basename={BASENAME}>
-        <AuthProvider>{renderRoutes(routes)}</AuthProvider>
-      </Router>
-    </>
-  );
+            <Router basename={BASENAME}>
+                <AuthProvider>{renderRoutes(routes)}</AuthProvider>
+            </Router>
+        </>
+    );
 };
 
 export default App;

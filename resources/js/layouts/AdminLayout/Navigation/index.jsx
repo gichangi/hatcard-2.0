@@ -1,4 +1,4 @@
-import  { useContext } from 'react';
+import {useContext, useEffect} from 'react';
 
 import { ConfigContext } from '../../../contexts/ConfigContext';
 import useWindowSize from '../../../hooks/useWindowSize';
@@ -14,6 +14,7 @@ const Navigation = () => {
     //console.log(currentMenu.menuItems.navigation_menu_items)
     //console.log(navigation.items)
   const configContext = useContext(ConfigContext);
+
   const {
     layout,
     layoutType,
@@ -140,14 +141,14 @@ const Navigation = () => {
   let navContent = (
     <div className={navBarClass.join(' ')}>
       <NavLogo />
-      <NavContent navigation={currentMenu.menuItems.navigation_menu_items} />
+      <NavContent navigation={currentMenu.menuItems} />
     </div>
   );
   if (windowSize.width < 992) {
     navContent = (
       <div className="navbar-wrapper">
         <NavLogo />
-        <NavContent navigation={currentMenu.menuItems.navigation_menu_items} />
+        <NavContent navigation={currentMenu.menuItems} />
       </div>
     );
   }

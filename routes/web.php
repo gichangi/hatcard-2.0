@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return Inertia('LandingPage');
+    return Inertia('landing/LandingPage');
 });
 Route::get('/login', function () {
     return Inertia('auth/signin/SignIn');
