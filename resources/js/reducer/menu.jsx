@@ -6,11 +6,11 @@ const menuReducer = (state = { list:[]   }, action) => {
 
     switch(action.type){
 
-        case USERTYPES.FETCH_MENU:
+        case USERTYPES.FETCH_MENU_TREE:
 
             return {...state, list:action.payload}
 
-        case USERTYPES.UPDATE_MENU:
+        case USERTYPES.UPDATE_MENU_TREE:
 
             return {...state, list:action.payload}
 

@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import { Card,  Row, Col } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form';
 import {Button, FormControl, InputLabel, MenuItem, OutlinedInput, Select, Typography} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import NavGroup from "./NavGroup";
@@ -8,17 +7,16 @@ import NavCollapse from "./NavCollapse";
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import ReplyIcon from '@mui/icons-material/Reply';
 import Box from "@mui/material/Box";
-import {useHistory} from "react-router-dom";
-import { Link } from 'react-router-dom'
 import _ from 'lodash';
-import {apiFetch} from "../../../../assets/api/utils";
+import {apiFetch, updateMenuStore} from "../../../../assets/api/utils";
 import Swal from 'sweetalert2';
 import withReactContent from "sweetalert2-react-content";
 import NavLink from "./NavLink";
+import {FacebookCircularProgress} from "../../../../assets/ui";
+import {connect, useDispatch} from "react-redux";
+import {updateMenuTree} from "../../../../actions/user";
 
-
-
-function Index({menuDetails,pageSwitch}) {
+function Index({menuDetails,pageSwitch,updatemenutree}) {
     const [menuType,setMenuType] = useState('')
     const [menuTypeName,setMenuTypeName] = useState("")
     const [enableCreate, setEnableCreate] = useState(false);
@@ -29,14 +27,7 @@ function Index({menuDetails,pageSwitch}) {
     const [enableSubmit, setEnableSubmit] = useState(false)
     const [formValidate, setFormValidate] = useState(false)
     const MySwal = withReactContent(Swal);
-
-    const sweetAlertHandler = (alert) => {
-        MySwal.fire({
-            title: alert.title,
-            text: alert.text,
-            type: alert.type
-        });
-    };
+    const [reComp, setReComp] = useState(<FacebookCircularProgress />)
 
 
     const updateFormData = (childForm) =>{
@@ -55,8 +46,13 @@ function Index({menuDetails,pageSwitch}) {
                 "Authorization": `Bearer ${autStore.token}`
             }
             apiFetch('POST',headers,'/api/menu-items',formData).then(res=>{
-                console.log(res.data)
+/*                storeDispatch(updateMenuAction([]));//update store
+                dispatch(updateMenuAction([]));//update menu state by actionv*/
+
+                console.log("res.data")
                 if(res.data.message.type === 'success'){
+                    updatemenutree();
+
                     MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
                         pageSwitch(null)
                     })
@@ -76,34 +72,37 @@ function Index({menuDetails,pageSwitch}) {
     }
     const handleChange = (event,node) => {
         event.preventDefault();
-        setMenuComponent(node.props.value);
+        switchMenuComponent(node.props.value);
         setMenuType(event.target.value);
         setMenuTypeName(node.props.name)
     };
     useEffect(()=>{
         if (menuDetails != null){
             setEnableEdit(true);
-
-            setMenuComponent(_.capitalize(menuDetails.menu_type));
-            switchMenuComponent();
+            switchMenuComponent(_.capitalize(menuDetails.menu_type));
         }else{
             setEnableCreate(true)
         }
     },[]);
 
-    const switchMenuComponent = () =>{
-        console.log(menuComponent)
-        switch (menuComponent){
+    const switchMenuComponent = (m) =>{
+        console.log(m)
+        switch (m){
             case 'Group':
-                return <NavGroup  updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
+                setReComp( <NavGroup  updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>);
+                break;
             case 'Collapse':
-                return <NavCollapse updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
+                setReComp(<NavCollapse updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>);
+                break;
             case 'Item':
-                return <NavLink updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>
+                setReComp(<NavLink updateFormData={updateFormData} setFormValidate={setFormValidate} formData={menuDetails}/>);
+                break;
             default:
-                return null
+                setReComp(<FacebookCircularProgress />);
         }
     }
+
+
 
     return (
         <Card
@@ -174,7 +173,8 @@ function Index({menuDetails,pageSwitch}) {
             </Card.Header>
             <Card.Body>
                 <Grid container>
-                    {switchMenuComponent()}
+                    {/*{switchMenuComponent()}*/}
+                    {reComp}
                 </Grid>
             </Card.Body>
             <Card.Footer>
@@ -229,4 +229,11 @@ function Index({menuDetails,pageSwitch}) {
         </Card>
     );
 }
-export default Index;
+
+
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
+export default connect(null, mapActionToProps)(Index);
+//export default Index; fetchUsers

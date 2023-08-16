@@ -16,7 +16,9 @@ const userReducer = (state = { list:[] ,loggedIn: false,  }, action) => {
         case USERTYPES.LOG_OUT_USER:
 
             return {...state, list:action.payload}
+        case USERTYPES.UPDATE_MENU_TREE:
 
+            return {...state, list:action.payload}
         default:
 
             return state

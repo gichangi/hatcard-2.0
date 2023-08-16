@@ -176,8 +176,7 @@ function NavItemGrid(props) {
                             let dropDownItems = [
                                 <MenuItem key={1}
                                           onClick={() => {
-                                              console.info('View Profile', row.original.name);
-                                              props.pageSwitch(row.original);
+                                              props.pageSwitch('crud',row.original);
                                               closeMenu();
                                           }}
                                           sx={{
@@ -238,7 +237,7 @@ function NavItemGrid(props) {
                                     variant="contained"
                                     startIcon={<AddCircleIcon />}
                                     onClick={() => {
-                                        props.pageSwitch();
+                                        props.pageSwitch('crud');
                                     }}
                                     sx={{
                                         fontWeight:'bolder',
@@ -254,7 +253,7 @@ function NavItemGrid(props) {
                                     variant="contained"
                                     startIcon={<AddCircleIcon />}
                                     onClick={() => {
-                                        props.pageSwitch('group_order');
+                                        props.pageSwitch('order');
                                     }}
                                     sx={{
                                         fontWeight:'bolder',

@@ -1,15 +1,15 @@
 import { useReducer } from 'react';
 import {
-    UPDATE_MENU
+    UPDATE_MENU_TREE
 } from '../store/actions';
 
 import {useDispatch, useSelector} from "react-redux";
 
 
 
-export const reducer = (state, action) => {
+export const menuReducer = (state, action) => {
     switch (action.type) {
-        case UPDATE_MENU:{
+        case UPDATE_MENU_TREE:{
             const { list } = action.payload;
             return {
                 ...state,
@@ -24,7 +24,7 @@ export const reducer = (state, action) => {
 
 export function updateMenuAction(navMenuItems){
     return {
-        "type": "UPDATE_MENU",
+        "type": "UPDATE_MENU_TREE",
         "payload": {
             menuItems:navMenuItems
         }
@@ -32,7 +32,7 @@ export function updateMenuAction(navMenuItems){
 }
 
 export const StoreProviderUpdate = (Obj) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(menuReducer, initialState);
     const storeDispatch = useDispatch();
 
     storeDispatch(updateMenuAction(Obj));//update store

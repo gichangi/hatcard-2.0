@@ -2,7 +2,7 @@ import {createContext, useEffect, useReducer, useState} from 'react';
 import {
     LARAVEL_STATE_CHANGED,
     UPDATE_NAV_MENU_ITEMS, USER_STATE_CHANGED,
-    UPDATE_MENU
+    UPDATE_MENU_TREE
 } from '../store/actions';
 import Loader from '../components/Loader/Loader';
 import axios from 'axios';
@@ -36,7 +36,7 @@ export const reducer = (state, action) => {
                 navMenuItems
             };
         }
-        case UPDATE_MENU:{
+        case UPDATE_MENU_TREE:{
             const { list } = action.payload;
             return {
                 ...state,
@@ -82,13 +82,13 @@ export function updateMenuItemsAction(navMenuItems){
     return {
         "type": "UPDATE_NAV_MENU_ITEMS",
         "payload": {
-            navMenuItems:navMenuItems
+            menuItems:navMenuItems
         }
     }
 }
 export function updateMenuAction(navMenuItems){
     return {
-        "type": "UPDATE_MENU",
+        "type": "UPDATE_MENU_TREE",
         "payload": {
             menuItems:navMenuItems
         }

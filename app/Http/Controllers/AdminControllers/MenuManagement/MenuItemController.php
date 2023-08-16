@@ -180,7 +180,7 @@ $UserMenus =  DB::table('menu_items')
     public function navigationTree(string $id = null): \Illuminate\Http\JsonResponse
     {
         //$UserMenus =  DB::table('user_has_menus')->where('user_id', Auth::user()->id)->pluck('menu_id');
-$UserMenus =  DB::table('menu_items')->pluck('id');
+$UserMenus =  DB::table('menu_items')->orderBy('order_id')->pluck('id');
         $menus = New MenuItems();
         $treeArray = [];
         foreach ($UserMenus as $item) {

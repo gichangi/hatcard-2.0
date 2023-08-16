@@ -12,6 +12,8 @@ import Swal from "sweetalert2";
 import ReplyIcon from "@mui/icons-material/Reply";
 import Box from "@mui/material/Box";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import {updateMenuTree} from "../../../../actions/user";
+import {connect} from "react-redux";
 
 const DataGrid = styled(MuiDataGrid)(({ theme }) => ({
     "& .MuiDataGrid-columnHeaders": { display: "none" },
@@ -44,7 +46,7 @@ function updateRowPosition(initialIndex, newIndex, rows) {
     });
 }
 
-function NavGroupOrder({pageSwitch}) {
+function NavGroupOrder({pageSwitch,updatemenutree}) {
     const [menuGroups, setMenuGroups] = useState([]);
     const [loading, setLoading] = useState(true);
     const MySwal = withReactContent(Swal);
@@ -88,6 +90,7 @@ function NavGroupOrder({pageSwitch}) {
         apiFetch('POST',headers,'/api/menu-groups/order',menuGroups).then(res=>{
             if(res.data.message.type === 'success'){
                 MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
+                    updatemenutree();
                     pageSwitch()
                 });
             }else{
@@ -187,4 +190,9 @@ function NavGroupOrder({pageSwitch}) {
     );
 }
 
-export default NavGroupOrder;
+
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
+export default connect(null, mapActionToProps)(NavGroupOrder);

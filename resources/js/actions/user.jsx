@@ -37,3 +37,24 @@ export const fetchUsers = () => (dispatch) => {
 
 };
 
+export const updateMenuTree = () => (dispatch) => {
+
+    apiFetch('GET',{},'/api/menu-tree',{}).then(res=>{
+        console.log(res.data)
+        if(res.data){
+            dispatch({
+                type: ACTION_TYPES.UPDATE_MENU_TREE,
+                payload: {
+                    menuItems:res.data.navigation_menu_items
+                }
+
+
+            });
+        }else{
+            dispatch({
+                payload: "Something went wrong, please try again",
+            });
+        }
+    })
+
+};

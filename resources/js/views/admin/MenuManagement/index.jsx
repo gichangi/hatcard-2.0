@@ -6,25 +6,33 @@ import Navigation from "./Navigation";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import NavGroupOrder from "./Navigation/NavGroupOrder";
+import {FacebookCircularProgress} from "../../../assets/ui";
+
 
 function index(props) {
-    const [menuDetails, setMenuDetails] = useState(null);
-    const [showGroupOrderPage,setShowGroupOrderPage]=useState(false);
-    const [showMenuGrid,setShowMenuGrid]=useState(true);
-    const pageSwitch = (menu_details = '') =>{
-        if(menu_details === 'group_order'){
-            setShowGroupOrderPage(!showGroupOrderPage);
-            setShowMenuGrid(false);
-        }else if (menu_details !== '' && menu_details !== 'group_order'){
-            setMenuDetails(menu_details);
-            setShowMenuGrid(!showMenuGrid);
-            setShowGroupOrderPage(false);
-        }else{
-            setShowMenuGrid(!showMenuGrid);
-            setShowGroupOrderPage(false);
-        }
+    const [reComp, setReComp] = useState(<FacebookCircularProgress />)
 
+    useEffect(()=>{
+        pageSwitch('grid')
+    },[])
+
+    const pageSwitch = (page,row) =>{
+        switch (page) {
+            case 'grid':
+                setReComp(<NavItemGrid pageSwitch={pageSwitch}  />);
+                break;
+            case 'crud':
+                setReComp(<Navigation menuDetails={row} pageSwitch={pageSwitch} />);
+                break;
+            case 'order':
+                setReComp(<NavGroupOrder pageSwitch={pageSwitch}/>);
+                break;
+            default:
+                setReComp(<NavItemGrid pageSwitch={pageSwitch}  />);
+        }
     }
+
+
     return (
         <Box
             sx={{
@@ -38,18 +46,7 @@ function index(props) {
             }}
         >
             <Paper elevation={0}>
-                {/*PageSwitch is used here to pass the menu details from the selected row*/}
-                {showMenuGrid && !showGroupOrderPage  &&
-                    <NavItemGrid pageSwitch={pageSwitch}  />
-                }
-                {/*Page switch allow to reset the display to show grid by passing null*/}
-                { !showMenuGrid && !showGroupOrderPage  &&
-                    <Navigation menuDetails={menuDetails} pageSwitch={pageSwitch} />
-                }
-                {/*Show page to order groups*/}
-                { showGroupOrderPage &&
-                    <NavGroupOrder pageSwitch={pageSwitch}/>
-                }
+                {reComp}
             </Paper>
         </Box>
 
