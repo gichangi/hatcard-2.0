@@ -82,6 +82,7 @@ function NavGroupOrder({pageSwitch,updatemenutree}) {
 
 
     const handleSubmit = () =>{
+
         let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
         let headers = {
             "Accept": "application/json",
