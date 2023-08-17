@@ -1,7 +1,7 @@
 import {useEffect, useState, useMemo, useRef} from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Navigation from "../MenuManagement/Navigation";
+import Navigation from "../menumanagement/navigation";
 import OrgList from "./OrgList";
 import OrgAdd from "./OrgAdd";
 

@@ -94,18 +94,7 @@ function Index() {
                                 <Item sx={{width:'100%'}}>
                                     <Grid container spacing={1} sx={{padding:'0px 10px 0px 10px'}}>
                                         <Grid item xs={12} >
-                                            <Button
-                                                variant="contained"
-                                                sx={{
-                                                    fontSize:'14px',
-                                                    fontWeight:'bolder',
-                                                    backgroundColor:'#0E6073'
-                                                }}
-                                                startIcon={<ControlPointIcon />}
-                                                onClick={loadT}
-                                            >
-                                                Submit
-                                            </Button>
+
                                             <Form.Group as={Row} controlId="first_name">
                                                 <Form.Label column sm={4}>
                                                     First Names

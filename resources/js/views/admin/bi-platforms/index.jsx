@@ -1,7 +1,7 @@
 import {useEffect, useState, useMemo, useRef} from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Navigation from "../MenuManagement/Navigation";
+import Navigation from "../menumanagement/navigation";
 import PlatformList from "./PlatformList";
 import PlatformAdd from "./PlatformAdd";
 import TableauServerConfig from "./Tableau/TableauServerConfig";

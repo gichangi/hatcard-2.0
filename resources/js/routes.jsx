@@ -76,7 +76,7 @@ const routes = [
             },
             {
                 exact: true,
-                path: '/explore',
+                path: '/admin/explore',
                 component: lazy(() => import('./views/menu-cards'))
             },
 
@@ -84,42 +84,42 @@ const routes = [
                 permission:['Roles-view','Roles-create','Roles-edit','Roles-delete'],
                 exact: true,
                 path: '/admin/roles',
-                component: lazy(() => import('./views/admin/Roles'))
+                component: lazy(() => import('./views/admin/roles'))
             },
             {
                 exact: true,
                 path: '/admin/menu-management',
-                component: lazy(() => import('./views/admin/MenuManagement'))
+                component: lazy(() => import('./views/admin/menumanagement'))
             },
             {
                 permission:['Users-view','Users-create','Users-edit','Users-delete'],
                 exact: true,
                 path: '/admin/users',
-                component: lazy(() => import('./views/admin/Users'))
+                component: lazy(() => import('./views/admin/users'))
             },
             {
                 permission:['Sidebar-view','Sidebar-create','Sidebar-edit','Sidebar-delete'],
                 exact: true,
                 path: '/admin/sidebar/menuitem',
-                component: lazy(() => import('./views/admin/MenuManagement/Navigation'))
+                component: lazy(() => import('./views/admin/menumanagement/navigation'))
             },
             {
                 permission:['Organisations-view','Organisations-create','Organisations-edit','Organisations-delete'],
                 exact: true,
                 path: '/admin/organisation',
-                component: lazy(() => import('./views/admin/Organisations'))
+                component: lazy(() => import('./views/admin/organisations'))
             },
             {
                 permission:['Bi-Platforms-view','Bi-Platforms-create','Bi-Platforms-edit','Bi-Platforms-delete'],
                 exact: true,
                 path: '/admin/bi-platforms',
-                component: lazy(() => import('./views/admin/BI-Platforms'))
+                component: lazy(() => import('./views/admin/bi-platforms'))
             },
             {
                 permission:['Bi-Dashboards-view','Bi-Dashboards-create','Bi-Dashboards-edit','Bi-Dashboards-delete'],
                 exact: true,
                 path: '/admin/bi-dashboards',
-                component: lazy(() => import('./views/admin/BI-Dashboards'))
+                component: lazy(() => import('./views/admin/bi-dashboards'))
             },
             {
                 permission:['Bi-Dashboards-view'],

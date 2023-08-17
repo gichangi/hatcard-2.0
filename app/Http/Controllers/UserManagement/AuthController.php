@@ -12,7 +12,7 @@ class AuthController extends Controller
     /**
      * Login
      */
-    public function login(Request $request)
+    public function login(Request $request): \Illuminate\Http\JsonResponse
     {
 
         $data = [

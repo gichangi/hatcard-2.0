@@ -7,6 +7,7 @@ const AuthGuard = ({ children }) => {
   const { isLoggedIn } = useAuth();
 
   if (!isLoggedIn) {
+    //alert("called");
     return <Redirect to="/" />;
   }
   if(isLoggedIn){
