@@ -26,7 +26,7 @@ const NavGroup = ({ layout, group }) => {
     <>
       <ListGroup.Item as="li" bsPrefix=" " key={group.id} className="nav-item pcoded-menu-caption">
           <label style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet'}}>
-            <Link to={{ pathname: '/explore', state: { id: group.id}}} style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet'}}>
+            <Link to={{ pathname: '/admin/explore', state: { id: group.id}}} style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet'}}>
               {group.title}
             </Link>
           </label>

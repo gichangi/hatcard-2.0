@@ -78,7 +78,7 @@ class UserController extends Controller
                     $menus = MenuItems::all()->pluck('id')->toArray();
                     foreach($request->menus as $menu){
                         if(in_array($menu, $menus)){
-                            error_log('Some menu -> '.$menu);
+                            //error_log('Some menu -> '.$menu);
                             DB::table('user_has_menus')->insert([
                                 'user_id' => $user->id,
                                 'menu_id' => $menu

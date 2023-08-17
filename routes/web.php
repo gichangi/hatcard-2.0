@@ -35,45 +35,48 @@ Route::get('/pms', function () {
 
 
 
-Route::middleware('auth')->group(function(){
+/*Route::middleware('auth')->group(function(){*/
     Route::get('home', function () {
-        return Inertia('user-profile');
+        return Inertia('homepage/index');
     });
     Route::get('profile', function () {
-        return Inertia('user-profile');
+        return Inertia('user-profile/index');
     });
-
+    Route::get('dashboards/view', function () {
+        return Inertia('dashboards/index');
+    });
     Route::prefix('admin')->group(function (){
 
         Route::get('roles', function () {
-            return Inertia('admin/roles');
-        });
-        Route::get('menu-management', function () {
-            return Inertia('admin/menu-management');
+            return Inertia('admin/roles/index');
         });
         Route::get('users', function () {
-            return Inertia('admin/users');
+            return Inertia('admin/users/index');
         });
-        Route::get('menu-management/menu', function () {
-            return Inertia('admin/menu-management/menu');
+        Route::get('menu-management', function () {
+            return Inertia('admin/menumanagement/index');
         });
 
-        Route::get('organisations', function () {
-            return Inertia('admin/organisations');
+        Route::get('organisation', function () {
+            return Inertia('admin/organisations/index');
         });
         Route::prefix('bi-platforms')->group(function () {
             Route::get('/', function () {
-                return Inertia('admin/bi-platforms');
+                return Inertia('admin/bi-platforms/index');
             });
         });
         Route::prefix('bi-dashboards')->group(function () {
             Route::get('/', function () {
-                return Inertia('admin/BI-Dashboards/index');
+                return Inertia('admin/bi-dashboards/index');
             });
         });
 
+        Route::get('explore', function () {
+            return Inertia('menu-cards/index');
+        });
 
-    });
+
+  /*  });*/
 
 });
 

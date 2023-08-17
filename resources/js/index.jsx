@@ -11,6 +11,7 @@ import 'font-awesome/css/font-awesome.min.css';
 
 createInertiaApp({
     resolve: name => {
+        //alert(1+" -> "+name);
         const pages = import.meta.glob('./views/**/*.jsx', { eager: true })
         return pages[`./views/${name}.jsx`]
     },

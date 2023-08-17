@@ -23,7 +23,6 @@ function Index(props) {
     let { state } = useLocation();
     const [cardItems, setCardItems] = useState([])
     useEffect(()=>{
-        console.log("menu cards")
         const elements = document.getElementsByClassName('breadcrumb');
         while(elements.length > 0){
             elements[0].parentNode.removeChild(elements[0]);
@@ -39,13 +38,14 @@ function Index(props) {
 
     return (
         <div>
+
             <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start" sx={{height:"90vh"}}>
                 {cardItems.map((i) => (
 
                         <Grid item xs={2} sm={3} md={3} key={i.id} >
 
                             {/*<Link to={{ pathname: '/explore', state: { id: i.id}}}>*/}
-                            <Link to={{ pathname: `${i.type!='item'?'/explore':i.url}`, state: { id: i.id,category:i.category}}}>
+                            <Link to={{ pathname: `${i.type!='item'?'/admin/explore':i.url}`, state: { id: i.id,category:i.category}}}>
                             <Item>
 
                                 <Card sx={{height:'100%'}}>

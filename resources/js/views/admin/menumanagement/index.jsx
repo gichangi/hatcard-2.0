@@ -1,11 +1,11 @@
 import {connect} from "react-redux";
 import './custom-css.css'
-import NavItemGrid from "./Navigation/NavItemGrid";
+import NavItemGrid from "./navigation/NavItemGrid";
 import {useEffect, useState} from "react";
-import Navigation from "./Navigation";
+import Navigation from "./navigation";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
-import NavGroupOrder from "./Navigation/NavGroupOrder";
+import NavGroupOrder from "./navigation/NavGroupOrder";
 import {FacebookCircularProgress} from "../../../assets/ui";
 
 

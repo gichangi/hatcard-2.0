@@ -48,7 +48,7 @@ class MenuItems extends Model
 
     public function getTree(string $id, array $tree = []): array
     {
-        error_log('id -> '.$id);
+        //error_log('id -> '.$id);
         $lowestLevel = MenuItems::where('id', $id)->select('id','name as title','menu_type as type','menu_category as category','menu_url as url','menu_icon as icon','order_id','parent_id')->first();
 
         if (!$lowestLevel) {
