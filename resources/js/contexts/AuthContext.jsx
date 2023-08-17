@@ -179,7 +179,6 @@ export const AuthProvider = ({ children, props }) => {
         //return firebase.auth().signInWithEmailAndPassword(email, password);
     };
 
-
     const logout = () => {
         //Remove auth data from local storage
         localStorage.clear();
@@ -197,9 +196,9 @@ export const AuthProvider = ({ children, props }) => {
     useEffect(() => {
 
         (async () => {
-            console.log("authprovider")
             //check for cookies values if not push to login
             let authStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
+            //console.log(authStore)
             if(authStore!== 1){
                 let menuItems = await fetchMenuItems(authStore.token);
                 if(menuItems.message === 'success'){
@@ -209,7 +208,7 @@ export const AuthProvider = ({ children, props }) => {
                     storeDispatch(updateAuthState(authStore));
                     storeDispatch(updateMenuAction(menuItems.data.navigation_menu_items));//update menu state
                     storeDispatch(updateMenuItemsAction(menuItems.data.navigation_menu_items))
-                    localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
+                    //localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{
                     dispatch(resetAuthContext());
                 }
@@ -219,7 +218,7 @@ export const AuthProvider = ({ children, props }) => {
         })();
 
 
-    }, [dispatch]);
+    }, []);
 
     if (!state.isInitialised) {
         return <Loader />;
