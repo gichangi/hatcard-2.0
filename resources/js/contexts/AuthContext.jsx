@@ -121,7 +121,7 @@ export const AuthProvider = ({ children, props }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const storeDispatch = useDispatch();
     const history = useHistory();
-    const currentMenu= useSelector(state => state.menus.list)
+    //const currentMenu= useSelector(state => state.menus.list)
 
     const emailPasswordSignIn = (email, password) => {
         return apiFetch('post',{ "Accept": "application/json" },'/api/login',{email:email,password:password}).then((response) => {
@@ -155,12 +155,12 @@ export const AuthProvider = ({ children, props }) => {
                     dispatch(updateAuthState(authStoreData))
                     dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
                 }).catch(error =>{
-                    console.log("error fetching menu Items");
-                    console.log(error)
+                    //console.log("error fetching menu Items");
+                    //console.log(error)
                 })
             }).catch((error)=>{
-                console.log("Error fetching user details")
-                console.log(error);
+                //console.log("Error fetching user details")
+                //console.log(error);
             })
 
             })

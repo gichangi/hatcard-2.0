@@ -3,19 +3,9 @@ import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import ListUsers from "./ListUsers";
 import AddUser from "./AddUser";
-import { connect } from "react-redux";
-import {  fetchUsers} from './../../../actions/user';
 
 function Index(props) {
     const [reComp, setReComp] = useState()
-    useEffect(() => {
-        loadUsers()
-    }, []); //componentDidMount to get module menus
-
-    const loadUsers =()=>{
-        props.fetchUsersAll();
-
-    }
 
     const pageSwitch = (action,rowData) =>{
         switch (action) {
@@ -53,15 +43,4 @@ function Index(props) {
     );
 }
 
-const mapStateToProps = (state, ownProps) => {
-    return {
-        userItem: state.users.list,
-    };
-};
-
-const mapActionToProps = {
-    fetchUsersAll:fetchUsers,
-};
-
-export default connect(mapStateToProps, mapActionToProps)(Index);
-//export default Index; fetchUsers
+export default Index;
