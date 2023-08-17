@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
+import { FiHome } from "react-icons/fi";
 //import navigation from '../../../menu-items';
 import { BASE_TITLE, BASENAME } from '../../../config/constant';
 import {useLocation, withRouter} from "react-router-dom";
@@ -76,7 +76,7 @@ const Breadcrumb = () => {
                         <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
                           <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
                             <Link to="/">
-                              <i className="feather icon-home"/>
+                              <FiHome />
                             </Link>
                           </ListGroup.Item>
                           {mainContent}
