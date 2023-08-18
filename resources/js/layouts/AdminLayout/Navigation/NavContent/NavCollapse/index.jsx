@@ -1,7 +1,6 @@
 import  { useContext, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 /*import { Link } from 'react-router-dom';*/
-import { FiChevronRight } from "react-icons/fi";
 import Link from '@mui/material/Link';
 import NavItem from '../NavItem';
 import LoopNavCollapse from './index';
@@ -132,7 +131,7 @@ const NavCollapse = ({ collapse, type }) => {
             }}
         >
           <NavIcon items={collapse} />
-          {itemTitle} <FiChevronRight className="text-right"/>
+          {itemTitle}
           <NavBadge items={collapse} />
         </Link>
 
