@@ -1,10 +1,11 @@
 import  { useState, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-
-import navigation from '../../../menu-items';
+import { FiHome } from "react-icons/fi";
+//import navigation from '../../../menu-items';
 import { BASE_TITLE, BASENAME } from '../../../config/constant';
 import {useLocation, withRouter} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 
 const Breadcrumb = () => {
@@ -12,9 +13,10 @@ const Breadcrumb = () => {
   const [main, setMain] = useState([]);
   const [item, setItem] = useState([]);
   const [showBreadcrumb, setShowBreadcrumb] = useState(true);
+  const navigation= useSelector(state => state.menus.list)
 
   useEffect(() => {
-    navigation.items.map((item, index) => {
+    navigation.menuItems.map((item, index) => {
       if (item.type && item.type === 'group') {
         getCollapse(item, index);
         setShowBreadcrumb(false)
@@ -74,7 +76,7 @@ const Breadcrumb = () => {
                         <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
                           <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
                             <Link to="/">
-                              <i className="feather icon-home"/>
+                              <FiHome />
                             </Link>
                           </ListGroup.Item>
                           {mainContent}

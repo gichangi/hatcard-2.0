@@ -3,7 +3,7 @@ import { Switch, Redirect, Route } from 'react-router-dom';
 
 import Loader from './components/Loader/Loader';
 import AdminLayout from './layouts/AdminLayout';
-
+//import { BASE_URL } from './config/constant';
 import GuestGuard from './components/Auth/GuestGuard';
 import AuthGuard from './components/Auth/AuthGuard';
 
@@ -126,7 +126,13 @@ const routes = [
                 exact: true,
                 path: '/dashboards/view',
                 component: lazy(() => import('./views/dashboards'))
-            }
+            },
+
+            // {
+            //     path: '*',
+            //     exact: true,
+            //     component: () => <Redirect to={BASE_URL} />
+            // }
         ]
 
     }

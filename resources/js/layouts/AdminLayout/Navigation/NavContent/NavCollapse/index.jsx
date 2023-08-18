@@ -80,7 +80,7 @@ const NavCollapse = ({ collapse, type }) => {
         case 'collapse':
           return <LoopNavCollapse key={item.id} collapse={item} type="sub" />;
         case 'item':
-          return <NavItem layout={layout} key={item.id} item={item} showIcon={false} />;
+          return <NavItem layout={layout} key={item.id} item={item} showIcon={true} />;
         default:
           return false;
       }

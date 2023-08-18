@@ -5,13 +5,13 @@ import useWindowSize from '../../../hooks/useWindowSize';
 
 import NavLogo from './NavLogo';
 import NavContent from './NavContent';
-import navigation from '../../../menu-items';
+//import navigation from '../../../menu-items';
 import {useSelector} from "react-redux";
 
 const Navigation = () => {
    // console.log("I am here")
    const currentMenu= useSelector(state => state.menus.list)
-    //console.log(currentMenu.menuItems.navigation_menu_items)
+    //console.log(currentMenu)
     //console.log(navigation.items)
   const configContext = useContext(ConfigContext);
 
@@ -37,23 +37,6 @@ const Navigation = () => {
   } = configContext.state;
   const windowSize = useWindowSize();
 
-  // const scroll = () => {
-  //     if (navFixedLayout && headerFixedLayout === false) {
-  //         const main = document.querySelector('.pcoded-navbar');
-  //         const el = document.querySelector('.pcoded-navbar.menupos-fixed');
-  //         const scrollPosition = window.pageYOffset;
-  //         if (scrollPosition > 60) {
-  //             el.style.position = 'fixed';
-  //             el.style.transition = 'none';
-  //             el.style.marginTop = '0';
-  //         } else {
-  //             main.style.position = 'absolute';
-  //             main.style.marginTop = '56px';
-  //         }
-  //     } else {
-  //         document.querySelector('.pcoded-navbar').removeAttribute('style');
-  //     }
-  // };
 
   let navClass = [
     'pcoded-navbar'

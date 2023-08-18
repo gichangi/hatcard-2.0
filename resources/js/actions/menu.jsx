@@ -17,8 +17,8 @@ import * as ACTION_TYPES from "./types";
 export const fetchMenu = () => (dispatch) => {
 
     apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
-        console.log('code is here')
-        console.log(res.data)
+        // console.log('code is here')
+        // console.log(res.data)
         if(res.data){
             dispatch({
                 type: ACTION_TYPES.FETCH_MENU,
