@@ -7,10 +7,11 @@ import ViewTableau from "../dashboards/Tableau/ViewTableau";
 import ViewHtmlDashboard from "../dashboards/HTML/ViewHTMLDashboard";
 import AdminLayout from '../../layouts/AdminLayout';
 import Breadcrumb from "../../layouts/AdminLayout/Breadcrumb";
+import Placeholder from "../../components/Placeholder";
 
 
 const Index = (props) => {
-    const [reComp, setReComp] = useState(<>Empty</>)
+    const [reComp, setReComp] = useState(<Placeholder/>)
     useEffect(()=>{
         apiFetch('get',{},`/api/bi-dashboards/homepage`,{}).then(res=>{
             pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
@@ -19,17 +20,17 @@ const Index = (props) => {
 
     const pageSwitch = (category,id,dashboard) =>{
         switch (category) {
-            case 'tableau_server':
+            case 'tableau_servers':
                 setReComp(<ViewTableau id={id}/>);
                 break;
-            case 'tableau_public':
+            case 'tableau_publics':
                 setReComp(<ViewTableau id={id}/>);
                 break;
-            case 'html_dashboard':
+            case 'html_dashboards':
                 setReComp(<ViewHtmlDashboard id={id} details={dashboard}/>);
                 break;
             default:
-                setReComp(<>Empty</>);
+                setReComp(<Placeholder/>);
         }
     }
 

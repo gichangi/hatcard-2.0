@@ -31,7 +31,7 @@ const NavRight = () => {
   return (
     <>
       <ListGroup as="ul" bsPrefix=" " className="navbar-nav ml-auto" id="navbar-right">
-        <ListGroup.Item as="li" bsPrefix=" ">
+{/*        <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown alignRight={!rtlLayout}>
             <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
               <i className="feather icon-bell icon" />
@@ -121,14 +121,14 @@ const NavRight = () => {
               </div>
             </Dropdown.Menu>
           </Dropdown>
-        </ListGroup.Item>
-        <ListGroup.Item as="li" bsPrefix=" ">
+        </ListGroup.Item>*/}
+       {/* <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown>
             <Dropdown.Toggle as={Link} variant="link" to="#" className="displayChatbox" onClick={() => setListOpen(true)}>
               <i className="icon feather icon-mail" />
             </Dropdown.Toggle>
           </Dropdown>
-        </ListGroup.Item>
+        </ListGroup.Item>*/}
         <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown alignRight={!rtlLayout} className="drp-user">
             <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
@@ -143,26 +143,26 @@ const NavRight = () => {
                 </Link>
               </div>
               <ListGroup as="ul" bsPrefix=" " variant="flush" className="pro-body">
-                <ListGroup.Item as="li" bsPrefix=" ">
+{/*                <ListGroup.Item as="li" bsPrefix=" ">
                   <Link to="#" className="dropdown-item">
                     <i className="feather icon-settings" /> Settings
                   </Link>
-                </ListGroup.Item>
+                </ListGroup.Item>*/}
                 <ListGroup.Item as="li" bsPrefix=" ">
                   <Link to="/profile" className="dropdown-item">
                     <i className="feather icon-user" /> Profile
                   </Link>
                 </ListGroup.Item>
-                <ListGroup.Item as="li" bsPrefix=" ">
+{/*                <ListGroup.Item as="li" bsPrefix=" ">
                   <Link to="#" className="dropdown-item">
                     <i className="feather icon-mail" /> My Messages
                   </Link>
-                </ListGroup.Item>
-                <ListGroup.Item as="li" bsPrefix=" ">
+                </ListGroup.Item>*/}
+{/*                <ListGroup.Item as="li" bsPrefix=" ">
                   <Link to="#" className="dropdown-item">
                     <i className="feather icon-lock" /> Lock Screen
                   </Link>
-                </ListGroup.Item>
+                </ListGroup.Item>*/}
                 <ListGroup.Item as="li" bsPrefix=" ">
                   <Link to="#" className="dropdown-item" onClick={handleLogout}>
                     <i className="feather icon-log-out" /> Logout

@@ -28,7 +28,7 @@ const NavLeft = () => {
           {/*<a style={{'color':'#0F697D', 'fontFamily':"Noto Sans",'fontSize': "3vh", 'textAlign': "center", fontWeight:'bolder',marginLeft:'auto', width:'100%'}}  className="noble-ui-logo d-block mb-2">
           */}<a style={{fontFamily:"Noto Sans",fontSize: "4vh", 'textAlign': "center", fontWeight:'bolder', width:'100%'}}  className="noble-ui-logo d-block mb-2">
             {/*Comprehensive Access and Review Dashboard*/}
-            Comprehensive Access and Review Dashboard Portals
+            Comprehensive Access and Review Dashboard Portal
           </a>
         </ListGroup.Item>
       </ListGroup>

@@ -7,6 +7,7 @@ import {styled} from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import {Avatar, Card, CardContent, CardHeader, CardMedia, Typography} from "@mui/material";
 import {  Link } from "react-router-dom";
+import Placeholder from "../../components/Placeholder";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -40,6 +41,10 @@ function Index(props) {
         <div>
 
             <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start" sx={{height:"90vh"}}>
+
+                {cardItems.length === 0 &&
+                    <Placeholder/>
+                }
                 {cardItems.map((i) => (
 
                         <Grid item xs={2} sm={3} md={3} key={i.id} >
