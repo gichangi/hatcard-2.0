@@ -11,7 +11,7 @@ import {useSelector} from "react-redux";
 const Navigation = () => {
    // console.log("I am here")
    const currentMenu= useSelector(state => state.menus.list)
-    //console.log(currentMenu.menuItems.navigation_menu_items)
+    //console.log(currentMenu)
     //console.log(navigation.items)
   const configContext = useContext(ConfigContext);
 

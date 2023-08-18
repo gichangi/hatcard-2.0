@@ -34,7 +34,7 @@ const NavRight = () => {
 
         <ListGroup.Item as="li" bsPrefix=" ">
           <Dropdown alignRight={true} className="drp-user">
-            <Dropdown.Toggle as={Link} variant="link" to="#" id="dropdown-basic">
+            <Dropdown.Toggle as={Link} variant="link" to="#" >
               <FiSettings />
             </Dropdown.Toggle>
             <Dropdown.Menu alignRight className="profile-notification">
@@ -61,6 +61,7 @@ const NavRight = () => {
           </Dropdown>
         </ListGroup.Item>
       </ListGroup>
+
       <ChatList listOpen={listOpen} closed={() => setListOpen(false)} />
     </>
   );

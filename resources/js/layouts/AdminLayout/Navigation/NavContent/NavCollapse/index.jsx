@@ -1,6 +1,7 @@
 import  { useContext, useEffect } from 'react';
 import { ListGroup } from 'react-bootstrap';
 /*import { Link } from 'react-router-dom';*/
+import { FiChevronRight } from "react-icons/fi";
 import Link from '@mui/material/Link';
 import NavItem from '../NavItem';
 import LoopNavCollapse from './index';
@@ -80,7 +81,7 @@ const NavCollapse = ({ collapse, type }) => {
         case 'collapse':
           return <LoopNavCollapse key={item.id} collapse={item} type="sub" />;
         case 'item':
-          return <NavItem layout={layout} key={item.id} item={item} showIcon={false} />;
+          return <NavItem layout={layout} key={item.id} item={item} showIcon={true} />;
         default:
           return false;
       }
@@ -131,7 +132,7 @@ const NavCollapse = ({ collapse, type }) => {
             }}
         >
           <NavIcon items={collapse} />
-          {itemTitle}
+          {itemTitle} <FiChevronRight className="text-right"/>
           <NavBadge items={collapse} />
         </Link>
 
