@@ -9,6 +9,7 @@ import axios from 'axios';
 import {useDispatch, useSelector} from "react-redux";
 import {Redirect, useHistory} from "react-router-dom";
 import {apiFetch} from "../assets/api/utils";
+import _ from "lodash";
 
 
 const initialState = {
@@ -145,15 +146,15 @@ export const AuthProvider = ({ children, props }) => {
                     }
                     //Update local store for persistence on refresh
                     localStorage.setItem('hatcard.auth', JSON.stringify(authStoreData));
-                   localStorage.setItem('hatcard.navMenuItems', JSON.stringify(res.data.navigation_menu_items));
+                   localStorage.setItem('hatcard.navMenuItems', JSON.stringify(_.orderBy(res.data.navigation_menu_items, item => item.order_id, ['asc'])));
                     //Update redux state
                    storeDispatch(updateAuthState(authStoreData))
-                   storeDispatch(updateMenuItemsAction(res.data.navigation_menu_items));
-                   storeDispatch(updateMenuAction(res.data.navigation_menu_items));//update store
-                    dispatch(updateMenuAction(res.data.navigation_menu_items));//update menu state by action
-                   console.log("state menu set 1")
+
+                   storeDispatch(updateMenuItemsAction(_.orderBy(res.data.navigation_menu_items, item => item.order_id, ['asc'])));
+                   storeDispatch(updateMenuAction(_.orderBy(res.data.navigation_menu_items, item => item.order_id, ['asc'])));//update store
+                    dispatch(updateMenuAction(_.orderBy(res.data.navigation_menu_items, item => item.order_id, ['asc'])));//update menu state by action
                     dispatch(updateAuthState(authStoreData))
-                    dispatch(updateMenuItemsAction(res.data.navigation_menu_items));
+                    dispatch(updateMenuItemsAction(_.orderBy(res.data.navigation_menu_items, item => item.order_id, ['asc'])));
                 }).catch(error =>{
                     //console.log("error fetching menu Items");
                     //console.log(error)
@@ -203,11 +204,12 @@ export const AuthProvider = ({ children, props }) => {
                 let menuItems = await fetchMenuItems(authStore.token);
                 if(menuItems.message === 'success'){
                     dispatch(updateAuthState(authStore));
-                    dispatch(updateMenuItemsAction(menuItems.data.navigation_menu_items))
-                    dispatch(updateMenuAction(menuItems.data.navigation_menu_items));//update menu state
+
+                    dispatch(updateMenuItemsAction( _.orderBy(menuItems.data.navigation_menu_items, item => item.order_id, ['asc'])))
+                    dispatch(updateMenuAction( _.orderBy(menuItems.data.navigation_menu_items, item => item.order_id, ['asc'])));//update menu state
                     storeDispatch(updateAuthState(authStore));
-                    storeDispatch(updateMenuAction(menuItems.data.navigation_menu_items));//update menu state
-                    storeDispatch(updateMenuItemsAction(menuItems.data.navigation_menu_items))
+                    storeDispatch(updateMenuAction( _.orderBy(menuItems.data.navigation_menu_items, item => item.order_id, ['asc'])));//update menu state
+                    storeDispatch(updateMenuItemsAction( _.orderBy(menuItems.data.navigation_menu_items, item => item.order_id, ['asc'])))
                     //localStorage.setItem('hatcard.navMenuItems', JSON.stringify(menuItems.data.navigation_menu_items));
                 }else{
                     dispatch(resetAuthContext());

@@ -13,6 +13,7 @@ import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import {updateMenuTree} from "../../../../actions/user";
 
 function NavItemGrid(props) {
     const[menuItems, setMenuItems] = useState([]);
@@ -117,6 +118,7 @@ function NavItemGrid(props) {
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', `You have successfully deleted: ${row.name} !`, 'success').then(()=>{
                         fetchMenuItems();
+                        props.updatemenutree();
                     })
                 }else{
                     MySwal.fire('', 'An error occurred while saving the data', 'error');
@@ -278,9 +280,13 @@ function NavItemGrid(props) {
     );
 }
 
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
 const mapStateToProps = state => {
     return {
         reduxStore: state
     };
 };
-export default connect(mapStateToProps)(NavItemGrid);
+export default connect(mapStateToProps,mapActionToProps)(NavItemGrid);

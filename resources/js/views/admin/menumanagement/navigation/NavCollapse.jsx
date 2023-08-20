@@ -8,6 +8,8 @@ import IconPicker from "../../../../components/IconPicker";
 import {styled} from "@mui/material/styles";
 import {DataGridPro as MuiDataGrid} from "@mui/x-data-grid-pro";
 import _ from 'lodash';
+import CustomMenuTree from "../../../../components/MenuTree/CustomMenuTree";
+import Paper from "@mui/material/Paper";
 
 const DataGrid = styled(MuiDataGrid)(({ theme }) => ({
     "& .MuiDataGrid-columnHeaders": { display: "none" },
@@ -68,12 +70,20 @@ const validate = (values) => {
     return errors;
 };
 
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(2),
+    color: theme.palette.text.secondary,
+    height:'100%'
+}));
+
 
 function NavCollapse({updateFormData,setFormValidate,formData}) {
     const imageUploadRef = useRef(null);
     const [defaultSwitch, setDefaultSwitch] = useState(true);
-    const [parentName, setParentName] = useState("");
-    const [parentId,setParentId] = useState("");
+    const [menuTreeItems, setMenuTreeItems] = useState([]);
+    const [parentMenu, setParentMenu] = useState();
     const [menuGroups,setMenuGroups] = useState([]);
     const [tempVal,setTempVal] = useState("");
     const [formErrors, setFormErrors] = useState({});
@@ -129,6 +139,10 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
 
         updateFormData(dataTemplate)
     }
+
+
+
+
     useEffect(()=>{
         setFormValidate({"validate":validate,'updateFormHelperText':updateFormHelperText});
         let autStore = JSON.parse(localStorage.getItem( 'hatcard.auth' )) || 1;
@@ -139,6 +153,18 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
         //Get Groups for parent of current collapse item
         apiFetch('GET',headers,'/api/menu-items',{}).then(res=>{
             setMenuGroups(_.orderBy(_.filter( res.data.menu_items, item => item.menu_type === 'group'|| item.menu_type === 'collapse'  ),['name'],['asc']));
+            let temp = [];
+            res.data.menu_items.forEach(i =>{
+                temp.push({
+                    name:i.name,
+                    id:i.id,
+                    order_id:i.order_id,
+                    parent_id:i.parent_id,
+                    menu_type:i.menu_type
+                });
+            })
+            setMenuTreeItems(temp);
+
         })
     },[]);
 
@@ -167,13 +193,15 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
                 childItems: childItems
             });
             setDefaultSwitch(formData.status==='active'?true:false);
-            setParentName(_.find(menuGroups, {id:formData.parent_id}).name);
-            setParentId(formData.parent_id);
+            setParentMenu(formData.parent_id)
             apiFetch('Get',headers,`/api/menu-child-items/${formData.id}`,{}).then(res =>{
                 setChildItems(res.data.childItems);
                 setLoading(false);
             })
+        }else{
+            setParentMenu([])
         }
+
     },[menuGroups])
 
     const handleImageChange = (base64) => {
@@ -186,173 +214,146 @@ function NavCollapse({updateFormData,setFormValidate,formData}) {
         dataTemplate.data.menu_icon = icon;
         updateFormData(dataTemplate)
     }
-    const handleParentChange = (event,node) => {
-        event.preventDefault();
-        dataTemplate.data.parent_id = node.props.value;
-        setParentName(node.props.name);
-        setParentId(node.props.value);
-        updateFormData(dataTemplate)
 
-    };
+    const setSelectedItems = (items) => {
+        dataTemplate.data.parent_id = items[0] == undefined?null:items[0] ;
+        console.log(dataTemplate)
+        updateFormData(dataTemplate)
+    }
 
     return (
-        <Grid item xs={6}>
-            <Form>
-                <Form.Group as={Row} controlId="parent">
-                    <Form.Label  column sm={3}>
-                        Menu Icon
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Grid container spacing={0}  direction="row" justifyContent="flex-start" alignItems="center">
-                            <Grid item xs={1}>
-                                <IconPicker selectedIcon={handleIconChange}/>
+        <Grid container spacing={2}>
+            <Grid item xs={6}>
+                <Form>
+                    <Form.Group as={Row} controlId="parent">
+                        <Form.Label  column sm={3}>
+                            Menu Icon
+                        </Form.Label>
+                        <Col sm={9}>
+                            <Grid container spacing={0}  direction="row" justifyContent="flex-start" alignItems="center">
+                                <Grid item xs={1}>
+                                    <IconPicker selectedIcon={handleIconChange}/>
+                                </Grid>
+                                <Grid item xs={11} sx={{border:'solid 2px #eee',marginLeft:'0px',height:'50px'}}>
+                                    <Typography variant="h5" component="div" gutterBottom sx={{paddingLeft:'12px',color:'rgb(79, 79, 79)',paddingTop:'15px', fontSize:'14px'}}>
+                                        {dataTemplate.data.menu_icon}
+                                    </Typography>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={11} sx={{border:'solid 2px #eee',marginLeft:'0px',height:'50px'}}>
-                                <Typography variant="h5" component="div" gutterBottom sx={{paddingLeft:'12px',color:'rgb(79, 79, 79)',paddingTop:'15px', fontSize:'14px'}}>
-                                    {dataTemplate.data.menu_icon}
-                                </Typography>
-                            </Grid>
-                        </Grid>
 
-                    </Col>
-                </Form.Group>
+                        </Col>
+                    </Form.Group>
 
-                <Form.Group as={Row} controlId="parent">
-                    <Form.Label  column sm={3}>
-                        Parent
-                    </Form.Label>
-                    <Col sm={9}>
+                    <Form.Group as={Row} controlId="name">
+                        <Form.Label  column sm={3}>
+                            Title
+                            {formErrors.name &&
+                                <>
+                                    <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
+                                </>
+                            }
+                        </Form.Label>
+                        <Col sm={9}>
+                            <Form.Control type="text" placeholder="Title" onChange={handleChange} value={dataTemplate.data.name}/>
+                        </Col>
+                    </Form.Group>
 
-                        <Select
-                            displayEmpty
-                            id="select-menu-type-select"
-                            value={parentId}
-                            onChange={(e,node)=>handleParentChange(e,node)}
-                            renderValue={(selected,node) => {
-                                if (selected.length === 0) {
-                                    return <>Select Parent</>;
-                                }
-                                return parentName;
-                            }}
-                            MenuProps={{
-                                sx: {
-                                    "&& .MuiMenuItem-root": {
-                                        color: "rgba(0, 0, 0, 0.6)",
-                                        fontWeight:'500 !important'
-                                    }
-                                }
-                            }}
-                            sx={{
-                                color:'rgba(0, 0, 0, 0.7)',
-                                /*fontWeight:'bold',*/
-                                minWidth: 300,
-                                width: '100%',
-                                '.MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#ddd',
-                                },
-                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#ddd',
-                                },
-                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                    borderColor: '#ddd',
-                                },
-                            }}
-                        >
-                            {menuGroups.map(group => (
-                                <MenuItem key={group.id} value={group.id}  name={group.name}>{group.name}</MenuItem>
-                            ))}
-                        </Select>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="name">
-                    <Form.Label  column sm={3}>
-                        Title
-                        {formErrors.name &&
-                            <>
-                                <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
-                            </>
-                        }
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control type="text" placeholder="Title" onChange={handleChange} value={dataTemplate.data.name}/>
-                    </Col>
-                </Form.Group>
-
-                <Form.Group as={Row} controlId="description">
-                    <Form.Label as="legend" column sm={3}>
-                        Description
-                        {formErrors.description &&
-                            <>
-                                <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
-                            </>
-                        }
-                    </Form.Label>
-                    <Col sm={9}>
-                        <Form.Control as="textarea" rows="3" onChange={handleChange} value={dataTemplate.data.description}/>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} >
-                    <Form.Label as="legend" column sm={3}>
-                        Status
-                    </Form.Label>
-                    <Col sm={9}>
-                        <div className="switch d-inline m-r-10">
-                            <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={toggleHandler} />
-                            <Form.Label htmlFor="checked-default" className="cr" />
-                        </div>
-                    </Col>
-                </Form.Group>
-                <Form.Group as={Row} controlId="menu_url">
-                    <Form.Label as="legend" column sm={3}>
-                        Image
-                        {formErrors.menu_icon &&
-                            <>
-                                <FormHelperText sx={{color:'red'}}>{formErrors.menu_icon}</FormHelperText>
-                            </>
-                        }
-                    </Form.Label>
-                    <Col sm={9}>
-                        <div className="switch d-inline m-r-10">
-                            <ImageUpload ref={imageUploadRef} imageBase64={handleImageChange} defaultImage={dataTemplate.data.menu_image}/>
-                        </div>
-
-                    </Col>
-                </Form.Group>
-                {childItems.length > 0 &&
+                    <Form.Group as={Row} controlId="description">
+                        <Form.Label as="legend" column sm={3}>
+                            Description
+                            {formErrors.description &&
+                                <>
+                                    <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
+                                </>
+                            }
+                        </Form.Label>
+                        <Col sm={9}>
+                            <Form.Control as="textarea" rows="3" onChange={handleChange} value={dataTemplate.data.description}/>
+                        </Col>
+                    </Form.Group>
                     <Form.Group as={Row} >
                         <Form.Label as="legend" column sm={3}>
-
+                            Status
                         </Form.Label>
                         <Col sm={9}>
                             <div className="switch d-inline m-r-10">
-                                <Typography variant="h6" component="h6" sx={{ fontWeight:'bold',fontSize:'18px',color:'rgb(15, 105, 125)', paddingBottom:'10px'}}>
-                                    Sub Menu Items
-                                </Typography>
-                                <DataGrid
-                                    loading={loading}
-                                    columns={columns}
-                                    rows={childItems}
-                                    rowReordering
-                                    onRowOrderChange={handleRowOrderChange}
-                                    columnVisibilityModel={{
-                                        // Hide columns id
-                                        id: false
-                                    }}
-                                    hideFooterSelectedRowCount
-                                    hideFooterRowCount
-                                    hideFooter
-                                    autoHeight
-                                    sx={{
-                                        color:'rgba(83, 83, 83)'
-                                    }}
-                                />
+                                <Form.Control type="checkbox"  id="checked-default" defaultChecked={defaultSwitch} onChange={toggleHandler} />
+                                <Form.Label htmlFor="checked-default" className="cr" />
                             </div>
                         </Col>
                     </Form.Group>
-                }
+                    <Form.Group as={Row} controlId="menu_url">
+                        <Form.Label as="legend" column sm={3}>
+                            Image
+                            {formErrors.menu_icon &&
+                                <>
+                                    <FormHelperText sx={{color:'red'}}>{formErrors.menu_icon}</FormHelperText>
+                                </>
+                            }
+                        </Form.Label>
+                        <Col sm={9}>
+                            <div className="switch d-inline m-r-10">
+                                <ImageUpload ref={imageUploadRef} imageBase64={handleImageChange} defaultImage={dataTemplate.data.menu_image}/>
+                            </div>
 
-            </Form>
+                        </Col>
+                    </Form.Group>
+                    {childItems.length > 0 &&
+                        <Form.Group as={Row} >
+                            <Form.Label as="legend" column sm={3}>
+
+                            </Form.Label>
+                            <Col sm={9}>
+                                <div className="switch d-inline m-r-10">
+                                    <Typography variant="h6" component="h6" sx={{ fontWeight:'bold',fontSize:'18px',color:'rgb(15, 105, 125)', paddingBottom:'10px'}}>
+                                        Sub Menu Items
+                                    </Typography>
+                                    <DataGrid
+                                        loading={loading}
+                                        columns={columns}
+                                        rows={childItems}
+                                        rowReordering
+                                        onRowOrderChange={handleRowOrderChange}
+                                        columnVisibilityModel={{
+                                            // Hide columns id
+                                            id: false
+                                        }}
+                                        hideFooterSelectedRowCount
+                                        hideFooterRowCount
+                                        hideFooter
+                                        autoHeight
+                                        sx={{
+                                            color:'rgba(83, 83, 83)'
+                                        }}
+                                    />
+                                </div>
+                            </Col>
+                        </Form.Group>
+                    }
+
+                </Form>
+            </Grid>
+            <Grid item xs={6}>
+                <Item>
+                    <Form.Group as={Row} controlId="parent_menu_uid">
+                        <Col sm={12}>
+                            {formErrors.parent_id &&
+                                <>
+                                    <FormHelperText sx={{color:'red'}}>{formErrors.parent_id}</FormHelperText>
+                                </>
+                            }
+
+                            {parentMenu &&
+                                <CustomMenuTree title={"Parent Menu"} menuTreeItems={menuTreeItems} orderField={'created_at'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={['group','collapse']} defaultSelected={[parentMenu]}  />
+
+                            }
+                        </Col>
+                    </Form.Group>
+                </Item>
+            </Grid>
+
         </Grid>
+
     );
 }
 

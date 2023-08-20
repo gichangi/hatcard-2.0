@@ -67,13 +67,14 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 function TabServerAdd({details,pageSwitch}) {
-
+    const [menuTreeItems, setMenuTreeItems] = useState([]);
     const [servers, setServers]=useState([]);
     const [projects, setProjects] = useState([]);
     const [workbooks, setWorkbooks] = useState([]);
     const [views, setViews] = useState([]);
     const [image, setImage] = useState('');
     const [selectedMenu, setSelectedMenu] = useState([]);
+    const [parentMenu, setParentMenu] = useState();
 
     const [formErrors, setFormErrors] = useState({});
     const [defaultSwitch, setDefaultSwitch] = useState(true);
@@ -98,12 +99,34 @@ function TabServerAdd({details,pageSwitch}) {
     });
 
 
+    useEffect(()=>{
+        apiFetch('GET',{},'/api/menu-items',{}).then(res=>{
+            let temp = [];
+            res.data.menu_items.forEach(i =>{
+                temp.push({
+                    name:i.name,
+                    id:i.id,
+                    order_id:i.order_id,
+                    parent_id:i.parent_id,
+                    menu_type:i.menu_type
+                });
+            })
+            setMenuTreeItems(temp);
+        })
+
+    },[]);
 
     useEffect(()=>{
         apiFetch('GET',{},'/api/bi-platforms/tableau_server/Configured',{}).then(res=>{
             //Read only resource since we are receiving a collection
             setServers(_.map(res.data.platforms, 'resource'));
         });
+
+        if(details){
+            setParentMenu(details.parent_menu_uid)
+        }else{
+            setParentMenu([])
+        }
 
     },[]);
 
@@ -500,7 +523,10 @@ function TabServerAdd({details,pageSwitch}) {
                                             <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                         </>
                                     }
-                                    <CustomMenuTree numberOfItems={'single'} selectedItem={setSelectedItems}  />
+
+                                    {parentMenu &&
+                                        <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  defaultSelected={[parentMenu]} />
+                                    }
                                 </Col>
                             </Form.Group>
                         </Item>

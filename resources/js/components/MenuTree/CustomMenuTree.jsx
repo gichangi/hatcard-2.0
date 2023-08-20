@@ -33,6 +33,7 @@ function CustomMenuTree({title="Menu Tree",menuTreeItems=[],orderField, numberOf
                 parent_id:item.parent_id,
                 [orderField]:item[orderField],
                 level: level+1,
+                menu_type:item.menu_type,
                 children: childrenOf(item.id, level+1 )
             }));
         }
@@ -82,7 +83,7 @@ function CustomMenuTree({title="Menu Tree",menuTreeItems=[],orderField, numberOf
 
         array = array.filter((v, i) => array.indexOf(v) === i);
         if(numberOfItems === 'single' && array.length >=2){
-            array.shift()
+            array = [array[1]];
         }
         selectedItem(array);
         setSelected(array);
@@ -98,7 +99,8 @@ function CustomMenuTree({title="Menu Tree",menuTreeItems=[],orderField, numberOf
         )
     }
     const treeLabel = (enabled, nodes)=>{
-        if(selectLevels.length >=1 &&  !selectLevels.includes(nodes.level)){
+
+        if(selectLevels.length >=1 &&  !selectLevels.includes(nodes.menu_type)){
             return (
                 <FormControlLabel
                     control={menuIcons(nodes.menu_type)}
@@ -137,7 +139,7 @@ function CustomMenuTree({title="Menu Tree",menuTreeItems=[],orderField, numberOf
                     if(selectLevels.length === 0 ){
                         return renderTree(n,true)
                     }
-                    return renderTree(n,(selectLevels.includes(n.level)=== true?false:true))
+                    return renderTree(n,(selectLevels.includes(n.menu_type) !== true))
                 })
                 : null}
         </TreeItem>

@@ -5,7 +5,6 @@ import Grid from "@mui/material/Grid";
 function Index(props) {
     return (
         <div>
-
             <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start" sx={{height:"90vh", width:"100vh"}}>
 
                 <img

@@ -34,7 +34,7 @@ class MenuItemsSeeder extends Seeder
                 "updated_at" =>\Carbon\Carbon::now()
 
             ],
-            [
+/*            [
                 "id"=>"c5cce308-6acf-11eb-9439-0242ac130003",
                 "name"=>"Integrations",
                 "description"=>"Custom Apps Integrations",
@@ -51,8 +51,8 @@ class MenuItemsSeeder extends Seeder
                 "last_updated_by"=>"c5cce308-6acf-11eb-9439-0242ac130002",
                 "created_at" =>\Carbon\Carbon::now(),
                 "updated_at" =>\Carbon\Carbon::now()
-            ],
-            [
+            ],*/
+/*            [
                 "id"=>"c5cce308-6acf-11eb-9439-0242ac130004",
                 "name"=>"Data Import",
                 "description"=>"DHIS2 and databases",
@@ -69,7 +69,7 @@ class MenuItemsSeeder extends Seeder
                 "last_updated_by"=>"c5cce308-6acf-11eb-9439-0242ac130002",
                 "created_at" =>\Carbon\Carbon::now(),
                 "updated_at" =>\Carbon\Carbon::now()
-            ],
+            ],*/
             [
                 "id"=>"c5cce308-6acf-11eb-9439-0242ac130005",
                 "name"=>"Organisations",

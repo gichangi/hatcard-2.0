@@ -62,8 +62,8 @@ function ViewTableau({id}) {
             }
         };
 
-         let viz = new tableau.Viz(placeholderDiv, url, options);
-         setTabViz(viz);
+        let viz = new tableau.Viz(placeholderDiv, url, options);
+        setTabViz(viz);
     }
 
     useEffect(() => {
@@ -116,7 +116,8 @@ function ViewTableau({id}) {
 
     function toFullscreen(elem) {
         if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
-            elem =  document.getElementById("tableauViz");
+            elem =  document.getElementById("tableauVizHolder");
+            let actionButtons =  document.getElementById("actionButtons");
             if (!document.fullscreenElement && !document.mozFullScreenElement &&
                 !document.webkitFullscreenElement && !document.msFullscreenElement) {
                 if (elem.requestFullscreen) {
@@ -145,15 +146,15 @@ function ViewTableau({id}) {
 
     return (
         <>
-            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'2px'}} >
-                <div style={{ height: '85vh', width: `100%` }}>
+            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'2px'}} id={"tableauVizHolder"} >
+                <div style={{ height: '100%', width: `100%` }}>
                     <div
                         ref={divRef}
                         style={{
                             margin: '5px',
                             width: `100%`,
                             height: '100%',
-                          /*  border: '1px solid black',*/
+                            /*  border: '1px solid black',*/
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -161,29 +162,30 @@ function ViewTableau({id}) {
                     >
 
                         <Grid container>
-                            <Item sx={{height:`83vh`,width:`100%`,margin:'2px'}} id={"tableauBody"} >
+                            <Item sx={{height:`95%`,width:`100%`,margin:'2px'}} id={"tableauBody"} >
                                 <div id={'tableauViz'}>
 
                                 </div>
                             </Item>
-                            <Item sx={{height:"50px",width:`100%`,margin:'2px'}}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={4}>
-                                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToPDF}>Export To PDF</Button>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToImage}>Export To Image</Button>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={toFullscreen}>Fullscreen</Button>
-                                    </Grid>
-                                </Grid>
-                            </Item>
+
                         </Grid>
 
                     </div>
                 </div>
             </Box>
+            <Item sx={{height:"50px",width:`100%`,margin:'2px'}} id={"actionButtons"}>
+                <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToPDF}>Export To PDF</Button>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToImage}>Export To Image</Button>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={toFullscreen}>Fullscreen</Button>
+                    </Grid>
+                </Grid>
+            </Item>
         </>
 
 

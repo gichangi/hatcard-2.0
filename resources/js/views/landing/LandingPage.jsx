@@ -1,17 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-
 import './assets/css/styles.scss';
-
-import BalanceIcon from '@mui/icons-material/Balance';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import capacityIcon from './assets/images/capacity-icon.png';
-import performanceIcon from './assets/images/performance-icon.png';
-import vspFaviconIcon from './assets/images/vsp-favicon.png';
-import lowerPageIcon from './assets/images/lower_icons.png';
-import vspTemplate from './assets/images/vsp-template.png';
 import hatcardLanding from './assets/images/hatcard_landing.png';
-import { Divider } from '@mui/material';
 import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
 
@@ -27,16 +16,16 @@ const LandingPage = () => {
                 <div className="hero-content app-hero-content text-center">
                   <div className="row justify-content-md-center">
                     <div className="col-md-10">
-                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'60px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
-                        Comprehensive Access and Review Dashboard Portals
+                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'45px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
+                        Comprehensive Access and Review Dashboard Portal
                       </h1>
                       <p className="wow fadeInUp" data-wow-delay="0.2s" style={{fontSize:'24px',color:'rgb(164, 34, 98)'}}>
                         Harnessing the Power of Digital Health Technologies
                       </p>
                     </div>
                     <div className="col-md-12">
-                      <div className="hero-image" style={{marginTop:'-60px'}}>
-                        <img src={hatcardLanding} alt="App Hero 1" height="650" />
+                      <div className="hero-image" style={{height:'75vh'}}>
+                        <img src={hatcardLanding} alt="Hatcard" height="98%" />
                       </div>
                     </div>
                   </div>

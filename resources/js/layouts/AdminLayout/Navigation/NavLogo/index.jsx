@@ -17,7 +17,7 @@ const NavLogo = () => {
   return (
     <>
       <div className="navbar-brand header-logo" style={{backgroundColor:'#fff'}}>
-        <Link to="#" className="b-brand">
+        <Link to="/home" className="b-brand">
           {/*<div className="b-bg" style={{backgroundImage:`url("images/hatcard_logo.jpg")`}}>*/}
           <div className="b-bg" style={{backgroundImage:`url("images/vsp-favicon.png")`}}>
           </div>

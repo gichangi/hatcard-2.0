@@ -279,7 +279,7 @@ function TabPubAdd({details,pageSwitch}) {
                                         </>
                                     }
                                     {parentMenu &&
-                                        <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  defaultSelected={[parentMenu]} />
+                                        <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={['group','collapse']}  defaultSelected={[parentMenu]} />
                                     }
                                 </Col>
                             </Form.Group>

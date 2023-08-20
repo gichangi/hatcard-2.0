@@ -39,7 +39,7 @@ class PasswordField extends Component {
         const { type, validator, onStateChanged, children, ...restProps } = this.props;
         const { password, strength } = this.state;
 
-        console.log("state has changed 1 -> "+JSON.stringify(this.state))
+        //console.log("state has changed 1 -> "+JSON.stringify(this.state))
 
         const passwordLength = password.length;
         const passwordStrong = strength >= this.minStrength;

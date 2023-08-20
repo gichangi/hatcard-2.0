@@ -32,6 +32,13 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
   const configContext = useContext(ConfigContext);
   const { dispatch } = configContext;
 
+  const menuItemHeightCalc = ()=>{
+    if(Math.round(item.title.length/21) === 0){
+      return 3;
+    }
+    return Math.round(item.title.length/21)+2.1
+  }
+
   let itemTitle = item.title;
   if (item.icon) {
     itemTitle = <span className="pcoded-mtext">{item.title}</span>;
@@ -57,7 +64,9 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
         //Customize here for change in colorclassName={'dashboardClass'}
         <>
           {item.category==='dashboard'&&
-              <CustomNavLink to={{ pathname: '/dashboards/view', state: { id: item.id}}} style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet'}}>
+              <CustomNavLink
+                  to={{ pathname: '/dashboards/view', state: { id: item.id}}}
+                  style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet',height:`${menuItemHeightCalc()}em`}}>
                 {showIcon &&
                     <NavIcon  items={item} />
                 }
@@ -66,7 +75,10 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
               </CustomNavLink>
           }
           {item.category !=='dashboard' &&
-            <CustomNavLink to={item.url} className={`${customClass} custom-menu-item nav-link ${item.category === 'dashboard'?'dashboard-link':''}`} exact={true} target={itemTarget}>
+            <CustomNavLink to={item.url}
+                           className={`${customClass} custom-menu-item nav-link ${item.category === 'dashboard'?'dashboard-link':''}`}
+                           style={{height:`${menuItemHeightCalc()}em`}}
+                           exact={true} target={itemTarget}>
               {showIcon &&
                   <NavIcon  items={item} />
               }

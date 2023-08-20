@@ -62,31 +62,34 @@ const Breadcrumb = () => {
     );
 
     if (item.breadcrumbs !== false) {
+      const location = useLocation();
       breadcrumbContent = (
           <>
-            {!state &&
-                <div className="page-header">
-                  <div className="page-block">
-                    <div className="row align-items-center">
-                      <div className="col-md-12">
-                        <div className="page-header-title">
-                          {/*<h5 className="m-b-10">{title}</h5>*/}
-                        </div>
+            <>
+              {(!state && location.pathname !== '/home')  &&
+                  <div className="page-header">
+                    <div className="page-block">
+                      <div className="row align-items-center">
+                        <div className="col-md-12">
+                          <div className="page-header-title">
+                            {/*<h5 className="m-b-10">{title}</h5>*/}
+                          </div>
 
-                        <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
-                          <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
-                            <Link to="/">
-                              <FiHome />
-                            </Link>
-                          </ListGroup.Item>
-                          {mainContent}
-                          {itemContent}
-                        </ListGroup>
+                          <ListGroup as="ul" bsPrefix=" " className="breadcrumb">
+                            <ListGroup.Item as="li" bsPrefix=" " className="breadcrumb-item">
+                              <Link to="/">
+                                <FiHome />
+                              </Link>
+                            </ListGroup.Item>
+                            {mainContent}
+                            {itemContent}
+                          </ListGroup>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-            }
+              }
+            </>
           </>
       );
     }

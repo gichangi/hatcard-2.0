@@ -50,7 +50,7 @@ class index extends Component {
     render() {
         const { value, dirty, errors } = this.state;
         const { type, label, fieldId, placeholder, children } = this.props;
-        console.log("state has changed 2 -> "+JSON.stringify(this.state))
+        //console.log("state has changed 2 -> "+JSON.stringify(this.state))
         const hasErrors = errors.length > 0;
         const controlClass = ['form-control', dirty ? hasErrors ? 'is-invalid' : 'is-valid' : '' ].join(' ').trim();
         return (
