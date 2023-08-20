@@ -16,6 +16,8 @@ import _ from 'lodash';
 import CheckIcon from '@mui/icons-material/Check';
 import PublicIcon from '@mui/icons-material/Public';
 import PublicOffIcon from '@mui/icons-material/PublicOff';
+import {updateMenuTree} from "../../../actions/user";
+import {connect} from "react-redux";
 
 
 function List(props) {
@@ -79,6 +81,7 @@ function List(props) {
                     MySwal.fire('', 'Successfully Deleted!', 'success').then(()=>{
                         dashboards.splice(row.index, 1);
                         setDashboards([...dashboards]);
+                        props.updatemenutree();
                     })
                 }else{
                     MySwal.fire('', res.data.message.message, 'error');
@@ -99,6 +102,7 @@ function List(props) {
                             }
                             return dashboard;
                         });
+                        props.updatemenutree();
                         setDashboards([...dashboards]);
                     })
                 }else{
@@ -382,4 +386,8 @@ function List(props) {
     );
 }
 
-export default List;
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
+export default connect(null, mapActionToProps)(List);

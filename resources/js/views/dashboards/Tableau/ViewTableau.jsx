@@ -67,10 +67,6 @@ function ViewTableau({id}) {
     }
 
     useEffect(() => {
-        const elements = document.getElementsByClassName('breadcrumb');
-        while(elements.length > 0){
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         const observer = new ResizeObserver(entries => {
             if(ref.current !== null){
                 setWidth(entries[0].contentRect.width)
@@ -79,7 +75,7 @@ function ViewTableau({id}) {
         })
         observer.observe(ref.current)
         return () => ref.current && observer.unobserve(ref.current)
-    }, [])
+    }, [id])
 
 
     useEffect(()=>{
@@ -88,14 +84,10 @@ function ViewTableau({id}) {
             defaultWidth=ref.current.clientWidth -20;
             initViz(res.data.message.url);
         })
-    },[]);
+    },[id]);
 
     //Check if Box dimensions have changed and update the tableau viz dimensions
     useEffect(()=>{
-        const elements = document.getElementsByClassName('breadcrumb');
-        while(elements.length > 0){
-            elements[0].parentNode.removeChild(elements[0]);
-        }
         if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
             tabViz.setFrameSize(parseInt(`${dimensions.width - 20}`, 10), parseInt(`${dimensions.height -50}`, 10))
         }
@@ -146,7 +138,7 @@ function ViewTableau({id}) {
 
     return (
         <>
-            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'2px'}} id={"tableauVizHolder"} >
+            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'-50px'}} id={"tableauVizHolder"} >
                 <div style={{ height: '100%', width: `100%` }}>
                     <div
                         ref={divRef}

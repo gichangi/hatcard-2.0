@@ -181,7 +181,21 @@ $UserMenus =  DB::table('menu_items')
     public function navigationTree(string $id = null): \Illuminate\Http\JsonResponse
     {
         //$UserMenus =  DB::table('user_has_menus')->where('user_id', Auth::user()->id)->pluck('menu_id');
-$UserMenus =  DB::table('menu_items')->orderBy('order_id')->pluck('id');
+        //dd(Auth::user()->getAllPermissions('userRoles'));
+
+        $permissions = Auth::user()->userPermissions()->pluck('name')->toArray();
+        $UserMenus = [];
+        if(in_array('ALL',$permissions)){
+            $UserMenus =  DB::table('menu_items')->where('status','!=','Archived')->orderBy('order_id')->pluck('id');
+        }else{
+            $UserMenus =DB::table('user_has_menus')
+                ->join('menu_items','user_has_menus.menu_id','menu_items.id')
+                ->where('user_has_menus.user_id','=', Auth::id())
+                ->where('menu_items.status','!=','Archived')
+                ->get()
+                ->pluck('menu_id');
+        }
+
         $menus = New MenuItems();
         $treeArray = [];
         foreach ($UserMenus as $item) {

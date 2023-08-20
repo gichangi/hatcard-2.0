@@ -27,6 +27,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CustomMenuTree from "../../../../../components/MenuTree/CustomMenuTree";
 import ImageUpload from "../../../../../components/Image/ImageUpload";
+import {updateMenuTree} from "../../../../../actions/user";
+import {connect} from "react-redux";
 
 const validate = (values) => {
     const errors = {};
@@ -63,7 +65,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 
-function TabPubAdd({details,pageSwitch}) {
+function TabPubAdd({details,pageSwitch,updatemenutree}) {
     const [menuTreeItems, setMenuTreeItems] = useState([]);
     const imageUploadRef = useRef(null);
     const [servers, setServers]=useState([]);
@@ -154,7 +156,8 @@ function TabPubAdd({details,pageSwitch}) {
                 console.log(res.data)
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
-                        pageSwitch('list')
+                        pageSwitch('list');
+                        updatemenutree();
                     })
                 }else{
                     MySwal.fire('', 'An error occurred while saving the data', 'error');
@@ -338,8 +341,12 @@ function TabPubAdd({details,pageSwitch}) {
         </Card>
     );
 }
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
 
-export default TabPubAdd;
+export default connect(null, mapActionToProps)(TabPubAdd);
+
 
 
 

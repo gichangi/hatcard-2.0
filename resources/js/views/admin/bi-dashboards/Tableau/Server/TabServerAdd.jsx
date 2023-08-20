@@ -20,12 +20,10 @@ import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import {styled} from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import TreeView from "@mui/lab/TreeView";
-import TreeItem from "@mui/lab/TreeItem";
-import TreeNode from "../../../../../components/MenuTree/TreeNode";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import CustomMenuTree from "../../../../../components/MenuTree/CustomMenuTree";
+import {FacebookCircularProgress} from "../../../../../assets/ui";
+import {updateMenuTree} from "../../../../../actions/user";
+import {connect} from "react-redux";
 
 const validate = (values) => {
     const errors = {};
@@ -66,14 +64,14 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 
-function TabServerAdd({details,pageSwitch}) {
+function TabServerAdd({details,pageSwitch,updatemenutree}) {
+    const [loading, setLoading] = useState(true);
     const [menuTreeItems, setMenuTreeItems] = useState([]);
     const [servers, setServers]=useState([]);
     const [projects, setProjects] = useState([]);
     const [workbooks, setWorkbooks] = useState([]);
     const [views, setViews] = useState([]);
     const [image, setImage] = useState('');
-    const [selectedMenu, setSelectedMenu] = useState([]);
     const [parentMenu, setParentMenu] = useState();
 
     const [formErrors, setFormErrors] = useState({});
@@ -93,7 +91,6 @@ function TabServerAdd({details,pageSwitch}) {
             view_id:'',
             view_content_url:'',
             preview_image:'',
-
         },
         status:'Active'
     });
@@ -120,13 +117,34 @@ function TabServerAdd({details,pageSwitch}) {
         apiFetch('GET',{},'/api/bi-platforms/tableau_server/Configured',{}).then(res=>{
             //Read only resource since we are receiving a collection
             setServers(_.map(res.data.platforms, 'resource'));
-        });
+        }).then(()=>{
+            if(details){
+                console.log("details2"+JSON.stringify(details))
+                setParentMenu(details.parent_menu_uid)
+                dashboard.id=details.id;
+                dashboard.name=details.name;
+                dashboard.description=details.description;
+                dashboard.parent_menu_uid=details.parent_menu_uid;
+                dashboard.server_uid=details.server_uid;
+                fetchProjects(details.server_uid).then((res)=>{
+                    fetchWorkbooks(details.server_uid,_.find(res,{id:details.config_json.project_id}).name).then(()=>{
+                        fetchWorkbookViews(details.server_uid,details.config_json.workbook_id).then(()=>{
+                            dashboard.config_json=details.config_json;
+                            setImage(dashboard.config_json.preview_image);
+                            setDashboard(dashboard);
+                            setLoading(false)
+                        })
 
-        if(details){
-            setParentMenu(details.parent_menu_uid)
-        }else{
-            setParentMenu([])
-        }
+                    })
+
+                })
+            }else{
+                setParentMenu([]);
+                setLoading(false)
+            }
+        })
+
+
 
     },[]);
 
@@ -139,6 +157,12 @@ function TabServerAdd({details,pageSwitch}) {
         setEnableSubmit(formValidation(dashboard))
     }
 
+    const fetchProjects = (server_id)=>{
+        return apiFetch('POST',{},'/api/tableau/projects',{id:server_id}).then(res=>{
+            setProjects(res.data.message.projects);
+            return res.data.message.projects;
+        });
+    }
     const handleServerChange = (event,node) => {
         event.preventDefault();
         dashboard.server_uid = node.props.value;
@@ -146,11 +170,15 @@ function TabServerAdd({details,pageSwitch}) {
         dashboard.config_json.workbook_id = '';
         dashboard.config_json.view_id = '';
         setDashboard(dashboard);
-        apiFetch('POST',{},'/api/tableau/projects',{id:node.props.value}).then(res=>{
-            setProjects(res.data.message.projects);
-        });
+        fetchProjects(node.props.value)
         setEnableSubmit(formValidation(dashboard))
     };
+
+    const fetchWorkbooks =(server_id,project_name)=>{
+        return apiFetch('POST',{},'/api/tableau/workbooks',{id:server_id,project:project_name}).then(res=>{
+            setWorkbooks(res.data.message.workbooks);
+        })
+    }
 
     const handleProjectChange = (event,node) => {
         event.preventDefault();
@@ -158,20 +186,21 @@ function TabServerAdd({details,pageSwitch}) {
         dashboard.config_json.workbook_id = '';
         dashboard.config_json.view_id = '';
         setDashboard(dashboard);
-        apiFetch('POST',{},'/api/tableau/workbooks',{id:dashboard.server_uid,project:node.props.name}).then(res=>{
-            setWorkbooks(res.data.message.workbooks);
-        })
+        fetchWorkbooks(dashboard.server_uid,node.props.name)
         setEnableSubmit(formValidation(dashboard))
     };
 
+    const fetchWorkbookViews = (server_id,workbook_id)=>{
+        return apiFetch('POST',{},'/api/tableau/workbook-views',{id:server_id,workbook:workbook_id}).then(res=>{
+            setViews(res.data.message.views);
+        })
+    }
     const handleWorkbookChange = (event,node) => {
         event.preventDefault();
         dashboard.config_json.workbook_id = node.props.value;
         dashboard.config_json.view_id = '';
         setDashboard(dashboard);
-        apiFetch('POST',{},'/api/tableau/workbook-views',{id:dashboard.server_uid,workbook:node.props.value}).then(res=>{
-            setViews(res.data.message.views);
-        })
+        fetchWorkbookViews(dashboard.server_uid,node.props.value)
         setEnableSubmit(formValidation(dashboard))
     };
     const handleViewChange = (event,node) => {
@@ -209,7 +238,9 @@ function TabServerAdd({details,pageSwitch}) {
                 console.log(res.data)
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
-                        pageSwitch('list')
+                        updatemenutree();
+                        pageSwitch('list');
+
                     })
                 }else{
                     MySwal.fire('', 'An error occurred while saving the data', 'error');
@@ -231,7 +262,6 @@ function TabServerAdd({details,pageSwitch}) {
             <Card.Header style={{
                 padding:`25px`
             }}>
-                {dashboard.parent_menu_uid}
                 <Grid container item xs={6}
                       direction="row"
                       justifyContent="flex-start"
@@ -244,295 +274,304 @@ function TabServerAdd({details,pageSwitch}) {
                 </Grid>
             </Card.Header>
             <Card.Body>
-                <Grid container spacing={2}>
+                {loading &&
+                    <FacebookCircularProgress />
+                }
+                {!loading &&
+                    <Grid container spacing={2}>
 
-                    <Grid item xs={6}>
-                        <Item>
-                            <Form>
-                                <Form.Group as={Row} controlId="biServer">
-                                    <Form.Label  column sm={3}>
-                                        Server
-                                        {formErrors.biServer &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.biServer}</FormHelperText>
-                                            </>
-                                        }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Select
-                                            displayEmpty
-                                            id="select-server"
-                                            value={dashboard.server_uid}
-                                            onChange={(e,node)=>handleServerChange(e,node)}
-                                            renderValue={(selected,node) => {
-                                                if (selected.length === 0) {
-                                                    return <>Select Server</>;
-                                                }
-                                                return _.find(servers,{id:dashboard.server_uid}).name;
-                                            }}
-                                            MenuProps={{
-                                                sx: {
-                                                    "&& .MuiMenuItem-root": {
-                                                        color: "#992E62"
+                        <Grid item xs={6}>
+                            <Item>
+                                <Form>
+                                    <Form.Group as={Row} controlId="biServer">
+                                        <Form.Label  column sm={3}>
+                                            Server
+                                            {formErrors.biServer &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.biServer}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Select
+                                                displayEmpty
+                                                id="select-server"
+                                                value={dashboard.server_uid}
+                                                onChange={(e,node)=>handleServerChange(e,node)}
+                                                renderValue={(selected,node) => {
+                                                    if (selected.length === 0) {
+                                                        return <>Select Server</>;
                                                     }
-                                                }
-                                            }}
-                                            sx={{
-                                                color:'#0E6073',
-                                                fontWeight:'bold',
-                                                minWidth: 300,
-                                                '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#0E6073',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                            }}
-                                        >
-                                            {servers.map((p)=>(
-                                                <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} controlId="biServer">
-                                    <Form.Label  column sm={3}>
-                                        Projects
-                                        {formErrors.biServer &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.biServer}</FormHelperText>
-                                            </>
-                                        }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Select
-                                            displayEmpty
-                                            id="select-project"
-                                            value={dashboard.config_json.project_id}
-                                            onChange={(e,node)=>handleProjectChange(e,node)}
-                                            renderValue={(selected,node) => {
-                                                if (selected.length === 0) {
-                                                    return <>Select Project</>;
-                                                }
-                                                return _.find(projects,{id:dashboard.config_json.project_id}).name;
-                                            }}
-                                            MenuProps={{
-                                                sx: {
-                                                    "&& .MuiMenuItem-root": {
-                                                        color: "#992E62"
+                                                    return _.find(servers,{id:dashboard.server_uid}).name;
+                                                }}
+                                                MenuProps={{
+                                                    sx: {
+                                                        "&& .MuiMenuItem-root": {
+                                                            color: "#992E62"
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            sx={{
-                                                color:'#0E6073',
-                                                fontWeight:'bold',
-                                                minWidth: 300,
-                                                '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#0E6073',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                            }}
-                                        >
-                                            {projects.map((p)=>(
-                                                <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                </Form.Group>
+                                                }}
+                                                sx={{
+                                                    color:'#0E6073',
+                                                    fontWeight:'bold',
+                                                    minWidth: 300,
+                                                    '.MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#0E6073',
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                }}
+                                            >
+                                                {servers.map((p)=>(
+                                                    <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </Col>
+                                    </Form.Group>
 
-                                <Form.Group as={Row} controlId="workbooks">
-                                    <Form.Label  column sm={3}>
-                                        Workbooks
-                                        {formErrors.workbook &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.workbook}</FormHelperText>
-                                            </>
-                                        }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Select
-                                            displayEmpty
-                                            id="select-workbook"
-                                            value={dashboard.config_json.workbook_id}
-                                            onChange={(e,node)=>handleWorkbookChange(e,node)}
-                                            renderValue={(selected,node) => {
-                                                if (selected.length === 0) {
-                                                    return <>Select Workbook</>;
-                                                }
-                                                return _.find(workbooks,{id:dashboard.config_json.workbook_id}).name;
-                                            }}
-                                            MenuProps={{
-                                                sx: {
-                                                    "&& .MuiMenuItem-root": {
-                                                        color: "#992E62"
+
+                                    <Form.Group as={Row} controlId="biServer">
+                                        <Form.Label  column sm={3}>
+                                            Projects
+                                            {formErrors.biServer &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.biServer}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Select
+                                                displayEmpty
+                                                id="select-project"
+                                                value={dashboard.config_json.project_id}
+                                                onChange={(e,node)=>handleProjectChange(e,node)}
+                                                renderValue={(selected,node) => {
+                                                    if (selected.length === 0) {
+                                                        return <>Select Project</>;
                                                     }
-                                                }
-                                            }}
-                                            sx={{
-                                                color:'#0E6073',
-                                                fontWeight:'bold',
-                                                minWidth: 300,
-                                                '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#0E6073',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                            }}
-                                        >
-                                            {workbooks.map((p)=>(
-                                                <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                </Form.Group>
-
-
-                                <Form.Group as={Row} controlId="views">
-                                    <Form.Label  column sm={3}>
-                                        Views
-                                        {formErrors.view &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.view}</FormHelperText>
-                                            </>
-                                        }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Select
-                                            displayEmpty
-                                            id="select-workbook"
-                                            value={dashboard.config_json.view_id}
-                                            onChange={(e,node)=>handleViewChange(e,node)}
-                                            renderValue={(selected,node) => {
-                                                if (selected.length === 0) {
-                                                    return <>Select View</>;
-                                                }
-                                                return _.find(views,{id:dashboard.config_json.view_id}).name;
-                                            }}
-                                            MenuProps={{
-                                                sx: {
-                                                    "&& .MuiMenuItem-root": {
-                                                        color: "#992E62"
+                                                    return _.find(projects,{id:dashboard.config_json.project_id}).name;
+                                                }}
+                                                MenuProps={{
+                                                    sx: {
+                                                        "&& .MuiMenuItem-root": {
+                                                            color: "#992E62"
+                                                        }
                                                     }
-                                                }
-                                            }}
-                                            sx={{
-                                                color:'#0E6073',
-                                                fontWeight:'bold',
-                                                minWidth: 300,
-                                                '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                                '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#0E6073',
-                                                },
-                                                '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#992E62',
-                                                },
-                                            }}
-                                        >
-                                            {views.map((p)=>(
-                                                <MenuItem key={p.id} value={p.id}  name={p.name} contentUrl={p.contentUrl}>{p.name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </Col>
-                                </Form.Group>
+                                                }}
+                                                sx={{
+                                                    color:'#0E6073',
+                                                    fontWeight:'bold',
+                                                    minWidth: 300,
+                                                    '.MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#0E6073',
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                }}
+                                            >
+                                                {projects.map((p)=>(
+                                                    <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </Col>
+                                    </Form.Group>
 
-                                <Form.Group as={Row} controlId="image">
-                                    <Form.Label as="legend" column sm={3}>
-                                        Image
-                                        {formErrors.image &&
+                                    <Form.Group as={Row} controlId="workbooks">
+                                        <Form.Label  column sm={3}>
+                                            Workbooks
+                                            {formErrors.workbook &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.workbook}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Select
+                                                displayEmpty
+                                                id="select-workbook"
+                                                value={dashboard.config_json.workbook_id}
+                                                onChange={(e,node)=>handleWorkbookChange(e,node)}
+                                                renderValue={(selected,node) => {
+                                                    if (selected.length === 0) {
+                                                        return <>Select Workbook</>;
+                                                    }
+                                                    return _.find(workbooks,{id:dashboard.config_json.workbook_id}).name;
+                                                }}
+                                                MenuProps={{
+                                                    sx: {
+                                                        "&& .MuiMenuItem-root": {
+                                                            color: "#992E62"
+                                                        }
+                                                    }
+                                                }}
+                                                sx={{
+                                                    color:'#0E6073',
+                                                    fontWeight:'bold',
+                                                    minWidth: 300,
+                                                    '.MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#0E6073',
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                }}
+                                            >
+                                                {workbooks.map((p)=>(
+                                                    <MenuItem key={p.id} value={p.id}  name={p.name}>{p.name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </Col>
+                                    </Form.Group>
+
+                                    <Form.Group as={Row} controlId="views">
+                                        <Form.Label  column sm={3}>
+                                            Views
+                                            {formErrors.view &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.view}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Select
+                                                displayEmpty
+                                                id="select-workbook"
+                                                value={dashboard.config_json.view_id}
+                                                onChange={(e,node)=>handleViewChange(e,node)}
+                                                renderValue={(selected,node) => {
+                                                    if (selected.length === 0) {
+                                                        return <>Select View</>;
+                                                    }
+                                                    return _.find(views,{id:dashboard.config_json.view_id}).name;
+                                                }}
+                                                MenuProps={{
+                                                    sx: {
+                                                        "&& .MuiMenuItem-root": {
+                                                            color: "#992E62"
+                                                        }
+                                                    }
+                                                }}
+                                                sx={{
+                                                    color:'#0E6073',
+                                                    fontWeight:'bold',
+                                                    minWidth: 300,
+                                                    '.MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#0E6073',
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#992E62',
+                                                    },
+                                                }}
+                                            >
+                                                {views.map((p)=>(
+                                                    <MenuItem key={p.id} value={p.id}  name={p.name} contentUrl={p.contentUrl}>{p.name}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </Col>
+                                    </Form.Group>
+
+
+
+                                    <Form.Group as={Row} controlId="image">
+                                        <Form.Label as="legend" column sm={3}>
+                                            Image
+                                            {formErrors.image &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.image}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <div className="switch d-inline m-r-10">
+                                                <Item>
+                                                    <CardMedia
+                                                        component="img"
+                                                        height="auto"
+                                                        image={`${dashboard.config_json.preview_image}`}
+                                                        alt="preview image"
+                                                    />
+
+                                                </Item>
+
+
+                                            </div>
+
+                                        </Col>
+                                    </Form.Group>
+
+                                    <Form.Group as={Row} controlId="name">
+                                        <Form.Label  column sm={3}>
+                                            Name
+                                            {formErrors.name &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Form.Control type="text" placeholder="Name" onChange={handleChange} value={dashboard.name} />
+                                        </Col>
+                                    </Form.Group>
+
+                                    <Form.Group as={Row} controlId="description">
+                                        <Form.Label  column sm={3}>
+                                            Description
+                                            {formErrors.description &&
+                                                <>
+                                                    <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
+                                                </>
+                                            }
+                                        </Form.Label>
+                                        <Col sm={9}>
+                                            <Form.Control as="textarea" rows="3" onChange={handleChange} value={dashboard.description} />
+                                        </Col>
+                                    </Form.Group>
+
+
+
+
+                                </Form>
+
+                            </Item>
+
+                        </Grid>
+
+                        <Grid item xs={6}>
+                            <Item>
+                                <Form.Group as={Row} controlId="parent_menu_uid">
+                                    <Col sm={12}>
+                                        {formErrors.parent_menu_uid &&
                                             <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.image}</FormHelperText>
+                                                <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                             </>
                                         }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <div className="switch d-inline m-r-10">
-                                            <Item>
-                                                <CardMedia
-                                                    component="img"
-                                                    height="auto"
-                                                    image={`${dashboard.config_json.preview_image}`}
-                                                    alt="preview image"
-                                                />
 
-                                            </Item>
-
-
-                                        </div>
-
-                                    </Col>
-                                </Form.Group>
-
-                                <Form.Group as={Row} controlId="name">
-                                    <Form.Label  column sm={3}>
-                                        Name
-                                        {formErrors.name &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.name}</FormHelperText>
-                                            </>
+                                        {parentMenu &&
+                                            <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={['group','collapse']}  defaultSelected={[parentMenu]} />
                                         }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Form.Control type="text" placeholder="Name" onChange={handleChange} value={dashboard.name} />
                                     </Col>
                                 </Form.Group>
+                            </Item>
 
-                                <Form.Group as={Row} controlId="description">
-                                    <Form.Label  column sm={3}>
-                                        Description
-                                        {formErrors.description &&
-                                            <>
-                                                <FormHelperText sx={{color:'red'}}>{formErrors.description}</FormHelperText>
-                                            </>
-                                        }
-                                    </Form.Label>
-                                    <Col sm={9}>
-                                        <Form.Control as="textarea" rows="3" onChange={handleChange} value={dashboard.description} />
-                                    </Col>
-                                </Form.Group>
-
-
-
-
-                            </Form>
-
-                        </Item>
-
+                        </Grid>
                     </Grid>
 
-                    <Grid item xs={6}>
-                        <Item>
-                            <Form.Group as={Row} controlId="parent_menu_uid">
-                                <Col sm={12}>
-                                    {formErrors.parent_menu_uid &&
-                                        <>
-                                            <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
-                                        </>
-                                    }
+                }
 
-                                    {parentMenu &&
-                                        <CustomMenuTree menuTreeItems={menuTreeItems} orderField={'order_id'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  defaultSelected={[parentMenu]} />
-                                    }
-                                </Col>
-                            </Form.Group>
-                        </Item>
-
-                    </Grid>
-                </Grid>
             </Card.Body>
             <Card.Footer>
                 <Grid container>
@@ -585,4 +624,9 @@ function TabServerAdd({details,pageSwitch}) {
     );
 }
 
-export default TabServerAdd;
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
+export default connect(null, mapActionToProps)(TabServerAdd);
+

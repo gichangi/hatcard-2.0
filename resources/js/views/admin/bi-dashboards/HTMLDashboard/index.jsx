@@ -14,6 +14,8 @@ import Box from "@mui/material/Box";
 import ControlPointIcon from "@mui/icons-material/ControlPoint";
 import MySwal from "sweetalert2";
 import ImageUpload from "../../../../components/Image/ImageUpload";
+import {updateMenuTree} from "../../../../actions/user";
+import {connect} from "react-redux";
 
 
 const validate = (values) => {
@@ -48,7 +50,7 @@ const Item = styled(Paper)(({ theme }) => ({
     height:'100%'
 }));
 
-function Index({details,pageSwitch}) {
+function Index({details,pageSwitch,updatemenutree}) {
     const editorRef = useRef(null);
     const imageUploadRef = useRef(null);
     const [editorContent, setEditorContent] = useState(null);
@@ -104,7 +106,8 @@ function Index({details,pageSwitch}) {
                 console.log(res.data)
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
-                        pageSwitch('list')
+                        pageSwitch('list');
+                        updatemenutree();
                     })
                 }else{
                     MySwal.fire('', 'An error occurred while saving the data', 'error');
@@ -316,4 +319,10 @@ function Index({details,pageSwitch}) {
     );
 }
 
-export default Index;
+
+const mapActionToProps = {
+    updatemenutree:updateMenuTree,
+};
+
+export default connect(null, mapActionToProps)(Index);
+
