@@ -35,19 +35,22 @@ const SignIn = () => {
                   <Card.Body>
                     <div className="mb-4">
                       <a style={{'color':'#0F697D', 'fontFamily':"Noto Sans",'fontSize': "3vw", 'textAlign': "center"}}  className="noble-ui-logo d-block mb-2">
-                        Comprehensive Access and Review Dashboard
+                        Kenya VSP Portal
                       </a>
                     </div>
                     <Login />
                     <Grid container spacing={1} direction="row" alignItems="center">
-                      <Grid item xs={4}>
-                        <img src="images/pepfar2.png" alt="image" style={{height:60, width:140}} />
+                      <Grid item xs={3}>
+                        <img src="images/Kenya-MOH.jpeg" alt="image" style={{height:80, width:100}} />
                       </Grid>
-                      <Grid item xs={4}>
-                        <img src="images/usaid.jpg" alt="image" style={{height:60, width:140}} />
+                      <Grid item xs={3}>
+                        <img src="images/phcpi.jpeg" alt="image" style={{height:80, width:140}} />
                       </Grid>
-                      <Grid item xs={4}>
-                        <img src="images/DataFI.png" alt="image" style={{height:60, width:140}} />
+                      <Grid item xs={3}>
+                        <img src="images/unicef.png" alt="image" style={{height:80, width:140}} />
+                      </Grid>
+                      <Grid item xs={3}>
+                        <img src="images/billandmelinda.png" alt="image" style={{height:80, width:140}} />
                       </Grid>
                     </Grid>
                   </Card.Body>

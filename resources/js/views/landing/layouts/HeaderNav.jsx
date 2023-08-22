@@ -8,7 +8,7 @@ function HeaderNav(props) {
             <nav className="navbar landing-nav navbar-expand-lg navbar-light navbar-default navbar-fixed-top past-main" role="navigation">
                 <div className="container">
                     <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder', fontSize:'28px',color:'rgb(164, 34, 98)'}}>
-                        <img src={vspFaviconIcon} alt="CARD" />CARD
+                        <img src={vspFaviconIcon} alt="CARD" />KenyaVSP
                     </a>
                     <button
                         className="navbar-toggler"
@@ -25,16 +25,16 @@ function HeaderNav(props) {
                         <ul className="navbar-nav mr-auto" />
                         <ul className="navbar-nav my-2 my-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link page-scroll" href="/landing">
+                                <a className="nav-link page-scroll" href="/">
                                     Home
                                 </a>
                             </li>
-{/*                            <li className="nav-item">
+                            <li className="nav-item">
                                 <a className="nav-link page-scroll" href="#services">
                                     Important
                                 </a>
-                            </li>*/}
-{/*                            <li className="nav-item dropdown">
+                            </li>
+                            <li className="nav-item dropdown">
                                 <Link
                                     className="nav-link dropdown-toggle"
                                     to="#"
@@ -57,9 +57,9 @@ function HeaderNav(props) {
                                         Level 3
                                     </Link>
                                 </div>
-                            </li>*/}
+                            </li>
                             <li className="nav-item">
-                                <a className="nav-link page-scroll" href="https://www.usaid.gov/nigeria" target="_blank">
+                                <a className="nav-link page-scroll" href="https://www.improvingphc.org/vital-signs-profiles" target="_blank">
                                     About
                                 </a>
                             </li>

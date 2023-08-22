@@ -8,7 +8,7 @@ function PageFooter(props) {
             <div className="container">
                 <div className="col-md-12 text-center">
                     <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder', color:'#000'}}>
-                        <img src={vspFaviconIcon} alt="CARD"/> CARD
+                        <img src={vspFaviconIcon} alt="CARD"/> KenyaVSP
                     </a>
                     <ul className="footer-menu">
                         <li>
@@ -25,7 +25,7 @@ function PageFooter(props) {
                         </li>
                     </ul>
                     <div className="footer-text">
-                        <p>Copyright © 2023 CARD.</p>
+                        <p>Copyright © 2023 KenyaVSP.</p>
                     </div>
                 </div>
             </div>

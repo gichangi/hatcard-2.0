@@ -1,8 +1,20 @@
 import React from 'react';
 import './assets/css/styles.scss';
-import hatcardLanding from './assets/images/hatcard_landing.png';
+import hatcardLanding from './assets/images/vsp-template.png';
 import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
+import Breadcrumb from '../../layouts/AdminLayout/Breadcrumb';
+import BalanceIcon from '@mui/icons-material/Balance';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import capacityIcon from './assets/images/capacity-icon.png';
+import performanceIcon from './assets/images/performance-icon.png';
+import vspFaviconIcon from './assets/images/vsp-favicon.png';
+import lowerPageIcon from './assets/images/lower_icons.png';
+import vspTemplate from './assets/images/vsp-template.png';
+import { Divider } from '@mui/material';
+
+
+
 
 const LandingPage = () => {
   return (
@@ -17,10 +29,10 @@ const LandingPage = () => {
                   <div className="row justify-content-md-center">
                     <div className="col-md-10">
                       <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'45px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
-                        Comprehensive Access and Review Dashboard Portal
+                        Kenya Vital Signs Profile
                       </h1>
                       <p className="wow fadeInUp" data-wow-delay="0.2s" style={{fontSize:'24px',color:'rgb(164, 34, 98)'}}>
-                        Harnessing the Power of Digital Health Technologies
+                        The Vital Signs Profile is one of the flagship products that came out of the work of the Primary Health Care Performance Initiative. Before the Vital Signs Profile,
                       </p>
                     </div>
                     <div className="col-md-12">
@@ -32,7 +44,7 @@ const LandingPage = () => {
                 </div>
               </div>
             </div>
-            {/*<div className="services-section text-center" id="services">
+            <div className="services-section text-center" id="services">
               <div className="container">
                 <div className="row  justify-content-md-center">
                   <div className="col-md-8">
@@ -109,7 +121,7 @@ const LandingPage = () => {
                 color:'#000'
               }}/>
             </div>
-            */}<PageFooter/>
+            <PageFooter/>
           </div>
         </div>
       </div>

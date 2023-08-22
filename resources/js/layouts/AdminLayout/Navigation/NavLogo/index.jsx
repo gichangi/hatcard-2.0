@@ -23,7 +23,7 @@ const NavLogo = () => {
           </div>
           <span className="b-title" style={{color: '#A42262',fontFamily: 'Trebuchet', fontSize:'25px'}}>
             {/*hat<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>CARD</span>*/}
-            CARD{/*<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>-2.0</span>*/}
+            KenyaVSP{/*<span style={{color: '#4ED4E8',fontWeight:'bold',fontFamily: 'Trebuchet'}}>-2.0</span>*/}
           </span>
         </Link>
         <Link to="#" className={toggleClass.join(' ')} id="mobile-collapse" onClick={() => dispatch({ type: actionType.COLLAPSE_MENU })}>
