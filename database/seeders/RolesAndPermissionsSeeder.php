@@ -53,6 +53,11 @@ class RolesAndPermissionsSeeder extends Seeder
         $permission=Permission::create(["name"=>"Bi-Platforms-delete"]);
 
 
+        //
+        $permission=Permission::create(["name"=>"View-homepage"]);
+        $permission=Permission::create(["name"=>"View-profile"]);
+        $permission=Permission::create(["name"=>"View-explore"]);
+        $permission=Permission::create(["name"=>"View-dashboards"]);
 
 
 

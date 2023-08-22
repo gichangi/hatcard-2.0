@@ -45,4 +45,9 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Exception|Throwable $exception): \Illuminate\Foundation\Application|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse|\Illuminate\Contracts\Foundation\Application|\Symfony\Component\HttpFoundation\Response
+    {
+        return redirect('/');
+        //return parent::render($request, $exception);
+    }
 }

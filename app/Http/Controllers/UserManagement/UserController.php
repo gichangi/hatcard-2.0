@@ -234,8 +234,19 @@ class UserController extends Controller
         }
     }
 
-    public function details(Request $request){
-        $userDetails = User::where('email',$request->email)->get()->first();
+    public function details(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $userDetails = User::where('email',$request->email)->with('userPermissions')->get()->first();
         return response()->json(['details' => $userDetails], 200);
+    }
+
+    public function checkPermission(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $permissions = Auth::user()->userPermissions()->pluck('name')->toArray();
+        if(in_array($request->permission,$permissions)){
+            return response()->json(["message"=>"true"],200);
+        }else{
+            return response()->json(["message"=>"false"],200);
+        }
     }
 }

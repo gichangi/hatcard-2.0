@@ -140,7 +140,8 @@ export const AuthProvider = ({ children, props }) => {
                             "id": userDetails.id,
                             "first_name":userDetails.first_name,
                             "last_name":userDetails.last_name,
-                            "email": email
+                            "email": email,
+                            "permissions":_.map(userDetails.user_permissions,'name')
                         }
 
                     }

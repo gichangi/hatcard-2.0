@@ -364,7 +364,7 @@ class TableauServerServices extends Controller
             if($dashboard->dashboard_type === 'tableau_server'){
                 $token=$this->generateToken($dashboard->server_uid);
                 $server_config = json_decode($dashboard->server->config_json);
-                $url=$server_config->base_url."/trusted/".$token['token']."/t/".$server_config->target_site."/views/".$dashboard->config_json->view_content_url;
+                $url=$server_config->base_url."/trusted/".$token['token']."/t/".$server_config->target_site."/views/".$dashboard->config_json->view_content_url."?:embed=yes&:toolbar=no";
                 return response()->json(['message'=>['type'=>'success','url'=>$url],200]);
             }else if ($dashboard->dashboard_type === 'tableau_public'){
                 return response()->json(['message'=>['type'=>'success','url'=>$dashboard->config_json->public_url],200]);

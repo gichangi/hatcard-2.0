@@ -53,6 +53,7 @@ Route::middleware('auth:api')->group(function(){
             Route::post('archive', 'archive');
             Route::delete('/', 'destroy');
             Route::get('/account', 'account');
+            Route::post('/checkpermission', 'checkPermission');
 
         });
     });

@@ -62,11 +62,11 @@ const Breadcrumb = () => {
     );
 
     if (item.breadcrumbs !== false) {
-
+      const location = useLocation();
       breadcrumbContent = (
           <>
             <>
-
+              {(!state && location.pathname !== '/home' && location.pathname !== '/dashboards/view') &&
                   <div className="page-header">
                     <div className="page-block">
                       <div className="row align-items-center">
@@ -88,6 +88,8 @@ const Breadcrumb = () => {
                       </div>
                     </div>
                   </div>
+              }
+
             </>
           </>
       );
@@ -96,11 +98,9 @@ const Breadcrumb = () => {
     //document.title = title + BASE_TITLE;
     document.title = BASE_TITLE;
   }
-  const location = useLocation();
+
   return <>
-    {(!state && location.pathname !== '/home' && location.pathname !== '/dashboards/view') &&
-        {breadcrumbContent}
-    }
+    {breadcrumbContent}
 
   </>;
 };

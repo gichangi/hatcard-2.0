@@ -6,12 +6,14 @@ import AdminLayout from './layouts/AdminLayout';
 //import { BASE_URL } from './config/constant';
 import GuestGuard from './components/Auth/GuestGuard';
 import AuthGuard from './components/Auth/AuthGuard';
+import {useSelector} from "react-redux";
 
 
 export const renderRoutes = (routes = []) => (
     <Suspense fallback={<Loader />}>
         <Switch>
             {routes.map((route, i) => {
+                //const permissions= useSelector(state => state.user.user.permissions)
                 const Guard = route.guard || Fragment;
                 const Layout = route.layout || Fragment;
                 const Component = route.component;
@@ -32,7 +34,7 @@ export const renderRoutes = (routes = []) => (
     </Suspense>
 );
 
-const routes = [
+export const routes = [
     {
         exact: true,
         guard: GuestGuard,
@@ -63,76 +65,66 @@ const routes = [
         guard: AuthGuard,
         routes: [
             {
-                permission:['view-homepage'],
+                permission:['ALL','View-homepage'],
                 exact: true,
                 path: '/home',
                 component: lazy(() => import('./views/homepage'))
             },
             {
-                permission:['view-homepage'],
+                permission:['ALL','View-profile'],
                 exact: true,
                 path: '/profile',
                 component: lazy(() => import('./views/user-profile'))
             },
             {
+                permission:['ALL','View-explore'],
                 exact: true,
                 path: '/admin/explore',
                 component: lazy(() => import('./views/menu-cards'))
             },
 
             {
-                permission:['Roles-view','Roles-create','Roles-edit','Roles-delete'],
+                permission:['ALL','Roles-view','Roles-create','Roles-edit','Roles-delete'],
                 exact: true,
                 path: '/admin/roles',
                 component: lazy(() => import('./views/admin/roles'))
             },
             {
+                permission:['ALL','Menu-view','Menu-create','Menu-edit','Menu-delete'],
                 exact: true,
                 path: '/admin/menu-management',
                 component: lazy(() => import('./views/admin/menumanagement'))
             },
             {
-                permission:['Users-view','Users-create','Users-edit','Users-delete'],
+                permission:['ALL','Users-view','Users-create','Users-edit','Users-delete'],
                 exact: true,
                 path: '/admin/users',
                 component: lazy(() => import('./views/admin/users'))
             },
             {
-                permission:['Sidebar-view','Sidebar-create','Sidebar-edit','Sidebar-delete'],
-                exact: true,
-                path: '/admin/sidebar/menuitem',
-                component: lazy(() => import('./views/admin/menumanagement/navigation'))
-            },
-            {
-                permission:['Organisations-view','Organisations-create','Organisations-edit','Organisations-delete'],
+                permission:['ALL','Organisations-view','Organisations-create','Organisations-edit','Organisations-delete'],
                 exact: true,
                 path: '/admin/organisation',
                 component: lazy(() => import('./views/admin/organisations'))
             },
             {
-                permission:['Bi-Platforms-view','Bi-Platforms-create','Bi-Platforms-edit','Bi-Platforms-delete'],
+                permission:['ALL','Bi-Platforms-view','Bi-Platforms-create','Bi-Platforms-edit','Bi-Platforms-delete'],
                 exact: true,
                 path: '/admin/bi-platforms',
                 component: lazy(() => import('./views/admin/bi-platforms'))
             },
             {
-                permission:['Bi-Dashboards-view','Bi-Dashboards-create','Bi-Dashboards-edit','Bi-Dashboards-delete'],
+                permission:['ALL','Bi-Dashboards-view','Bi-Dashboards-create','Bi-Dashboards-edit','Bi-Dashboards-delete'],
                 exact: true,
                 path: '/admin/bi-dashboards',
                 component: lazy(() => import('./views/admin/bi-dashboards'))
             },
             {
-                permission:['Bi-Dashboards-view'],
+                permission:['ALL','View-dashboards'],
                 exact: true,
                 path: '/dashboards/view',
                 component: lazy(() => import('./views/dashboards'))
-            },
-
-            // {
-            //     path: '*',
-            //     exact: true,
-            //     component: () => <Redirect to={BASE_URL} />
-            // }
+            }
         ]
 
     }
