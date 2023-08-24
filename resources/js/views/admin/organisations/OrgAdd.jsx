@@ -52,6 +52,7 @@ function OrgAdd({pageSwitch, rowData}) {
     const [menuTreeItems, setMenuTreeItems] = useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [defaultSwitch, setDefaultSwitch] = useState(true);
+    const [parentMenu, setParentMenu] = useState();
     const [tempVal,setTempVal] = useState("");
     const [enableSubmit, setEnableSubmit] = useState(false)
     const MySwal = withReactContent(Swal);
@@ -70,6 +71,7 @@ function OrgAdd({pageSwitch, rowData}) {
                 description: rowData.description,
                 status:rowData.status
             });
+            setParentMenu(rowData.parent_id)
             setDefaultSwitch(rowData.status==='active'?true:false);
         }
     },[rowData]);
@@ -93,7 +95,8 @@ function OrgAdd({pageSwitch, rowData}) {
         setEnableSubmit(formValidation(orgForm))
     }
     const formValidation = (formData = orgForm)=>{
-        return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
+        return Object.keys(validate(formData)).length ===0;
+        //return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
     }
 
     const handleSubmit = () =>{
@@ -103,9 +106,7 @@ function OrgAdd({pageSwitch, rowData}) {
                 "Accept": "application/json",
                 "Authorization": `Bearer ${autStore.token}`
             }
-            console.log(orgForm)
             apiFetch('POST',headers,'/api/organisations',orgForm).then(res=>{
-                console.log(res.data)
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
                         pageSwitch(null)
@@ -138,7 +139,7 @@ function OrgAdd({pageSwitch, rowData}) {
     },[]);
 
     const setSelectedItems = (items) => {
-        orgForm.parent_id = items[0];
+        orgForm.parent_id = items[0] === undefined?null:items[0];
         setTempVal(items[0]);
         setEnableSubmit(formValidation(orgForm))
     }
@@ -220,7 +221,7 @@ function OrgAdd({pageSwitch, rowData}) {
                                             <FormHelperText sx={{color:'red'}}>{formErrors.parent_menu_uid}</FormHelperText>
                                         </>
                                     }
-                                    <CustomMenuTree title={"Organisation Tree"} menuTreeItems={menuTreeItems} orderField={'date_created'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]}  />
+                                    <CustomMenuTree title={"Organisation Tree"} menuTreeItems={menuTreeItems} orderField={'date_created'} numberOfItems={'single'} selectedItem={setSelectedItems} selectLevels={[]} defaultSelected={[parentMenu]}   />
                                 </Col>
                             </Form.Group>
                         </Item>

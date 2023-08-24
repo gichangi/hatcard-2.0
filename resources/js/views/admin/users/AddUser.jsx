@@ -37,8 +37,6 @@ const validate = (values) => {
     } else if (values.last_name.length > 1000) {
         errors.last_name = 'Must be 1000 characters or less';
     }
-
-
     return errors;
 };
 
@@ -170,7 +168,8 @@ function AddUser({row,pageSwitch}) {
         setEnableSubmit(formValidation(user))
     }
     const formValidation = (formData = user)=>{
-        return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
+        return Object.keys(validate(formData)).length ===0;
+        //return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
     }
 
     const UpdateRoles = (items) =>{
@@ -206,7 +205,7 @@ function AddUser({row,pageSwitch}) {
             }
         }
 
-        if(formValidation && Object.keys(validate(user)).length === 0 && enableSubmit){
+        if(Object.keys(validate(user)).length === 0 && enableSubmit){
             let userObj = new Object(JSON.parse(JSON.stringify(user)));
             userObj.roles = [..._.map(user.roles, 'name')]
             userObj.email = user.email.value
