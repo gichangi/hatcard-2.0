@@ -236,7 +236,7 @@ class UserController extends Controller
 
     public function details(Request $request): \Illuminate\Http\JsonResponse
     {
-        $userDetails = User::where('email',$request->email)->with('userPermissions')->get()->first();
+        $userDetails = User::where('email',$request->email)->with('userPermissions')->with('organisations')->get()->first();
         return response()->json(['details' => $userDetails], 200);
     }
 

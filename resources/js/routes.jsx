@@ -124,6 +124,12 @@ export const routes = [
                 exact: true,
                 path: '/dashboards/view',
                 component: lazy(() => import('./views/dashboards'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/vsp',
+                component: lazy(() => import('./views/admin/vsp'))
             }
         ]
 

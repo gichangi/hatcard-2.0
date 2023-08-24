@@ -76,6 +76,12 @@ Route::get('/pms', function () {
         });
 
 
+        Route::prefix('data')->group(function () {
+            Route::get('/vsp', function () {
+                return Inertia('admin/vsp/index');
+            });
+        });
+
   /*  });*/
 
 });

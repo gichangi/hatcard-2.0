@@ -112,4 +112,11 @@ Route::middleware('auth:api')->group(function(){
             Route::post('/view-url', 'generateUrl');
         });
     });
+
+    Route::prefix('vsp-data')->group(function () {
+        Route::controller(\App\Http\Controllers\VSPControllers\VSPDataController::class)->group(function () {
+            Route::get('/', 'index');
+        });
+    });
+
 });

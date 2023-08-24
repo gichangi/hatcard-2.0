@@ -93,7 +93,8 @@ function OrgAdd({pageSwitch, rowData}) {
         setEnableSubmit(formValidation(orgForm))
     }
     const formValidation = (formData = orgForm)=>{
-        return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
+        return Object.keys(validate(formData)).length ===0;
+        //return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
     }
 
     const handleSubmit = () =>{

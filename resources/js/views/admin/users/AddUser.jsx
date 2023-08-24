@@ -170,7 +170,8 @@ function AddUser({row,pageSwitch}) {
         setEnableSubmit(formValidation(user))
     }
     const formValidation = (formData = user)=>{
-        return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
+        return Object.keys(validate(formData)).length ===0;
+        //return _.values(formData).some(el => el == null) === false && Object.keys(formData).length > 0;
     }
 
     const UpdateRoles = (items) =>{

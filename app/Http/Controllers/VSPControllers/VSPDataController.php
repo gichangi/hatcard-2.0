@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\PHCControllers;
+namespace App\Http\Controllers\VSPControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProgressiveModel;
+use App\Models\VSPData;
 use Illuminate\Http\Request;
 
-class ProgressiveModelController extends Controller
+class VSPDataController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +15,8 @@ class ProgressiveModelController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         //
-        $data = ProgressiveModel::all();
-        return response()->json(['progressive_model'=> $data],200);
+        $data = VSPData::all();
+        return response()->json(['vsp_data'=> $data],200);
     }
 
     /**
@@ -37,7 +38,7 @@ class ProgressiveModelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ProgressiveModel $progressiveModel)
+    public function show(VSPData $vSPData)
     {
         //
     }
@@ -45,7 +46,7 @@ class ProgressiveModelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(ProgressiveModel $progressiveModel)
+    public function edit(VSPData $vSPData)
     {
         //
     }
@@ -53,7 +54,7 @@ class ProgressiveModelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ProgressiveModel $progressiveModel)
+    public function update(Request $request, VSPData $vSPData)
     {
         //
     }
@@ -61,7 +62,7 @@ class ProgressiveModelController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProgressiveModel $progressiveModel)
+    public function destroy(VSPData $vSPData)
     {
         //
     }
