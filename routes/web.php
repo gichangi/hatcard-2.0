@@ -28,6 +28,9 @@ Route::get('/landing', function () {
 Route::get('/vsp', function () {
     return Inertia('landing/VspPage');
 });
+Route::get('/vsp-routine', function () {
+    return Inertia('landing/VspRoutinePage');
+});
 Route::get('/pms', function () {
     return Inertia('landing/ProgressiveModelPage');
 });

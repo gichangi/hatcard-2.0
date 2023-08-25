@@ -50,6 +50,12 @@ export const routes = [
     {
         exact: true,
         guard: GuestGuard,
+        path: '/vsp-routine',
+        component: lazy(() => import('./views/landing/VspRoutinePage'))
+    },
+    {
+        exact: true,
+        guard: GuestGuard,
         path: '/pms',
         component: lazy(() => import('./views/landing/ProgressiveModelPage'))
     },

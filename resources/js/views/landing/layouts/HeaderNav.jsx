@@ -50,6 +50,9 @@ function HeaderNav(props) {
                                     <Link to="/vsp" className="dropdown-item">
                                         County VSP
                                     </Link>
+                                    <Link to="/vsp-routine" className="dropdown-item">
+                                        County VSP Routine
+                                    </Link>
                                     <Link to="/pms" className="dropdown-item">
                                         Progress Module Scores
                                     </Link>
