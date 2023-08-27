@@ -2,24 +2,23 @@ import {useEffect, useState, useMemo, useRef} from "react";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import VSPUploadData from "./VSPUploadData";
+import VSPUploads from "./VSPUploadsList";
+import VSPUploadsList from "./VSPUploadsList";
 
 function Index(props) {
     const [reComp, setReComp] = useState()
 
-    const pageSwitch = (action,rowData) =>{
+    const pageSwitch = (action,uploadId=null) =>{
         switch (action) {
             case 'add':
-                setReComp(<VSPUploadData row={rowData} pageSwitch={pageSwitch}/>);
-                break;
-            case 'list':
-                setReComp(<VSPUploadData row={rowData} pageSwitch={pageSwitch}/>);
+                setReComp(<VSPUploadData uploadId={uploadId} pageSwitch={pageSwitch}/>);
                 break;
             default:
-                setReComp(<VSPUploadData row={rowData} pageSwitch={pageSwitch}/>);
+                setReComp(<VSPUploadsList pageSwitch={pageSwitch}/>);
         }
     }
     useEffect(()=>{
-        setReComp(<VSPUploadData  pageSwitch={pageSwitch}/>)
+        setReComp(<VSPUploadsList pageSwitch={pageSwitch}/>)
     },[])
 
     return (

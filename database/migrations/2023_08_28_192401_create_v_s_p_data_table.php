@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('definition')->nullable();
             $table->text('data_source')->nullable();
             $table->double('value')->nullable();
+            $table->uuid('upload_id');
             $table->timestamps();
         });
     }

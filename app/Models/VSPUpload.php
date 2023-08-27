@@ -9,9 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class VSPData extends Model
+class VSPUpload extends Model
 {
-    use Notifiable, HasApiTokens; Use UsesUuid; use HasRoles;
+    use Notifiable, HasApiTokens;Use UsesUuid;
     use HasFactory;
 
     /**
@@ -20,17 +20,17 @@ class VSPData extends Model
      * @var array<int, string>
      */
 
-    protected $primaryKey = 'id';
-    protected $table="vsp_data";
+    //protected $primaryKey = 'id';
+    protected $primaryKey='id';
+    protected $table="vsp_upload";
     protected $fillable = [
-        'value','county','period','indicator_on_khis','khis_uid','data_group','data_sub_group','indicator','definition','data_source','category','upload_id'
+        'created_by','last_updated_by'
     ];
     protected $casts = [
         'id' => 'string',
     ];
-
-    function vspUpload(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    function vspdata(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(VSPUpload::class, 'upload_id');
+        return $this->hasMany(VSPData::class, 'upload_id');
     }
 }

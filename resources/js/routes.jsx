@@ -13,7 +13,6 @@ export const renderRoutes = (routes = []) => (
     <Suspense fallback={<Loader />}>
         <Switch>
             {routes.map((route, i) => {
-                //const permissions= useSelector(state => state.user.user.permissions)
                 const Guard = route.guard || Fragment;
                 const Layout = route.layout || Fragment;
                 const Component = route.component;

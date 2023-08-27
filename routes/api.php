@@ -114,9 +114,11 @@ Route::middleware('auth:api')->group(function(){
     });
 
     Route::prefix('vsp-data')->group(function () {
-        Route::controller(\App\Http\Controllers\VSPControllers\VSPDataController::class)->group(function () {
-            Route::get('/', 'index');
-        });
+        Route::get('/', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'show']);
+
     });
 
 });
