@@ -118,7 +118,23 @@ Route::middleware('auth:api')->group(function(){
         Route::post('/', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'store']);
         Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'destroy']);
         Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\VSPUploadsController::class, 'show']);
-
     });
-
+    Route::prefix('pms-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\ProgressiveModelController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\ProgressiveModelController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\ProgressiveModelController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\ProgressiveModelController::class, 'show']);
+    });
+    Route::prefix('finance-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\FinanceController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\FinanceController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\FinanceController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\FinanceController::class, 'show']);
+    });
+    Route::prefix('cause-of-death-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'show']);
+    });
 });

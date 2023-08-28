@@ -8,6 +8,7 @@ use App\Models\VSPData;
 use App\Models\VSPUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class VSPUploadsController extends Controller
@@ -18,7 +19,10 @@ class VSPUploadsController extends Controller
     public function index()
     {
         //
-        $data = VSPUpload::all();
+        $data =DB::table('vsp_upload')
+            ->join('users', 'vsp_upload.created_by', '=', 'users.id')
+            ->select('users.first_name','users.middle_name','users.last_name','users.email','vsp_upload.*')
+            ->get();
         return response()->json(['vsp_uploads'=> $data],200);
     }
 
@@ -109,8 +113,18 @@ class VSPUploadsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VSPUpload $vSPUploads)
+    public function destroy(Request $request)
     {
+
         //
+        $id = $request->id;
+
+        try {
+            $uploadData = VSPData::where('upload_id', $id)->delete();
+            $uploadUpload = VSPUpload::where('id', $id)->delete();
+            return response()->json(['message' => ['type'=>'success']], 200);
+        }catch (Throwable $e){
+            return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
+        }
     }
 }

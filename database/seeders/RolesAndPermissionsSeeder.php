@@ -138,7 +138,7 @@ class RolesAndPermissionsSeeder extends Seeder
             'ALL'
         ]);
 
-        $user=User::all()->where('email','=','admin@usaid.org')->first();
+        $user=User::all()->where('email','=','admin@vspkenya.org')->first();
 
         //Assign Admin
         $user->assignRole($role);

@@ -134,7 +134,19 @@ export const routes = [
                 permission:['ALL','View-dashboards'],
                 exact: true,
                 path: '/data/vsp',
-                component: lazy(() => import('./views/admin/vsp'))
+                component: lazy(() => import('./views/admin/uploads-components/vsp'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/pms',
+                component: lazy(() => import('./views/admin/uploads-components/pms'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/finance',
+                component: lazy(() => import('./views/admin/uploads-components/finance'))
             }
         ]
 

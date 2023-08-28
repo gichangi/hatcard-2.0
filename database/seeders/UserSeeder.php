@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
                 "first_name"=>"admin",
                 "middle_name"=>"admin",
                 "last_name"=>"admin",
-                "email"=>"admin@usaid.org",
+                "email"=>"admin@vspkenya.org",
                 "phone"=>"+256777777777",
                 "password"=>bcrypt("P@55w0rd"),
                 "user"=>"c5cce308-6acf-11eb-9439-0242ac130002"

@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {apiFetch} from "../../../assets/api/utils";
+import {apiFetch} from "../../../../assets/api/utils";
 import MaterialReactTable from "material-react-table";
 import {Button, Card, CardContent, Divider, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,8 +8,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import {styled} from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
-import CSVReader from "./CSVUploadComponent";
+import CSVReader from "../../../../components/CSVUpload/CSVUploadComponent";
 import ReplyIcon from '@mui/icons-material/Reply';
+import MySwal from "sweetalert2";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#fff',
@@ -51,17 +52,17 @@ function VspUploadData({pageSwitch, uploadId}) {
     },[])
 
     const dataUpload=()=>{
-        console.log("---------upload--------")
-        console.log({
-            upload_id:uploadId,
-            data:data
-        })
-        console.log("---------upload--------")
         apiFetch('POST',{},'/api/vsp-data',{
             upload_id:uploadId,
             data:data
         }).then(res=>{
-            console.log(res)
+            if(res.data.message.type === 'success'){
+                MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
+                    pageSwitch(null)
+                })
+            }else{
+                MySwal.fire('', 'An error occurred while saving the data', 'error');
+            }
         })
     }
 

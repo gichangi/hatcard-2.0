@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {apiFetch} from "../../../assets/api/utils";
+import {apiFetch} from "../../../../assets/api/utils";
 import MySwal from "sweetalert2";
 import {Col, Row} from "react-bootstrap";
 import MaterialReactTable from "material-react-table";
@@ -10,22 +10,19 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-function VSPUploadsList(props) {
+function CauseOfDeathUploadsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
     useEffect(()=>{
-        apiFetch('GET',{},'/api/vsp-data',{}).then(res=>{
-            setUploads(res.data.vsp_uploads);
-            console.log("-------uploads-----")
-            console.log(res.data.vsp_uploads)
-            console.log("-------uploads-----")
+        apiFetch('GET',{},'/api/cause-of-death-data',{}).then(res=>{
+            setUploads(res.data.cause_of_death_uploads);
         })
     },[])
 
     const handleDeleteRow = useCallback(
-        (row) => {
-            apiFetch('DELETE',{},'/api/vsp-data',{id:row.getValue('id')}).then(res=>{
+        (uploadId,row) => {
+            apiFetch('DELETE',{},'/api/cause-of-death-data',{id:uploadId}).then(res=>{
                 if(res.data.message.type === 'success'){
                     MySwal.fire('', 'Successfully Deleted!', 'success').then(()=>{
                         uploads.splice(row.index, 1);
@@ -43,7 +40,7 @@ function VSPUploadsList(props) {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'created_by', //simple recommended way to define a column
+                accessorKey: 'email', //simple recommended way to define a column
                 header: 'Created By'
             },
             {
@@ -120,7 +117,7 @@ function VSPUploadsList(props) {
                                     <VisibilityIcon/>&nbsp; View
                                 </MenuItem>,
                                 <MenuItem key={2} onClick={() => {
-                                    handleDeleteRow(row.id)
+                                    handleDeleteRow(row.original.id,row)
                                     closeMenu();
                                 }}>
                                     <DeleteIcon/> &nbsp; Delete
@@ -178,4 +175,4 @@ function VSPUploadsList(props) {
     );
 }
 
-export default VSPUploadsList;
+export default CauseOfDeathUploadsList;

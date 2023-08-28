@@ -213,7 +213,7 @@ function AddUser({row,pageSwitch}) {
             userObj.email = user.email.value
             apiFetch('POST',{},'/api/user',userObj).then(res=>{
                 if(res.data.message.type === 'success'){
-                    MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
+                    MySwal.fire('', 'Successfully Uploaded!', 'success').then(()=>{
                         pageSwitch(null)
                     })
                 }else{

@@ -4,14 +4,14 @@ namespace App\Http\Controllers\VSPControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProgressiveModel;
-use App\Models\PMSData;
-use App\Models\PMSUpload;
+use App\Models\CauseOfDeathData;
+use App\Models\CauseOfDeathUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class ProgressiveModelController extends Controller
+class CauseOfDeathController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +19,11 @@ class ProgressiveModelController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         //
-        $data =DB::table('pms_upload')
-            ->join('users', 'pms_upload.created_by', '=', 'users.id')
-            ->select('users.first_name','users.middle_name','users.last_name','users.email','pms_upload.*')
+        $data =DB::table('cause_of_death_upload')
+            ->join('users', 'cause_of_death_upload.created_by', '=', 'users.id')
+            ->select('users.first_name','users.middle_name','users.last_name','users.email','cause_of_death_upload.*')
             ->get();
-        return response()->json(['pms_uploads'=> $data],200);
+        return response()->json(['cause_of_death_uploads'=> $data],200);
     }
 
     /**
@@ -44,11 +44,11 @@ class ProgressiveModelController extends Controller
             $id = $request->upload_id;
 
 
-            $upload = new PMSUpload();
-            $search = PMSUpload::find($id);
+            $upload = new CauseOfDeathUpload();
+            $search = CauseOfDeathUpload::find($id);
 
-            if(PMSUpload::find($id) === null){
-                $upload = PMSUpload::updateOrCreate(
+            if(CauseOfDeathUpload::find($id) === null){
+                $upload = CauseOfDeathUpload::updateOrCreate(
                     ["id"=>$id],
                     [
                         'created_by' => Auth::id(),
@@ -57,21 +57,21 @@ class ProgressiveModelController extends Controller
                 );
             }else{
                 //update vsp upload
-                $upload = PMSUpload::updateOrCreate(
+                $upload = CauseOfDeathUpload::updateOrCreate(
                     ["id"=>$id],
                     [
                         'last_updated_by' => Auth::id()
                     ]
                 );
                 //Delete upload data to upload new data
-                $uploadData = PMSData::where('upload_id', $id)->delete();
+                $uploadData = CauseOfDeathData::where('upload_id', $id)->delete();
             }
             if($upload->save()){
-                //$upload->PMSData()->insert($request->data);
+                //$upload->CauseOfDeathData()->insert($request->data);
 
                 foreach ($request->data as $row){
 
-                    $rows= PMSData::updateOrCreate(
+                    $rows= CauseOfDeathData::updateOrCreate(
                         ['id'=>null,'upload_id'=>$upload->id],
                         $row
                     );
@@ -89,8 +89,8 @@ class ProgressiveModelController extends Controller
      */
     public function show(Request $request)
     {
-        $data = PMSData::where('upload_id',$request->id)->get();
-        return response()->json(['pms_data'=> $data],200);
+        $data = CauseOfDeathData::where('upload_id',$request->id)->get();
+        return response()->json(['cause_of_death_data'=> $data],200);
     }
 
 
@@ -120,8 +120,8 @@ class ProgressiveModelController extends Controller
         $id = $request->id;
 
         try {
-            $uploadData = PMSData::where('upload_id', $id)->delete();
-            $uploadUpload = PMSUpload::where('id', $id)->delete();
+            $uploadData = CauseOfDeathData::where('upload_id', $id)->delete();
+            $uploadUpload = CauseOfDeathUpload::where('id', $id)->delete();
             return response()->json(['message' => ['type'=>'success']], 200);
         }catch (Throwable $e){
             return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);

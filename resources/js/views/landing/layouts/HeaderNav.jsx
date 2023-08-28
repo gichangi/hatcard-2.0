@@ -8,7 +8,7 @@ function HeaderNav(props) {
             <nav className="navbar landing-nav navbar-expand-lg navbar-light navbar-default navbar-fixed-top past-main" role="navigation">
                 <div className="container">
                     <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder', fontSize:'28px',color:'rgb(164, 34, 98)'}}>
-                        <img src={vspFaviconIcon} alt="CARD" />KenyaVSP
+                        <img src={vspFaviconIcon} alt="CARD" />Kenya Vital Signs Profile
                     </a>
                     <button
                         className="navbar-toggler"
@@ -54,10 +54,7 @@ function HeaderNav(props) {
                                         County VSP Routine
                                     </Link>
                                     <Link to="/pms" className="dropdown-item">
-                                        Progress Module Scores
-                                    </Link>
-                                    <Link to="#" className="dropdown-item">
-                                        Level 3
+                                        Progression Module Scores
                                     </Link>
                                 </div>
                             </li>

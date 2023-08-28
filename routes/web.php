@@ -81,7 +81,16 @@ Route::get('/pms', function () {
 
         Route::prefix('data')->group(function () {
             Route::get('/vsp', function () {
-                return Inertia('admin/vsp/index');
+                return Inertia('admin/uploads-components/vsp/index');
+            });
+            Route::get('/pms', function () {
+                return Inertia('admin/uploads-components/pms/index');
+            });
+            Route::get('/finance', function () {
+                return Inertia('admin/uploads-components/finance/index');
+            });
+            Route::get('/cause-of-death', function () {
+                return Inertia('admin/uploads-components/cause-of-death/index');
             });
         });
 

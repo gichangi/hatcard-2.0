@@ -28,11 +28,11 @@ const LandingPage = () => {
                 <div className="hero-content app-hero-content text-center">
                   <div className="row justify-content-md-center">
                     <div className="col-md-10">
-                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'45px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
+{/*                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'45px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
                         Kenya Vital Signs Profile
-                      </h1>
+                      </h1>*/}
                       <p className="wow fadeInUp" data-wow-delay="0.2s" style={{fontSize:'24px',color:'rgb(164, 34, 98)'}}>
-                        The Vital Signs Profile is one of the flagship products that came out of the work of the Primary Health Care Performance Initiative. Before the Vital Signs Profile,
+                        The Vital Signs Profile is an innovative approach to monitor the primary health care systems capacity, financing, performance and equity. It came out of the Primary Health Care Performance improvement initiative
                       </p>
                     </div>
                     <div className="col-md-12">
@@ -53,7 +53,7 @@ const LandingPage = () => {
                         VSP Pillars
                       </h1>
                       <p className="wow fadeInUp" data-wow-delay="0.2s">
-                        Each Vital Signs Profile Provides answers to some of the most critical questions about a country's primary health care system
+                        Each Vital Signs Profile Provides answers to some of the most critical questions about Kenya's national and county specific health system performance.
                       </p>
                     </div>
                   </div>

@@ -4,14 +4,14 @@ namespace App\Http\Controllers\VSPControllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProgressiveModel;
-use App\Models\PMSData;
-use App\Models\PMSUpload;
+use App\Models\FinanceData;
+use App\Models\FinanceUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class ProgressiveModelController extends Controller
+class FinanceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,11 +19,11 @@ class ProgressiveModelController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         //
-        $data =DB::table('pms_upload')
-            ->join('users', 'pms_upload.created_by', '=', 'users.id')
-            ->select('users.first_name','users.middle_name','users.last_name','users.email','pms_upload.*')
+        $data =DB::table('finance_upload')
+            ->join('users', 'finance_upload.created_by', '=', 'users.id')
+            ->select('users.first_name','users.middle_name','users.last_name','users.email','finance_upload.*')
             ->get();
-        return response()->json(['pms_uploads'=> $data],200);
+        return response()->json(['finance_uploads'=> $data],200);
     }
 
     /**
@@ -44,11 +44,11 @@ class ProgressiveModelController extends Controller
             $id = $request->upload_id;
 
 
-            $upload = new PMSUpload();
-            $search = PMSUpload::find($id);
+            $upload = new FinanceUpload();
+            $search = FinanceUpload::find($id);
 
-            if(PMSUpload::find($id) === null){
-                $upload = PMSUpload::updateOrCreate(
+            if(FinanceUpload::find($id) === null){
+                $upload = FinanceUpload::updateOrCreate(
                     ["id"=>$id],
                     [
                         'created_by' => Auth::id(),
@@ -57,21 +57,21 @@ class ProgressiveModelController extends Controller
                 );
             }else{
                 //update vsp upload
-                $upload = PMSUpload::updateOrCreate(
+                $upload = FinanceUpload::updateOrCreate(
                     ["id"=>$id],
                     [
                         'last_updated_by' => Auth::id()
                     ]
                 );
                 //Delete upload data to upload new data
-                $uploadData = PMSData::where('upload_id', $id)->delete();
+                $uploadData = FinanceData::where('upload_id', $id)->delete();
             }
             if($upload->save()){
-                //$upload->PMSData()->insert($request->data);
+                //$upload->FinanceData()->insert($request->data);
 
                 foreach ($request->data as $row){
 
-                    $rows= PMSData::updateOrCreate(
+                    $rows= FinanceData::updateOrCreate(
                         ['id'=>null,'upload_id'=>$upload->id],
                         $row
                     );
@@ -89,8 +89,8 @@ class ProgressiveModelController extends Controller
      */
     public function show(Request $request)
     {
-        $data = PMSData::where('upload_id',$request->id)->get();
-        return response()->json(['pms_data'=> $data],200);
+        $data = FinanceData::where('upload_id',$request->id)->get();
+        return response()->json(['finance_data'=> $data],200);
     }
 
 
@@ -120,8 +120,8 @@ class ProgressiveModelController extends Controller
         $id = $request->id;
 
         try {
-            $uploadData = PMSData::where('upload_id', $id)->delete();
-            $uploadUpload = PMSUpload::where('id', $id)->delete();
+            $uploadData = FinanceData::where('upload_id', $id)->delete();
+            $uploadUpload = FinanceUpload::where('id', $id)->delete();
             return response()->json(['message' => ['type'=>'success']], 200);
         }catch (Throwable $e){
             return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
