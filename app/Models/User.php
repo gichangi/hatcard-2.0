@@ -74,7 +74,7 @@ class User extends Authenticatable
     }
     public function organisations(): BelongsToMany
     {
-        return $this->belongsToMany(Organisation::class, 'user_has_organisations','user_id', 'organisation_id')->select(['id']);
+        return $this->belongsToMany(Organisation::class, 'user_has_organisations','user_id', 'organisation_id')->select(['id','name']);
     }
 
     public function userPermissions(): BelongsToMany

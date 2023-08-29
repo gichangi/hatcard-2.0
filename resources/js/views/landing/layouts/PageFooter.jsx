@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 function PageFooter(props) {
     return (
-        <div className="footer">
+        <div className="footer" style={{backgroundColor:"#fff",padding:'5px'}}>
             <div className="container">
                 <div className="col-md-12 text-center">
                     <a className="navbar-brand page-scroll bg-transparent" href="#" style={{fontWeight:'bolder', color:'#000'}}>

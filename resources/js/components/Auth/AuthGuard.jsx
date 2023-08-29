@@ -18,10 +18,10 @@ const AuthGuard = ({ children }) => {
   //This causes an error on server
   if(isLoggedIn){
     //
-    let routePermissions = _.find(appRoutes[4].routes,{path:location.pathname}).permission
+/*    let routePermissions = _.find(appRoutes[4].routes,{path:location.pathname}).permission
     if(!userPermissions.some(p => routePermissions.includes(p))){
       return <Redirect to="/" />;
-    }
+    }*/
 
   }
   return <>{children}</>;

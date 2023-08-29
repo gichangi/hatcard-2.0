@@ -21,6 +21,7 @@ function HeaderNav(props) {
                     >
                         <span className="navbar-toggler-icon" />
                     </button>
+
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto" />
                         <ul className="navbar-nav my-2 my-lg-0">
@@ -29,42 +30,13 @@ function HeaderNav(props) {
                                     Home
                                 </a>
                             </li>
-{/*                            <li className="nav-item">
-                                <a className="nav-link page-scroll" href="#services">
-                                    Important
-                                </a>
-                            </li>*/}
-{/*                            <li className="nav-item dropdown">
-                                <Link
-                                    className="nav-link dropdown-toggle"
-                                    to="#"
-                                    id="navbarDropdown"
-                                    role="button"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                >
-                                    Dashboards
-                                </Link>
-                                <div className="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <Link to="/vsp" className="dropdown-item">
-                                        County VSP
-                                    </Link>
-                                    <Link to="/pms" className="dropdown-item">
-                                        Progress Module Scores
-                                    </Link>
-                                    <Link to="#" className="dropdown-item">
-                                        Level 3
-                                    </Link>
-                                </div>
-                            </li>*/}
                             <li className="nav-item">
                                 <a className="nav-link page-scroll" href="https://www.usaid.gov/nigeria" target="_blank">
                                     About
                                 </a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link page-scroll" href="/login">
+                            <li className="nav-item" style={{backgroundColor:'#00697F',width:'100px',textAlign:'center'}}>
+                                <a className="nav-link page-scroll" href="/login" style={{color:'#fff'}}>
                                     Login
                                 </a>
                             </li>

@@ -3,34 +3,41 @@ import './assets/css/styles.scss';
 import hatcardLanding from './assets/images/hatcard_landing.png';
 import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
+import Grid from "@mui/material/Grid";
+import {Typography} from "@mui/material";
 
 const LandingPage = () => {
   return (
     <React.Fragment>
-      <div className="wrapper">
+      <div className="wrapper" style={{backgroundColor:"#fff"}}>
         <div>
           <HeaderNav/>
-          <div className="main" id="main">
-            <div className="hero-section app-hero" >
-              <div className="container">
-                <div className="hero-content app-hero-content text-center">
-                  <div className="row justify-content-md-center">
-                    <div className="col-md-10">
-                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{marginTop:'-10px',color:'rgb(15, 105, 125)', fontSize:'45px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
+          <div className="main" id="main" style={{backgroundColor:"#fff"}}>
+            <div className="hero-section app-hero" style={{height:'79vh',backgroundColor:"#fff"}} >
+              <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}>
+                <Grid item xs={7} style={{display:'flex',justifyContent:'center',alignItems:'center'}} >
+                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"60%"} />
+                </Grid>
+
+                <Grid item xs={5} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                  <Grid container>
+                    <Grid item xs={12}>
+                      <Typography variant="h1" gutterBottom style={{fontSize:'68px',color:'#C21C66',fontWeight:'bolder'}}>
                         Comprehensive Access and Review Dashboard Portal
-                      </h1>
-                      <p className="wow fadeInUp" data-wow-delay="0.2s" style={{fontSize:'24px',color:'rgb(164, 34, 98)'}}>
-                        Harnessing the Power of Digital Health Technologies
-                      </p>
-                    </div>
-                    <div className="col-md-12">
-                      <div className="hero-image" style={{height:'75vh'}}>
-                        <img src={hatcardLanding} alt="Hatcard" height="98%" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography variant="body2" style={{fontSize:'22px',color:"#000"}}>
+                        The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
+
+                      </Typography>
+
+                    </Grid>
+                  </Grid>
+
+
+                </Grid>
+              </Grid>
             </div>
             {/*<div className="services-section text-center" id="services">
               <div className="container">

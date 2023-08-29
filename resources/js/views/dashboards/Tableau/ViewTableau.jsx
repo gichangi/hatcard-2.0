@@ -5,9 +5,17 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import {apiFetch} from "../../../assets/api/utils";
 import {Button} from "@mui/material";
-
+import {useSelector} from "react-redux";
+import _ from "lodash";
 const {tableau} = window;
-
+import {
+    FilterUpdateType,
+    TableauDialogType,
+    TableauEventType,
+    SelectionUpdateType,
+    SheetSizeBehavior,
+    TableauViz
+} from "./tableau.embedding.3.latest.min";
 
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -35,6 +43,8 @@ const useRefDimensions = (ref,w,h) => {
 let defaultHeight =0;
 let defaultWidth =0;
 function ViewTableau({id}) {
+    const userPermissions= useSelector(state => state.user.user.permissions);
+    const userOrganisations= useSelector(state => state.user.user.organisations);
     const [height, setHeight] = useState(1)
     const [width, setWidth] = useState(0)
     const [tabViz, setTabViz] = useState();
@@ -42,6 +52,8 @@ function ViewTableau({id}) {
     const divRef = createRef();
     const dimensions = useRefDimensions(divRef,width,height);
     const ref = useRef();
+    let limitIpFilter =true;
+
 
     function initViz(url){
         const myNode = document.getElementById("tableauBody");
@@ -50,64 +62,112 @@ function ViewTableau({id}) {
         g.setAttribute("id", "tableauViz");
         myNode.append(g)
 
-        let placeholderDiv = document.getElementById("tableauViz");
-        let options = {
-            hideTabs: true,
-            width: `${defaultWidth}px`,
-            height: `${defaultHeight}px`,
-
-            onFirstInteractive: function() {
-                // The viz is now ready and can be safely used.
-                setVizLoaded(true);
+        let viz = new TableauViz();
+        viz.src = url;
+        viz.style.height = `${defaultHeight}px`;
+        viz.style.width = `${defaultWidth}px`;
+        viz.hideTabs = true;
+        viz.hideToolbar = true;
+        viz.addEventListener(TableauEventType.FirstInteractive, (event) => {
+            setVizLoaded(true)
+            if(limitIpFilter){
+                viz.workbook.activeSheet.applyFilterAsync("IP", userOrganisations, tableau.FilterUpdateType.REPLACE);
             }
+
+            const observer = new ResizeObserver(entries => {
+                if(ref.current !== null){
+                    //Working just check css
+                    viz.width=entries[0].contentRect.width;
+                    viz.height=ref.current.clientHeight;
+                }
+            })
+            observer.observe(ref.current)
+            return () => ref.current && observer.unobserve(ref.current)
+        });
+
+        var onSuccess = function (filters) {
+            filters.map(function (filter, i) {
+                // use .value property of each DataValue object
+/*                console.log(i)
+                console.log(filter)
+                console.log(filter._appliedValues)
+                console.log(_.map(filter._appliedValues,'_value'))*/
+                if(filter._fieldName === "IP"){
+                    if(!_.map(filter._appliedValues,'_value').every(val => userOrganisations.includes(val))){
+                        viz.workbook.activeSheet.applyFilterAsync("IP", userOrganisations, tableau.FilterUpdateType.REPLACE);
+                    }
+                }
+            })
         };
 
-        let viz = new tableau.Viz(placeholderDiv, url, options);
+        var onError = function (err) {
+            alert("error");
+        };
+
+
+        viz.addEventListener(TableauEventType.FilterChanged, async (event) => {
+            if(limitIpFilter){
+                viz.workbook.activeSheet.getFiltersAsync("IP").then(onSuccess, onError);
+            }
+
+        });
+        viz.addEventListener(TableauEventType.FirstInteractive, (e) => {
+            document.getElementById('export-pdf').onclick = async () => {
+                await viz.displayDialogAsync(TableauDialogType.ExportPDF);
+            };
+            document.getElementById('export-image').onclick = async () => {
+                await viz.exportImageAsync();
+            };
+        });
+
+        document.getElementById("tableauViz").appendChild(viz)
+
         setTabViz(viz);
     }
 
     useEffect(() => {
         const observer = new ResizeObserver(entries => {
             if(ref.current !== null){
+                const viz = document.getElementById("tableauViz")
+                viz.style.width=entries[0].contentRect.width;
+                viz.style.height=ref.current.clientHeight;
                 setWidth(entries[0].contentRect.width)
                 setHeight(ref.current.clientHeight)
             }
         })
         observer.observe(ref.current)
         return () => ref.current && observer.unobserve(ref.current)
-    }, [id])
+    }, [id,vizLoaded])
 
 
     useEffect(()=>{
         apiFetch('POST',{},`/api/tableau/view-url`,{id:id}).then(res=>{
             defaultHeight=ref.current.clientHeight - 30;
             defaultWidth=ref.current.clientWidth -20;
-            initViz(res.data.message.url);
+            if(userPermissions.includes('ALL')){
+                limitIpFilter=false;
+                initViz(res.data.message.url);
+
+            }else{
+                initViz(res.data.message.url+"&IP="+_.join(userOrganisations,','));
+            }
+
         })
     },[id]);
 
     //Check if Box dimensions have changed and update the tableau viz dimensions
     useEffect(()=>{
-        if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
-            tabViz.setFrameSize(parseInt(`${dimensions.width - 20}`, 10), parseInt(`${dimensions.height -50}`, 10))
+        if( ref.current !== null ){
+            const viz = document.getElementById("tableauViz")
+            viz.style.width=parseInt(`${dimensions.width - 20}`, 10);
+            viz.style.height=parseInt(`${dimensions.height -50}`, 10);
         }
     },[dimensions])
 
 
-    function exportToPDF() {
-        if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
-            tabViz.showExportPDFDialog();
-        }
-    }
-    function exportToImage() {
-        if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
-            tabViz.showExportImageDialog();
-        }
-    }
-
 
     function toFullscreen(elem) {
-        if( ref.current !== null && vizLoaded===true && tabViz !== undefined ){
+        if( ref.current !== null  ){
             elem =  document.getElementById("tableauVizHolder");
             let actionButtons =  document.getElementById("actionButtons");
             if (!document.fullscreenElement && !document.mozFullScreenElement &&
@@ -168,10 +228,10 @@ function ViewTableau({id}) {
             <Item sx={{height:"50px",width:`100%`,margin:'2px'}} id={"actionButtons"}>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToPDF}>Export To PDF</Button>
+                        <Button id="export-pdf" variant="contained" sx={{fontWeight:'bolder'}}>Export To PDF</Button>
                     </Grid>
                     <Grid item xs={4}>
-                        <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={exportToImage}>Export To Image</Button>
+                        <Button id="export-image" variant="contained" sx={{fontWeight:'bolder'}}>Export To Image</Button>
                     </Grid>
                     <Grid item xs={4}>
                         <Button variant="contained" sx={{fontWeight:'bolder'}} onClick={toFullscreen}>Fullscreen</Button>
