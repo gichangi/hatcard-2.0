@@ -14,20 +14,20 @@ const LandingPage = () => {
           <HeaderNav/>
           <div className="main" id="main" style={{backgroundColor:"#fff"}}>
             <div className="hero-section app-hero" style={{height:'79vh',backgroundColor:"#fff"}} >
-              <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}>
-                <Grid item xs={7} style={{display:'flex',justifyContent:'center',alignItems:'center'}} >
-                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"60%"} />
+              <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}  direction="row" justifyContent="center" alignItems="center">
+                <Grid item xs={6} md={6} style={{display:'flex',justifyContent:'center',alignItems:'center'}} >
+                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} />
                 </Grid>
 
-                <Grid item xs={5} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                <Grid item xs={5} md={5} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
                   <Grid container>
                     <Grid item xs={12}>
-                      <Typography variant="h1" gutterBottom style={{fontSize:'68px',color:'#C21C66',fontWeight:'bolder'}}>
-                        Comprehensive Access and Review Dashboard Portal
+                      <Typography variant="h1" gutterBottom style={{fontSize:'8.0vh',color:'#C21C66',fontWeight:'bolder'}}>
+                        Comprehensive Access and Review Dashboard Portals
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                      <Typography variant="body2" style={{fontSize:'22px',color:"#000"}}>
+                      <Typography variant="body2" style={{fontSize:'3.0vh',color:"#000"}}>
                         The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
 
                       </Typography>

@@ -77,8 +77,14 @@ function ViewTableau({id}) {
             const observer = new ResizeObserver(entries => {
                 if(ref.current !== null){
                     //Working just check css
-                    viz.width=entries[0].contentRect.width;
-                    viz.height=ref.current.clientHeight;
+
+                    //const viz2 = document.getElementById("tableauViz");
+                    //var divs = viz2.getElementsByTagName('tableau-viz')[0];
+                    //console.log("-----viz2---"+divs.src)
+                    //divs.width=entries[0].contentRect.width;
+                    //divs.height=ref.current.clientHeight - 30;
+                    setHeight(ref.current.clientHeight - 30);
+                    setWidth(entries[0].contentRect.width)
                 }
             })
             observer.observe(ref.current)
@@ -125,6 +131,7 @@ function ViewTableau({id}) {
         setTabViz(viz);
     }
 
+/*
     useEffect(() => {
         const observer = new ResizeObserver(entries => {
             if(ref.current !== null){
@@ -138,6 +145,7 @@ function ViewTableau({id}) {
         observer.observe(ref.current)
         return () => ref.current && observer.unobserve(ref.current)
     }, [id,vizLoaded])
+*/
 
 
     useEffect(()=>{
@@ -153,7 +161,7 @@ function ViewTableau({id}) {
             }
 
         })
-    },[id]);
+    },[id,width,height]);
 
     //Check if Box dimensions have changed and update the tableau viz dimensions
     useEffect(()=>{
@@ -198,7 +206,7 @@ function ViewTableau({id}) {
 
     return (
         <>
-            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'-50px'}} id={"tableauVizHolder"} >
+            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'-30px'}} id={"tableauVizHolder"} >
                 <div style={{ height: '100%', width: `100%` }}>
                     <div
                         ref={divRef}
