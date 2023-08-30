@@ -92,6 +92,15 @@ Route::get('/pms', function () {
             Route::get('/cause-of-death', function () {
                 return Inertia('admin/uploads-components/cause-of-death/index');
             });
+            Route::get('/equity', function () {
+                return Inertia('admin/uploads-components/equity/index');
+            });
+            Route::get('/rmncah', function () {
+                return Inertia('admin/uploads-components/rmncah/index');
+            });
+            Route::get('/rmncah-low-high', function () {
+                return Inertia('admin/uploads-components/rmncah-low-high/index');
+            });
         });
 
   /*  });*/

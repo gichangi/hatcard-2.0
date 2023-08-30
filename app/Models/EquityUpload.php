@@ -9,9 +9,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class DHISData extends Model
+class EquityUpload extends Model
 {
-    use Notifiable, HasApiTokens; Use UsesUuid; use HasRoles;
+    use Notifiable, HasApiTokens;Use UsesUuid;
     use HasFactory;
 
     /**
@@ -20,14 +20,14 @@ class DHISData extends Model
      * @var array<int, string>
      */
 
-    protected $primaryKey = 'id';
-    protected $keyType = 'string';
-    protected $table="dhis_data";
+    //protected $primaryKey = 'id';
+    protected $primaryKey='id';
+    protected $table="equity_upload";
     protected $fillable = [
-        "organisationunitid","organisationunitname","organisationunitcode","organisationunitdescription","periodid","periodname","periodcode","perioddescription","dataid","dataname","datacode","datadescription","total"
+        'created_by','last_updated_by'
     ];
-
     protected $casts = [
         'id' => 'string',
     ];
+
 }

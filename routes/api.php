@@ -30,9 +30,17 @@ Route::post('/login', [\App\Http\Controllers\UserManagement\AuthController::clas
         });
     });
 
-Route::prefix('data')->group(function () {
+Route::prefix('public/data')->group(function () {
     Route::controller(\App\Http\Controllers\PublicControllers\DataController::class)->group(function () {
         Route::get('progressive-model', 'progressiveModelData');
+        Route::get('vsp', 'vspData');
+        Route::get('vsp-routine', 'vsproutineData');
+        Route::get('cause-of-death', 'causeofdeathData');
+        Route::get('finance', 'financeData');
+        Route::get('equity', 'equityData');
+        Route::get('rmncah', 'rmncahData');
+        Route::get('rmncah-low-high', 'rmncahlowhighData');
+        Route::get('dhis', 'dhisData');
     });
 });
 
@@ -137,4 +145,30 @@ Route::middleware('auth:api')->group(function(){
         Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'destroy']);
         Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\CauseOfDeathController::class, 'show']);
     });
+    Route::prefix('equity-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\EquityController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\EquityController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\EquityController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\EquityController::class, 'show']);
+    });
+    Route::prefix('rmncah-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\RMNCAHController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\RMNCAHController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\RMNCAHController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\RMNCAHController::class, 'show']);
+    });
+    Route::prefix('rmncah-low-high-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\RMNCAHLowHighController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\VSPControllers\RMNCAHLowHighController::class, 'store']);
+        Route::delete('/{id?}', [\App\Http\Controllers\VSPControllers\RMNCAHLowHighController::class, 'destroy']);
+        Route::get('/data/{id?}', [\App\Http\Controllers\VSPControllers\RMNCAHLowHighController::class, 'show']);
+    });
+    Route::prefix('dhis-data')->group(function () {
+        Route::get('/', [\App\Http\Controllers\VSPControllers\DHISController::class, 'index']);
+        Route::get('/indicators', [\App\Http\Controllers\VSPControllers\DHISController::class, 'indicators']);
+        Route::post('/refresh', [\App\Http\Controllers\VSPControllers\DHISController::class, 'refresh']);
+        Route::get('/data/{period?}', [\App\Http\Controllers\VSPControllers\DHISController::class, 'periodData']);
+        Route::get('/data/fetch-all', [\App\Http\Controllers\VSPControllers\DHISController::class, 'fetchAllData']);
+    });
 });
+

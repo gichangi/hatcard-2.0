@@ -147,6 +147,36 @@ export const routes = [
                 exact: true,
                 path: '/data/finance',
                 component: lazy(() => import('./views/admin/uploads-components/finance'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/equity',
+                component: lazy(() => import('./views/admin/uploads-components/equity'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/rmncah',
+                component: lazy(() => import('./views/admin/uploads-components/rmncah'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/rmncah-low-high',
+                component: lazy(() => import('./views/admin/uploads-components/rmncah-low-high'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/cause-of-death',
+                component: lazy(() => import('./views/admin/uploads-components/cause-of-death'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
+                path: '/data/dhis',
+                component: lazy(() => import('./views/admin/uploads-components/dhis'))
             }
         ]
 

@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cause_of_death_data', function (Blueprint $table) {
+        Schema::create('rmncah_upload', function (Blueprint $table) {
             $table->uuid('id');
-            $table->date('period');
-            $table->string('county');
-            $table->text('data_group');
-            $table->text('indicator');
-            $table->double('score')->nullable();
-            $table->uuid('upload_id');
+            $table->uuid('created_by');
+            $table->uuid('last_updated_by');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cause_of_death_data');
+        Schema::dropIfExists('rmncah_upload');
     }
 };

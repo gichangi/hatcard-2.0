@@ -11,6 +11,8 @@ import Paper from "@mui/material/Paper";
 import CSVReader from "../../../../components/CSVUpload/CSVUploadComponent";
 import ReplyIcon from '@mui/icons-material/Reply';
 import MySwal from "sweetalert2";
+import SyncIcon from '@mui/icons-material/Sync';
+
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#fff',
@@ -25,40 +27,29 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 
-function CauseOfDeathUploadData({pageSwitch, uploadId}) {
+function DHISData({pageSwitch, periodId}) {
     const [data, setData] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
-    const [uploadInfo, setUploadInfo] = useState(
-        {
-            upload_id:null,
-            data:[]
-        }
-    )
+
     useEffect(()=>{
-        if(uploadId != null){
-            apiFetch('GET',{},`/api/cause-of-death-data/data/${uploadId}`,{}).then(res=>{
-                setData(res.data.cause_of_death_data);
-                setUploadInfo(
-                    {
-                        upload_id:uploadId,
-                        data:res.data.cause_of_death_data
-                    }
-                )
+        if(periodId != null){
+            apiFetch('GET',{},`/api/dhis-data/data/${periodId}`,{}).then(res=>{
+                setData(res.data.dhis_data);
             })
 
         }
 
     },[])
 
-    const dataUpload=()=>{
-        apiFetch('POST',{},'/api/cause-of-death-data',{
-            upload_id:uploadId,
-            data:data
+    const dataRefresh=()=>{
+        apiFetch('POST',{},'/api/dhis-data/refresh',{
+            period_id:periodId
         }).then(res=>{
+            console.log(res)
             if(res.data.message.type === 'success'){
-                MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
-                    pageSwitch(null)
+                MySwal.fire('', 'Successfully Pulled', 'success').then(()=>{
+                    setData(res.data.message.dhis_data);
                 })
             }else{
                 MySwal.fire('', 'An error occurred while saving the data', 'error');
@@ -70,24 +61,20 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     const columns = useMemo(
         () => [
             {
-                accessorKey: 'period', //simple recommended way to define a column
+                accessorKey: 'periodid', //simple recommended way to define a column
                 header: 'Period'
             },
             {
-                accessorKey: 'county', //simple recommended way to define a column
-                header: 'County'
+                accessorKey: 'organisationunitname', //simple recommended way to define a column
+                header: 'Org Unit'
             },
             {
-                accessorKey: 'data_group', //simple recommended way to define a column
-                header: 'Data Group'
-            },
-            {
-                accessorKey: 'indicator', //simple recommended way to define a column
+                accessorKey: 'dataname', //simple recommended way to define a column
                 header: 'Indicator'
             },
             {
-                accessorKey: 'score', //simple recommended way to define a column
-                header: 'Score'
+                accessorKey: 'total', //simple recommended way to define a column
+                header: 'Value'
             }
 
         ],
@@ -97,41 +84,30 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
 
     return (
         <div>
+            {periodId}
             <Box sx={{ flexGrow: 1,display: 'flex',backgroundColor:'#fff',width: '100%',padding:'10px'}}>
                 <Grid container rowSpacing={2}>
                     <Grid item xs={12} >
                         <Item>
                             <Grid container  direction="row" justifyContent="flex-start" alignItems="center" spacing={2}>
-                                <Grid item xs={2}>
+                                <Grid item xs={6}>
                                     <Card sx={{boxShadow:'none'}}>
                                         <CardContent>
                                             <Typography sx={{ fontSize: 18, color:'#E19133',fontWeight:'bold' }}>
-                                                Upload File
+
                                             </Typography>
                                         </CardContent>
                                     </Card>
                                 </Grid>
-                                <Divider orientation="vertical" variant="middle" flexItem>
-                                    -
-                                </Divider>
-                                <Grid item xs={3}>
-                                    <Card sx={{boxShadow:'none'}}>
-                                        <CardContent>
-                                            <CSVReader setData={setData}/>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Divider orientation="vertical" variant="middle" flexItem>
-                                    -
-                                </Divider>
                                 <Grid item xs={2}>
                                     <Card sx={{boxShadow:'none'}}>
                                         <CardContent>
                                             <Button variant="outlined"
-                                                    onClick={()=>dataUpload()}
-                                                    startIcon={<DeleteIcon />}
+                                                    onClick={()=>dataRefresh()}
+                                                    startIcon={<SyncIcon />}
                                                     sx={{
                                                         color: '#fff',
+                                                        fontWeight:'bold',
                                                         borderColor:'#1976D2',
                                                         backgroundColor: '#1976D2',
                                                         '&:hover': {
@@ -141,7 +117,7 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
                                                         },
                                                     }}
                                             >
-                                                Upload
+                                                Refresh Data
                                             </Button>
 
                                         </CardContent>
@@ -246,4 +222,4 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     );
 }
 
-export default CauseOfDeathUploadData;
+export default DHISData;

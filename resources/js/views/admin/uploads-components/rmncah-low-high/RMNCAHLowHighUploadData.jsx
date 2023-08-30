@@ -25,7 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 
-function CauseOfDeathUploadData({pageSwitch, uploadId}) {
+function RMNCAHLowHighUploadData({pageSwitch, uploadId}) {
     const [data, setData] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
@@ -37,12 +37,12 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     )
     useEffect(()=>{
         if(uploadId != null){
-            apiFetch('GET',{},`/api/cause-of-death-data/data/${uploadId}`,{}).then(res=>{
-                setData(res.data.cause_of_death_data);
+            apiFetch('GET',{},`/api/rmncah-low-high-data/data/${uploadId}`,{}).then(res=>{
+                setData(res.data.rmncah_low_high_data);
                 setUploadInfo(
                     {
                         upload_id:uploadId,
-                        data:res.data.cause_of_death_data
+                        data:res.data.rmncah_low_high_data
                     }
                 )
             })
@@ -52,7 +52,7 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     },[])
 
     const dataUpload=()=>{
-        apiFetch('POST',{},'/api/cause-of-death-data',{
+        apiFetch('POST',{},'/api/rmncah-low-high-data',{
             upload_id:uploadId,
             data:data
         }).then(res=>{
@@ -78,16 +78,12 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
                 header: 'County'
             },
             {
-                accessorKey: 'data_group', //simple recommended way to define a column
-                header: 'Data Group'
+                accessorKey: 'lowest', //simple recommended way to define a column
+                header: 'Lowest'
             },
             {
-                accessorKey: 'indicator', //simple recommended way to define a column
-                header: 'Indicator'
-            },
-            {
-                accessorKey: 'score', //simple recommended way to define a column
-                header: 'Score'
+                accessorKey: 'highest', //simple recommended way to define a column
+                header: 'highest'
             }
 
         ],
@@ -246,4 +242,4 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     );
 }
 
-export default CauseOfDeathUploadData;
+export default RMNCAHLowHighUploadData;

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class DHISData extends Model
+class RMNCAHData extends Model
 {
     use Notifiable, HasApiTokens; Use UsesUuid; use HasRoles;
     use HasFactory;
@@ -21,13 +21,12 @@ class DHISData extends Model
      */
 
     protected $primaryKey = 'id';
-    protected $keyType = 'string';
-    protected $table="dhis_data";
+    protected $table="rmncah_data";
     protected $fillable = [
-        "organisationunitid","organisationunitname","organisationunitcode","organisationunitdescription","periodid","periodname","periodcode","perioddescription","dataid","dataname","datacode","datadescription","total"
+        "period","county","sub_county","indicator","value",'upload_id'
     ];
-
     protected $casts = [
         'id' => 'string',
     ];
+
 }

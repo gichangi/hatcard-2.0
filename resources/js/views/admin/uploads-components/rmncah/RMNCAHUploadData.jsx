@@ -25,7 +25,7 @@ const Item = styled(Paper)(({ theme }) => ({
 
 
 
-function CauseOfDeathUploadData({pageSwitch, uploadId}) {
+function RMNCAHUploadData({pageSwitch, uploadId}) {
     const [data, setData] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
@@ -37,12 +37,12 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     )
     useEffect(()=>{
         if(uploadId != null){
-            apiFetch('GET',{},`/api/cause-of-death-data/data/${uploadId}`,{}).then(res=>{
-                setData(res.data.cause_of_death_data);
+            apiFetch('GET',{},`/api/rmncah-data/data/${uploadId}`,{}).then(res=>{
+                setData(res.data.rmncah_data);
                 setUploadInfo(
                     {
                         upload_id:uploadId,
-                        data:res.data.cause_of_death_data
+                        data:res.data.rmncah_data
                     }
                 )
             })
@@ -52,7 +52,7 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     },[])
 
     const dataUpload=()=>{
-        apiFetch('POST',{},'/api/cause-of-death-data',{
+        apiFetch('POST',{},'/api/rmncah-data',{
             upload_id:uploadId,
             data:data
         }).then(res=>{
@@ -78,16 +78,12 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
                 header: 'County'
             },
             {
-                accessorKey: 'data_group', //simple recommended way to define a column
-                header: 'Data Group'
+                accessorKey: 'sub_county', //simple recommended way to define a column
+                header: 'Sub County'
             },
             {
-                accessorKey: 'indicator', //simple recommended way to define a column
-                header: 'Indicator'
-            },
-            {
-                accessorKey: 'score', //simple recommended way to define a column
-                header: 'Score'
+                accessorKey: 'value', //simple recommended way to define a column
+                header: 'Value'
             }
 
         ],
@@ -246,4 +242,4 @@ function CauseOfDeathUploadData({pageSwitch, uploadId}) {
     );
 }
 
-export default CauseOfDeathUploadData;
+export default RMNCAHUploadData;
