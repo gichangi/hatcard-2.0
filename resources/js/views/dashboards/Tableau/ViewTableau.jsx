@@ -67,7 +67,9 @@ function ViewTableau({id}) {
         viz.style.height = `${defaultHeight}px`;
         viz.style.width = `${defaultWidth}px`;
         viz.hideTabs = true;
-        viz.hideToolbar = true;
+        //viz.hideToolbar = true;
+        viz.toolbar = 'hidden';
+
         viz.addEventListener(TableauEventType.FirstInteractive, (event) => {
             setVizLoaded(true)
             if(limitIpFilter){
@@ -78,11 +80,11 @@ function ViewTableau({id}) {
                 if(ref.current !== null){
                     //Working just check css
 
-                    //const viz2 = document.getElementById("tableauViz");
-                    //var divs = viz2.getElementsByTagName('tableau-viz')[0];
-                    //console.log("-----viz2---"+divs.src)
-                    //divs.width=entries[0].contentRect.width;
-                    //divs.height=ref.current.clientHeight - 30;
+                    const viz2 = document.getElementById("tableauViz");
+                    var divs = viz2.getElementsByTagName('tableau-viz')[0];
+                    console.log("-----viz2---"+divs.src)
+                    divs.width=entries[0].contentRect.width;
+                    divs.height=ref.current.clientHeight - 30;
                     setHeight(ref.current.clientHeight - 30);
                     setWidth(entries[0].contentRect.width)
                 }
@@ -154,10 +156,10 @@ function ViewTableau({id}) {
             defaultWidth=ref.current.clientWidth -20;
             if(userPermissions.includes('ALL')){
                 limitIpFilter=false;
-                initViz(res.data.message.url);
+                initViz(res.data.message.url+'&:toolbar=no');
 
             }else{
-                initViz(res.data.message.url+"&IP="+_.join(userOrganisations,','));
+                initViz(res.data.message.url+"&:toolbar=no&IP="+_.join(userOrganisations,','));
             }
 
         })
