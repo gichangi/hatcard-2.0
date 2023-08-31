@@ -29,11 +29,6 @@ function HeaderNav(props) {
                                     Home
                                 </a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link page-scroll" href="#services">
-                                    Important
-                                </a>
-                            </li>
                             <li className="nav-item dropdown">
                                 <Link
                                     className="nav-link dropdown-toggle"
@@ -48,13 +43,13 @@ function HeaderNav(props) {
                                 </Link>
                                 <div className="dropdown-menu custom-dropdown-menu" aria-labelledby="navbarDropdown">
                                     <Link to="/vsp" className="dropdown-item">
-                                        County VSP
+                                        County VSP (KDHS)
                                     </Link>
                                     <Link to="/vsp-routine" className="dropdown-item">
-                                        County VSP Routine
+                                        County VSP (KHIS)
                                     </Link>
                                     <Link to="/pms" className="dropdown-item">
-                                        Progression Module Scores
+                                        Progression Module
                                     </Link>
                                 </div>
                             </li>

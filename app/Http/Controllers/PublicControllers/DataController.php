@@ -11,6 +11,7 @@ use App\Models\ProgressiveModel;
 use App\Models\RMNCAHData;
 use App\Models\RMNCAHLowHighData;
 use App\Models\VSPData;
+use App\Models\VSPRoutineView;
 use Illuminate\Http\Request;
 
 class DataController extends Controller
@@ -30,7 +31,9 @@ class DataController extends Controller
     public function vsproutineData(): \Illuminate\Http\JsonResponse
     {
         //
-        $data = RMNCAHLowHighData::all("period","county","lowest","highest");
+        $data =VSPRoutineView::select("*")
+            ->get()
+            ->toArray();
         return response()->json( $data,200);
     }
     public function causeofdeathData(): \Illuminate\Http\JsonResponse

@@ -166,7 +166,8 @@ Route::middleware('auth:api')->group(function(){
     Route::prefix('dhis-data')->group(function () {
         Route::get('/', [\App\Http\Controllers\VSPControllers\DHISController::class, 'index']);
         Route::get('/indicators', [\App\Http\Controllers\VSPControllers\DHISController::class, 'indicators']);
-        Route::post('/refresh', [\App\Http\Controllers\VSPControllers\DHISController::class, 'refresh']);
+        //Route::post('/refresh', [\App\Http\Controllers\VSPControllers\DHISController::class, 'refresh']);
+        Route::post('/refresh', [\App\Http\Controllers\VSPControllers\DHISController::class, 'fetchAllData']);
         Route::get('/data/{period?}', [\App\Http\Controllers\VSPControllers\DHISController::class, 'periodData']);
         Route::get('/data/fetch-all', [\App\Http\Controllers\VSPControllers\DHISController::class, 'fetchAllData']);
     });

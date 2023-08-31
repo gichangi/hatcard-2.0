@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\VSPControllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\DHISPullJob;
 use App\Models\DHISData;
 use App\Models\ProgressiveModel;
 use App\Models\EquityData;
@@ -11,6 +12,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -65,12 +67,10 @@ class DHISController extends Controller
                 ->pluck('khis_uid');
 
             foreach ($indicators as $indicator){
-                $dhis_data = $this->dhisDataPull('https://hiskenya.org/api/analytics.csv?dimension=pe:'.$request->period_id.'&dimension=dx:'.$indicator.'&dimension=ou:HfVjCurKxh2;LEVEL-JwTgQwgnl8h&tableLayout=true&rows=pe;dx;ou&skipRounding=false&completedOnly=false&hideEmptyRows=true','gichangijohn','Gigi@123');
-                DHISData::where('periodid', $request->period_id)->delete();
-                foreach ($dhis_data as $row){
-                    $rows= DHISData::updateOrCreate($row);
-                    $rows->save();
-                }
+                $url = 'https://hiskenya.org/api/analytics.csv?dimension=pe:'.$request->period_id.'&dimension=dx:'.$indicator.'&dimension=ou:HfVjCurKxh2;LEVEL-JwTgQwgnl8h&tableLayout=true&rows=pe;dx;ou&skipRounding=false&completedOnly=false&hideEmptyRows=true';
+                $username = 'gichangijohn';
+                $password = 'Gigi@123';
+                DHISPullJob::dispatch($url,$request->period_id,$username,$password);
             }
             $data =DB::table('dhis_data')
                 ->where('periodid',$request->period_id)
@@ -78,12 +78,12 @@ class DHISController extends Controller
                 ->get();
             return response()->json(["message"=>['type'=>'success','dhis_data'=>  $data]],200);
         }catch (\Exception $e){
-            dd($e);
+            error_log("exception -> ".$e);
         }
 
     }
 
-    public function fetchAllData(Request $request)
+    public function fetchAllData()
     {
         try {
             $indicators =DB::table('vsp_data')
@@ -97,66 +97,29 @@ class DHISController extends Controller
             $end      = (new DateTime())->modify('first day of this month')->modify('-1 months');
             $interval = DateInterval::createFromDateString('1 month');
             foreach (new DatePeriod($start, $interval, $end) as $dt) {
+                error_log('period pull -> '.$dt->format("Ym"));
                 foreach ($indicators as $indicator){
-                    $dhis_data = $this->dhisDataPull('https://hiskenya.org/api/analytics.csv?dimension=pe:'.$dt->format("Ym").'&dimension=dx:'.$indicator.'&dimension=ou:HfVjCurKxh2;LEVEL-JwTgQwgnl8h&tableLayout=true&rows=pe;dx;ou&skipRounding=false&completedOnly=false&hideEmptyRows=true','gichangijohn','Gigi@123');
-                    //convert data to json
-                    $json_output = json_encode($dhis_data);
-                    //DB::table('dhis_data')->insert($dhis_data);
-                    DHISData::where('periodid', $dt->format("Ym"))->delete();
-                    foreach ($dhis_data as $row){
-                        $rows= DHISData::updateOrCreate($row);
-                        $rows->save();
-                    }
+                    $url = 'https://hiskenya.org/api/analytics.csv?dimension=pe:'.$dt->format("Ym").'&dimension=dx:'.$indicator.'&dimension=ou:HfVjCurKxh2;LEVEL-JwTgQwgnl8h&tableLayout=true&rows=pe;dx;ou&skipRounding=false&completedOnly=false&hideEmptyRows=true';
+                    $username = 'gichangijohn';
+                    $password = 'Gigi@123';
+                    DHISPullJob::dispatch($url,$dt->format("Ym"),$username,$password);
                 }
             }
-            $data =DB::table('dhis_data')
-                ->where('periodid',$request->period_id)
+            return 'jobs ran successfully';
+/*            $data =DB::table('dhis_data')
                 ->select('periodid','organisationunitname','dataid', 'dataname','total')
                 ->get();
-            return response()->json(["message"=>['type'=>'success','dhis_data'=>  $data]],200);
-        }catch (\Exception $e){
-            dd($e);
+            return response()->json(["message"=>['type'=>'success','dhis_data'=>  $data]],200);*/
+        }
+        catch (\Exception $e){
+            error_log("exception -> ".$e);
+            return 'jobs ran failed';
         }
 
     }
 
 
 
-    public function dhisDataPull($url, $username, $password)
-    {
-        try {
-            $client = new Client();
-            $res = $client->request('GET', $url, [
-                'verify'=>false,
-                'auth' => [$username, $password],
-                'headers' => [
-                    'Accept' => '*/*',
-                    'Accept-Encoding' => 'gzip, deflate',
-                    'Cache-Control' => 'no-cache',
-                    'Connection' => 'keep-alive'
-                ]
-            ]);
-
-            $data_array = explode("\n", $res->getBody()->getContents());
-            $cols =   array_map('strtolower', explode(",", $data_array[0]));
-            $output = [];
-            foreach ($data_array as $line_index => $line) {
-                if ($line_index > 0 && $line_index < sizeof($data_array)-1) { // I assume the the first line contains the column names.
-                    $newLine = [];
-                    $values = explode(',', $line);
-                    foreach ($values as $col_index => $value) {
-                        $newLine[$cols[$col_index]] = $value;
-                    }
-                    $output[] = $newLine;
-                }
-            }
-            //Returns array of arrays with data
-            return $output;
-        }catch (\Exception $e){
-            dd($e);
-            return ["status"=>"error","data"=>$e];
-        }
-    }
     /**
      * Store a newly created resource in storage.
      */

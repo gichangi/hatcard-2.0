@@ -157,7 +157,7 @@ function DHISPullsList(props) {
                                         }
                                     }}
                                 >
-                                    Upload
+                                    Refresh All Data
                                 </Button>
                             </Box>
                         )}
