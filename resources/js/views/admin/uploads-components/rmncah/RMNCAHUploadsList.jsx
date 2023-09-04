@@ -14,6 +14,7 @@ function RMNCAHUploadsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
     useEffect(()=>{
         apiFetch('GET',{},'/api/rmncah-data',{}).then(res=>{
             setUploads(res.data.rmncah_uploads);

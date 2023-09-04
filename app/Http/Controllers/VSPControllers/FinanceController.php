@@ -22,6 +22,7 @@ class FinanceController extends Controller
         $data =DB::table('finance_upload')
             ->join('users', 'finance_upload.created_by', '=', 'users.id')
             ->select('users.first_name','users.middle_name','users.last_name','users.email','finance_upload.*')
+            ->orderBy('updated_at')
             ->get();
         return response()->json(['finance_uploads'=> $data],200);
     }
@@ -60,7 +61,8 @@ class FinanceController extends Controller
                 $upload = FinanceUpload::updateOrCreate(
                     ["id"=>$id],
                     [
-                        'last_updated_by' => Auth::id()
+                        'last_updated_by' => Auth::id(),
+                        'updated_at'=> now()
                     ]
                 );
                 //Delete upload data to upload new data

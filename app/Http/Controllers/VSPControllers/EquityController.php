@@ -22,6 +22,7 @@ class EquityController extends Controller
         $data =DB::table('equity_upload')
             ->join('users', 'equity_upload.created_by', '=', 'users.id')
             ->select('users.first_name','users.middle_name','users.last_name','users.email','equity_upload.*')
+            ->orderBy('updated_at')
             ->get();
         return response()->json(['equity_uploads'=> $data],200);
     }
@@ -60,7 +61,8 @@ class EquityController extends Controller
                 $upload = EquityUpload::updateOrCreate(
                     ["id"=>$id],
                     [
-                        'last_updated_by' => Auth::id()
+                        'last_updated_by' => Auth::id(),
+                        'updated_at'=> now()
                     ]
                 );
                 //Delete upload data to upload new data

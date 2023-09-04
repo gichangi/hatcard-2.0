@@ -14,6 +14,7 @@ function EquityUploadsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
     useEffect(()=>{
         apiFetch('GET',{},'/api/equity-data',{}).then(res=>{
             setUploads(res.data.equity_uploads);

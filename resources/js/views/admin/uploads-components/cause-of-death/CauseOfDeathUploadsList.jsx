@@ -14,6 +14,7 @@ function CauseOfDeathUploadsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
     useEffect(()=>{
         apiFetch('GET',{},'/api/cause-of-death-data',{}).then(res=>{
             setUploads(res.data.cause_of_death_uploads);

@@ -24,7 +24,7 @@ class CauseOfDeathUpload extends Model
     protected $primaryKey='id';
     protected $table="cause_of_death_upload";
     protected $fillable = [
-        'created_by','last_updated_by'
+        'created_by','last_updated_by','updated_at','updated_at'
     ];
     protected $casts = [
         'id' => 'string',

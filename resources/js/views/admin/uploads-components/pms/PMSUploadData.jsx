@@ -2,7 +2,18 @@ import React from 'react';
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {apiFetch} from "../../../../assets/api/utils";
 import MaterialReactTable from "material-react-table";
-import {Button, Card, CardContent, Divider, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
+import {
+    Button,
+    Card,
+    CardContent, Dialog, DialogContent,
+    Divider,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    Typography, useMediaQuery,
+    useTheme
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,6 +22,9 @@ import Paper from "@mui/material/Paper";
 import CSVReader from "../../../../components/CSVUpload/CSVUploadComponent";
 import ReplyIcon from '@mui/icons-material/Reply';
 import MySwal from "sweetalert2";
+import UploadIcon from "@mui/icons-material/Upload";
+import CircularProgress from "@mui/material/CircularProgress";
+
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#fff',
@@ -29,6 +43,10 @@ function PMSUploadData({pageSwitch, uploadId}) {
     const [data, setData] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
+    const [open, setOpen] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const [uploadInfo, setUploadInfo] = useState(
         {
             upload_id:null,
@@ -52,21 +70,23 @@ function PMSUploadData({pageSwitch, uploadId}) {
     },[])
 
     const dataUpload=()=>{
+        setOpen(true)
         apiFetch('POST',{},'/api/pms-data',{
             upload_id:uploadId,
             data:data
         }).then(res=>{
+            setOpen(false)
             if(res.data.message.type === 'success'){
                 MySwal.fire('', 'Successfully Saved!', 'success').then(()=>{
                     pageSwitch(null)
                 })
             }else{
+                setOpen(false)
                 MySwal.fire('', 'An error occurred while saving the data', 'error');
             }
         })
     }
 
-    "region","year","components","pilar","category","measure","measure_name","value",'upload_id'
     const columns = useMemo(
         () => [
             {
@@ -74,8 +94,9 @@ function PMSUploadData({pageSwitch, uploadId}) {
                 header: 'Region'
             },
             {
-                accessorKey: 'year', //simple recommended way to define a column
-                header: 'Year'
+                accessorFn: (row) => new Date(row.year).toLocaleDateString('en-GB'), //alternate way
+                id: 'year', //id required if you use accessorFn instead of accessorKey
+                header: 'Year',
             },
             {
                 accessorKey: 'components', //simple recommended way to define a column
@@ -129,39 +150,45 @@ function PMSUploadData({pageSwitch, uploadId}) {
                                 <Grid item xs={3}>
                                     <Card sx={{boxShadow:'none'}}>
                                         <CardContent>
-                                            <CSVReader setData={setData}/>
+                                            <CSVReader setData={setData} action={setEnableUpload}/>
                                         </CardContent>
                                     </Card>
                                 </Grid>
                                 <Divider orientation="vertical" variant="middle" flexItem>
                                     -
                                 </Divider>
-                                <Grid item xs={2}>
-                                    <Card sx={{boxShadow:'none'}}>
-                                        <CardContent>
-                                            <Button variant="outlined"
-                                                    onClick={()=>dataUpload()}
-                                                    startIcon={<DeleteIcon />}
-                                                    sx={{
-                                                        color: '#fff',
-                                                        borderColor:'#1976D2',
-                                                        backgroundColor: '#1976D2',
-                                                        '&:hover': {
-                                                            backgroundColor: '#E19133',
-                                                            color:'#fff',
-                                                            borderColor:'#E19133',
-                                                        },
-                                                    }}
-                                            >
-                                                Upload
-                                            </Button>
+                                {enableUpload &&
+                                    <>
+                                        <Grid item xs={2}>
+                                            <Card sx={{boxShadow:'none'}}>
+                                                <CardContent>
 
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                                <Divider orientation="vertical" variant="middle" flexItem>
-                                    -
-                                </Divider>
+                                                    <Button variant="outlined"
+                                                            onClick={()=>dataUpload()}
+                                                            startIcon={<UploadIcon />}
+                                                            sx={{
+                                                                color: '#fff',
+                                                                borderColor:'#1976D2',
+                                                                backgroundColor: '#1976D2',
+                                                                '&:hover': {
+                                                                    backgroundColor: '#E19133',
+                                                                    color:'#fff',
+                                                                    borderColor:'#E19133',
+                                                                },
+                                                            }}
+                                                    >
+                                                        Upload
+                                                    </Button>
+
+                                                </CardContent>
+                                            </Card>
+                                        </Grid>
+                                        <Divider orientation="vertical" variant="middle" flexItem>
+                                            -
+                                        </Divider>
+                                    </>
+                                }
+
                                 <Grid item xs={3}>
                                     <Card sx={{boxShadow:'none'}}>
                                         <CardContent>
@@ -253,7 +280,23 @@ function PMSUploadData({pageSwitch, uploadId}) {
 
             </Box>
 
-
+            <Dialog
+                fullScreen={fullScreen}
+                open={open}
+                aria-labelledby="responsive-dialog-title"
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        width:'35rem',
+                        backgroundColor: 'transparent',
+                        boxShadow: 'none'
+                    }
+                }}
+            >
+                <DialogContent sx={{width:'35rem',height:'40rem'}}>
+                    <CircularProgress size={'30rem'} />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

@@ -22,6 +22,7 @@ class RMNCAHLowHighController extends Controller
         $data =DB::table('rmncah_low_high_upload')
             ->join('users', 'rmncah_low_high_upload.created_by', '=', 'users.id')
             ->select('users.first_name','users.middle_name','users.last_name','users.email','rmncah_low_high_upload.*')
+            ->orderBy('updated_at')
             ->get();
         return response()->json(['rmncah_low_high_uploads'=> $data],200);
     }
@@ -60,7 +61,8 @@ class RMNCAHLowHighController extends Controller
                 $upload = RMNCAHLowHighUpload::updateOrCreate(
                     ["id"=>$id],
                     [
-                        'last_updated_by' => Auth::id()
+                        'last_updated_by' => Auth::id(),
+                        'updated_at'=> now()
                     ]
                 );
                 //Delete upload data to upload new data

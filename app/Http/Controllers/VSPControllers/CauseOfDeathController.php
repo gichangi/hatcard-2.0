@@ -22,6 +22,7 @@ class CauseOfDeathController extends Controller
         $data =DB::table('cause_of_death_upload')
             ->join('users', 'cause_of_death_upload.created_by', '=', 'users.id')
             ->select('users.first_name','users.middle_name','users.last_name','users.email','cause_of_death_upload.*')
+            ->orderBy('updated_at')
             ->get();
         return response()->json(['cause_of_death_uploads'=> $data],200);
     }
@@ -60,7 +61,8 @@ class CauseOfDeathController extends Controller
                 $upload = CauseOfDeathUpload::updateOrCreate(
                     ["id"=>$id],
                     [
-                        'last_updated_by' => Auth::id()
+                        'last_updated_by' => Auth::id(),
+                        'updated_at'=> now()
                     ]
                 );
                 //Delete upload data to upload new data

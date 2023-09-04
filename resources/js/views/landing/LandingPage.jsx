@@ -12,6 +12,7 @@ import vspFaviconIcon from './assets/images/vsp-favicon.png';
 import lowerPageIcon from './assets/images/lower_icons.png';
 import vspTemplate from './assets/images/vsp-template.png';
 import { Divider } from '@mui/material';
+import Grid from "@mui/material/Grid";
 
 
 
@@ -114,7 +115,21 @@ const LandingPage = () => {
                 width: '100%',
                 color:'#000'
               }}/>
-              <img className="icon-3" src={lowerPageIcon} height="80" width="95%" alt="Service" />
+              {/*<img className="icon-3" src={lowerPageIcon} height="80" width="95%" alt="Service" />*/}
+              <Grid container spacing={1} direction="row" alignItems="center">
+                <Grid item xs={3}>
+                  <img src="images/Kenya-MOH.jpeg" alt="image" style={{height:80, width:100}} />
+                </Grid>
+                <Grid item xs={3}>
+                  <img src="images/phcpi.jpeg" alt="image" style={{height:80, width:140}} />
+                </Grid>
+                <Grid item xs={3}>
+                  <img src="images/unicef.png" alt="image" style={{height:80, width:140}} />
+                </Grid>
+                <Grid item xs={3}>
+                  <img src="images/billandmelinda.png" alt="image" style={{height:80, width:140}} />
+                </Grid>
+              </Grid>
               <Divider sx={{
                 border: '1px solid #000',
                 width: '100%',

@@ -2,7 +2,18 @@ import React from 'react';
 import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {apiFetch} from "../../../../assets/api/utils";
 import MaterialReactTable from "material-react-table";
-import {Button, Card, CardContent, Divider, FormControl, InputLabel, MenuItem, Select, Typography} from "@mui/material";
+import {
+    Button,
+    Card,
+    CardContent,
+    Dialog, DialogContent,
+    Divider,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    Typography, useMediaQuery, useTheme
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,8 +22,9 @@ import Paper from "@mui/material/Paper";
 import CSVReader from "../../../../components/CSVUpload/CSVUploadComponent";
 import ReplyIcon from '@mui/icons-material/Reply';
 import MySwal from "sweetalert2";
+import UploadIcon from "@mui/icons-material/Upload";
 import SyncIcon from '@mui/icons-material/Sync';
-
+import CircularProgress from "@mui/material/CircularProgress";
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#fff',
@@ -31,6 +43,10 @@ function DHISData({pageSwitch, periodId}) {
     const [data, setData] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
+    const [open, setOpen] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(()=>{
         if(periodId != null){
@@ -43,15 +59,17 @@ function DHISData({pageSwitch, periodId}) {
     },[])
 
     const dataRefresh=()=>{
+        setOpen(true)
         apiFetch('POST',{},'/api/dhis-data/refresh',{
             period_id:periodId
         }).then(res=>{
-            console.log(res)
+            setOpen(false)
             if(res.data.message.type === 'success'){
                 MySwal.fire('', 'Successfully Pulled', 'success').then(()=>{
                     setData(res.data.message.dhis_data);
                 })
             }else{
+                setOpen(false)
                 MySwal.fire('', 'An error occurred while saving the data', 'error');
             }
         })
@@ -217,7 +235,23 @@ function DHISData({pageSwitch, periodId}) {
 
             </Box>
 
-
+            <Dialog
+                fullScreen={fullScreen}
+                open={open}
+                aria-labelledby="responsive-dialog-title"
+                PaperProps={{
+                    elevation: 0,
+                    sx: {
+                        width:'35rem',
+                        backgroundColor: 'transparent',
+                        boxShadow: 'none'
+                    }
+                }}
+            >
+                <DialogContent sx={{width:'35rem',height:'40rem'}}>
+                    <CircularProgress size={'30rem'} />
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

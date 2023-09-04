@@ -29,6 +29,7 @@ class DHISController extends Controller
         $data =DB::table('dhis_data')
             ->select('periodid','created_at')
             ->distinct()
+            ->orderBy('updated_at')
             ->get();
         return response()->json(['dhis_data_pulls'=> $data],200);
     }
@@ -42,7 +43,7 @@ class DHISController extends Controller
         return response()->json(['dhis_indicators'=> $data],200);
     }
 
-    public function periodData(Request $request)
+    public function  periodData(Request $request): \Illuminate\Http\JsonResponse
     {
 
         $data =DB::table('dhis_data')
@@ -106,10 +107,6 @@ class DHISController extends Controller
                 }
             }
             return 'jobs ran successfully';
-/*            $data =DB::table('dhis_data')
-                ->select('periodid','organisationunitname','dataid', 'dataname','total')
-                ->get();
-            return response()->json(["message"=>['type'=>'success','dhis_data'=>  $data]],200);*/
         }
         catch (\Exception $e){
             error_log("exception -> ".$e);
@@ -126,48 +123,7 @@ class DHISController extends Controller
     public function store(Request $request)
     {
         //dd([$request->data[0]]);
-        try {
-            $id = $request->upload_id;
 
-
-            $upload = new EquityUpload();
-            $search = EquityUpload::find($id);
-
-            if(EquityUpload::find($id) === null){
-                $upload = EquityUpload::updateOrCreate(
-                    ["id"=>$id],
-                    [
-                        'created_by' => Auth::id(),
-                        'last_updated_by' => Auth::id()
-                    ]
-                );
-            }else{
-                //update vsp upload
-                $upload = EquityUpload::updateOrCreate(
-                    ["id"=>$id],
-                    [
-                        'last_updated_by' => Auth::id()
-                    ]
-                );
-                //Delete upload data to upload new data
-                $uploadData = EquityData::where('upload_id', $id)->delete();
-            }
-            if($upload->save()){
-                //$upload->EquityData()->insert($request->data);
-
-                foreach ($request->data as $row){
-
-                    $rows= EquityData::updateOrCreate(
-                        ['id'=>null,'upload_id'=>$upload->id],
-                        $row
-                    );
-                    $rows->save();
-                }
-            }
-            return response()->json(['message' => ['type'=>'success']], 200);
-        }catch (Throwable $e){
-            return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
-        }
     }
 
     /**
@@ -175,8 +131,7 @@ class DHISController extends Controller
      */
     public function show(Request $request)
     {
-        $data = EquityData::where('upload_id',$request->id)->get();
-        return response()->json(['equity_data'=> $data],200);
+        //
     }
 
 
@@ -203,14 +158,5 @@ class DHISController extends Controller
     {
 
         //
-        $id = $request->id;
-
-        try {
-            $uploadData = EquityData::where('upload_id', $id)->delete();
-            $uploadUpload = EquityUpload::where('id', $id)->delete();
-            return response()->json(['message' => ['type'=>'success']], 200);
-        }catch (Throwable $e){
-            return response()->json(['message' => ['type'=>'error','message'=>$e]], 200);
-        }
     }
 }

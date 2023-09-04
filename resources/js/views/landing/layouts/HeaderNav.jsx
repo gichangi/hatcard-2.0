@@ -49,13 +49,18 @@ function HeaderNav(props) {
                                         County VSP (KHIS)
                                     </Link>
                                     <Link to="/pms" className="dropdown-item">
-                                        Progression Module
+                                        Progression Model
                                     </Link>
                                 </div>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link page-scroll" href="https://www.improvingphc.org/vital-signs-profiles" target="_blank">
                                     About
+                                </a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link page-scroll" href="https://www.health.go.ke/contact-us" target="_blank">
+                                    Contact Us
                                 </a>
                             </li>
                             <li className="nav-item">

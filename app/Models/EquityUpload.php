@@ -24,7 +24,7 @@ class EquityUpload extends Model
     protected $primaryKey='id';
     protected $table="equity_upload";
     protected $fillable = [
-        'created_by','last_updated_by'
+        'created_by','last_updated_by','updated_at'
     ];
     protected $casts = [
         'id' => 'string',

@@ -14,6 +14,7 @@ function DHISPullsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
     useEffect(()=>{
         apiFetch('GET',{},'/api/dhis-data',{}).then(res=>{
             setUploads(res.data.dhis_data_pulls);
@@ -52,7 +53,16 @@ function DHISPullsList(props) {
         [],
     );
 
-
+    const dataPullAll=()=>{
+        apiFetch('GET',{},'/api/dhis-data/fetch-all',{}).then(res=>{
+            if(res.data.message.type === 'success'){
+                MySwal.fire('', 'Successfully Pulled', 'success').then(()=>{
+                })
+            }else{
+                MySwal.fire('', 'An error occurred while saving the data', 'error');
+            }
+        })
+    }
     return (
         <div>
             <Row>
@@ -147,7 +157,8 @@ function DHISPullsList(props) {
                                     variant="contained"
                                     startIcon={<AddCircleIcon />}
                                     onClick={() => {
-                                        props.pageSwitch('add');
+                                        //props.pageSwitch('add');
+                                        dataPullAll();
                                     }}
                                     sx={{
                                         fontWeight:'bolder',
@@ -157,7 +168,7 @@ function DHISPullsList(props) {
                                         }
                                     }}
                                 >
-                                    Refresh All Data
+                                    Fetch Data
                                 </Button>
                             </Box>
                         )}

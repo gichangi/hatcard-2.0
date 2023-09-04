@@ -113,7 +113,7 @@ export default function CSVReader(props) {
                 //console.log("-----------res----------------")
                 //console.log(results)
                 props.setData(convertToJson(results.data));
-
+                props.action(true)
                 //console.log("-----------res----------------")
                 setZoneHover(false)
             }}
@@ -164,6 +164,10 @@ export default function CSVReader(props) {
                                         onMouseOut={event => {
                                             event.preventDefault()
                                             setRemoveHoverColor(DEFAULT_REMOVE_HOVER_COLOR)
+                                        }}
+                                        onClick={(event) => {
+                                            getRemoveFileProps().onClick(event);
+                                            props.action(false)
                                         }}
                                     >
                                         <Remove color={removeHoverColor} />

@@ -14,6 +14,7 @@ function VSPUploadsList(props) {
     const [uploads, setUploads] = useState([]);
     const tableInstanceRef = useRef(null);
     const [rowSelection, setRowSelection] = useState({});
+    const [enableUpload,setEnableUpload] = useState(false);
     useEffect(()=>{
         apiFetch('GET',{},'/api/vsp-data',{}).then(res=>{
             setUploads(res.data.vsp_uploads);
