@@ -26,11 +26,8 @@ class DHISController extends Controller
     public function index(): \Illuminate\Http\JsonResponse
     {
         //
-        $data =DB::table('dhis_data')
-            ->select('periodid','created_at')
-            ->distinct()
-            ->orderBy('updated_at')
-            ->get();
+        $data =DB::select('SELECT distinct periodid, created_at ::timestamp::date from public.dhis_data order by periodid desc');
+
         return response()->json(['dhis_data_pulls'=> $data],200);
     }
     public function indicators(): \Illuminate\Http\JsonResponse

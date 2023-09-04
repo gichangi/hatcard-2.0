@@ -15,9 +15,10 @@ return new class extends Migration
             $table->uuid('id');
             $table->date('period');
             $table->string('county');
-            $table->string('sub_county');
+            $table->string('data_group');
+            $table->string('data_sub_group');
             $table->text('indicator');
-            $table->double('value')->nullable();
+            $table->double('score')->nullable();
             $table->uuid('upload_id');
             $table->timestamps();
         });

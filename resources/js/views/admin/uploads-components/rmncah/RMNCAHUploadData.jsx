@@ -103,6 +103,10 @@ function RMNCAHUploadData({pageSwitch, uploadId}) {
                 header: 'Sub County'
             },
             {
+                accessorKey: 'indicator', //simple recommended way to define a column
+                header: 'Indicator'
+            },
+            {
                 accessorKey: 'value', //simple recommended way to define a column
                 header: 'Value'
             }

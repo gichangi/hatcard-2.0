@@ -23,7 +23,7 @@ class EquityData extends Model
     protected $primaryKey = 'id';
     protected $table="equity_data";
     protected $fillable = [
-        "period","county","sub_county","indicator","value",'upload_id'
+        "period","county","data_group","data_sub_group","indicator","score",'upload_id'
     ];
     protected $casts = [
         'id' => 'string',

@@ -99,12 +99,16 @@ function EquityUploadData({pageSwitch, uploadId}) {
                 header: 'County'
             },
             {
-                accessorKey: 'sub_county', //simple recommended way to define a column
-                header: 'Sub County'
+                accessorKey: 'data_group', //simple recommended way to define a column
+                header: 'Data Group'
             },
             {
-                accessorKey: 'value', //simple recommended way to define a column
-                header: 'Value'
+                accessorKey: 'data_sub_group', //simple recommended way to define a column
+                header: 'Data Sub-Group'
+            },
+            {
+                accessorKey: 'score', //simple recommended way to define a column
+                header: 'Score'
             }
 
         ],
