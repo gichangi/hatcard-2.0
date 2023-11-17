@@ -6,6 +6,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import NavGroup from './NavGroup';
 import { ConfigContext } from '../../../../contexts/ConfigContext';
 import * as actionType from '../../../../store/actions';
+import _ from "lodash";
 
 const NavContent = ({ navigation }) => {
   const [scrollWidth, setScrollWidth] = useState(0);
@@ -49,7 +50,7 @@ const NavContent = ({ navigation }) => {
     }
   };
 
-  const navItems = navigation.map((item) => {
+  const navItems =_.orderBy(navigation, ['order_id'], ['asc']).map((item) => {
     switch (item.type) {
       case 'group':
         return <NavGroup layout={layout} key={'nav-group-' + item.id} group={item} />;

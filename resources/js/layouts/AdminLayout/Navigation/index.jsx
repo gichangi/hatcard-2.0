@@ -7,6 +7,7 @@ import NavLogo from './NavLogo';
 import NavContent from './NavContent';
 //import navigation from '../../../menu-items';
 import {useSelector} from "react-redux";
+import _ from 'lodash';
 
 const Navigation = () => {
    // console.log("I am here")
@@ -124,14 +125,14 @@ const Navigation = () => {
   let navContent = (
     <div className={navBarClass.join(' ')}>
       <NavLogo />
-      <NavContent navigation={currentMenu.menuItems} />
+      <NavContent navigation={_.orderBy(currentMenu.menuItems, ['order_id'], ['asc'])} />
     </div>
   );
   if (windowSize.width < 992) {
     navContent = (
       <div className="navbar-wrapper">
         <NavLogo />
-        <NavContent navigation={currentMenu.menuItems} />
+        <NavContent navigation={_.orderBy(currentMenu.menuItems, ['order_id'], ['asc'])} />
       </div>
     );
   }

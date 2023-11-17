@@ -96,10 +96,10 @@ function ViewTableau({id}) {
         var onSuccess = function (filters) {
             filters.map(function (filter, i) {
                 // use .value property of each DataValue object
-/*                console.log(i)
-                console.log(filter)
-                console.log(filter._appliedValues)
-                console.log(_.map(filter._appliedValues,'_value'))*/
+                /*                console.log(i)
+                                console.log(filter)
+                                console.log(filter._appliedValues)
+                                console.log(_.map(filter._appliedValues,'_value'))*/
                 if(filter._fieldName === "IP"){
                     if(!_.map(filter._appliedValues,'_value').every(val => userOrganisations.includes(val))){
                         viz.workbook.activeSheet.applyFilterAsync("IP", userOrganisations, tableau.FilterUpdateType.REPLACE);
@@ -133,21 +133,21 @@ function ViewTableau({id}) {
         setTabViz(viz);
     }
 
-/*
-    useEffect(() => {
-        const observer = new ResizeObserver(entries => {
-            if(ref.current !== null){
-                const viz = document.getElementById("tableauViz")
-                viz.style.width=entries[0].contentRect.width;
-                viz.style.height=ref.current.clientHeight;
-                setWidth(entries[0].contentRect.width)
-                setHeight(ref.current.clientHeight)
-            }
-        })
-        observer.observe(ref.current)
-        return () => ref.current && observer.unobserve(ref.current)
-    }, [id,vizLoaded])
-*/
+    /*
+        useEffect(() => {
+            const observer = new ResizeObserver(entries => {
+                if(ref.current !== null){
+                    const viz = document.getElementById("tableauViz")
+                    viz.style.width=entries[0].contentRect.width;
+                    viz.style.height=ref.current.clientHeight;
+                    setWidth(entries[0].contentRect.width)
+                    setHeight(ref.current.clientHeight)
+                }
+            })
+            observer.observe(ref.current)
+            return () => ref.current && observer.unobserve(ref.current)
+        }, [id,vizLoaded])
+    */
 
 
     useEffect(()=>{
@@ -208,7 +208,7 @@ function ViewTableau({id}) {
 
     return (
         <>
-            <Box ref={ref}  sx={{height:`85vh`,width:`100%`,marginTop:'-30px'}} id={"tableauVizHolder"} >
+            <Box ref={ref}  sx={{height:`80vh`,width:`100%`,marginTop:'0px'}} id={"tableauVizHolder"} >
                 <div style={{ height: '100%', width: `100%` }}>
                     <div
                         ref={divRef}

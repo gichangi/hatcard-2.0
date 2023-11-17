@@ -3,12 +3,13 @@ import { ListGroup } from 'react-bootstrap';
 import NavCollapse from '../NavCollapse';
 import NavItem from '../NavItem';
 import {  Link } from "react-router-dom";
+import _ from "lodash";
 
 const NavGroup = ({ layout, group }) => {
   let navItems = '';
 
   if (group.children) {
-    const groups = group.children;
+    const groups = _.orderBy(group.children, ['order_id'], ['asc']);
     navItems = Object.keys(groups).map((item) => {
       item = groups[item];
       switch (item.type) {

@@ -65,7 +65,8 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
         <>
           {item.category==='dashboard'&&
               <CustomNavLink
-                  to={{ pathname: '/dashboards/view', state: { id: item.id}}}
+                  //to={{ pathname: '/dashboards/view', state: { id: item.id}}}
+                  to={{ pathname: `/dashboards/view/${item.id}`}}
                   style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet',height:`${menuItemHeightCalc()}em`}}>
                 {showIcon &&
                     <NavIcon  items={item} />

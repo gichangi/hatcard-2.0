@@ -23,7 +23,7 @@ const LandingPage = () => {
                   <Grid container>
                     <Grid item xs={12}>
                       <Typography variant="h1" gutterBottom style={{fontSize:'8.0vh',color:'#C21C66',fontWeight:'bolder'}}>
-                        Comprehensive Access and Review Dashboard Portals
+                        Comprehensive Access and Review Dashboard Portal
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>

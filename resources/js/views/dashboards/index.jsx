@@ -1,5 +1,5 @@
 import {useEffect,useState} from "react";
-import {useLocation} from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import {apiFetch} from "../../assets/api/utils";
 import ViewTableau from "./Tableau/ViewTableau";
 import ViewHtmlDashboard from "./HTML/ViewHTMLDashboard";
@@ -11,18 +11,27 @@ function Index(props) {
     let { state } = useLocation();
     const [reComp, setReComp] = useState(<FacebookCircularProgress />)
     const [currentDashboard, setCurrentDashboard] = useState(null)
-    const[currentId, setCurrentId] = useState(null)
+    const[currentId, setCurrentId] = useState(null);
+    let { id } = useParams();
+
     useEffect(()=>{
-        if(state !== undefined && currentId !== state.id){
-            apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
-                console.log("res.data.dashboard")
-                console.log(res.data.dashboard)
+        if(id !== undefined){
+            apiFetch('get',{},`/api/bi-dashboards/find/${id}`,{}).then(res=>{
                 pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
             })
-            setCurrentId(state.id)
+            setCurrentId(id)
+        }else{
+            if(state !== undefined && currentId !== state.id){
+                apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
+                    pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
+                })
+                setCurrentId(state.id)
+            }
+
         }
 
-    },[state])
+
+    },[state,id])
 
     const pageSwitch = (category,id,dashboard) =>{
         switch (category) {
@@ -39,7 +48,6 @@ function Index(props) {
                 setReComp(<FacebookCircularProgress />);
         }
     }
-
 
 
     return (

@@ -44,18 +44,6 @@ export const routes = [
     {
         exact: true,
         guard: GuestGuard,
-        path: '/vsp',
-        component: lazy(() => import('./views/landing/VspPage'))
-    },
-    {
-        exact: true,
-        guard: GuestGuard,
-        path: '/pms',
-        component: lazy(() => import('./views/landing/ProgressiveModelPage'))
-    },
-    {
-        exact: true,
-        guard: GuestGuard,
         path: '/login',
         component: lazy(() => import('./views/auth/signin/SignIn'))
     },
@@ -75,6 +63,18 @@ export const routes = [
                 exact: true,
                 path: '/profile',
                 component: lazy(() => import('./views/user-profile'))
+            },
+            {
+                permission:['ALL','View-explore'],
+                exact: true,
+                path: '/explore',
+                component: lazy(() => import('./views/menu-cards'))
+            },
+            {
+                permission:['ALL','View-explore'],
+                exact: true,
+                path: '/explore/:id',
+                component: lazy(() => import('./views/menu-cards'))
             },
             {
                 permission:['ALL','View-explore'],
@@ -122,9 +122,16 @@ export const routes = [
             {
                 permission:['ALL','View-dashboards'],
                 exact: true,
+                path: '/dashboards/view/:id',
+                component: lazy(() => import('./views/dashboards'))
+            },
+            {
+                permission:['ALL','View-dashboards'],
+                exact: true,
                 path: '/dashboards/view',
                 component: lazy(() => import('./views/dashboards'))
-            }
+            },
+
         ]
 
     }

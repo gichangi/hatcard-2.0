@@ -36,12 +36,12 @@ function ViewHtmlDashboard({id,details}) {
     }
 
     useEffect(()=>{
-        const elements = document.getElementsByClassName('breadcrumb');
-        while(elements.length > 0){
-            elements[0].parentNode.removeChild(elements[0]);
-        }
-        let aColl = document.getElementsByClassName('pcoded-content')
-        changeColor(aColl, 'white');
+        // const elements = document.getElementsByClassName('breadcrumb');
+        // while(elements.length > 0){
+        //     elements[0].parentNode.removeChild(elements[0]);
+        // }
+        // let aColl = document.getElementsByClassName('pcoded-content')
+        // changeColor(aColl, 'white');
 
         const observer = new ResizeObserver(entries => {
             if(ref.current !== null){
@@ -55,10 +55,10 @@ function ViewHtmlDashboard({id,details}) {
 
     },[])
     useEffect(()=>{
-        const elements = document.getElementsByClassName('breadcrumb');
-        while(elements.length > 0){
-            elements[0].parentNode.removeChild(elements[0]);
-        }
+        // const elements = document.getElementsByClassName('breadcrumb');
+        // while(elements.length > 0){
+        //     elements[0].parentNode.removeChild(elements[0]);
+        // }
     },[dimensions])
     return (
         <>

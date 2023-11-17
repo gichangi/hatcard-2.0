@@ -29,7 +29,7 @@ export const  Tableau  =()=> {
     return (
         <div id={"tableauBody"} style={{width:'70%', margin:'auto'}}>
             <div id={"tableauViz"} style={{width:'70%', margin:'auto'}}>
-                mew
+
             </div>
         </div>
 

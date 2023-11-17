@@ -42,9 +42,25 @@ Route::get('/pms', function () {
     Route::get('profile', function () {
         return Inertia('user-profile/index');
     });
-    Route::get('dashboards/view', function () {
-        return Inertia('dashboards/index');
+
+    Route::prefix('dashboards')->group(function (){
+        Route::get('view', function () {
+            return Inertia('dashboards/index');
+        });
+        Route::get('view/{id}', function (string $id) {
+            return Inertia('dashboards/index');
+        });
     });
+    Route::prefix('explore')->group(function (){
+        Route::get('/', function () {
+            return Inertia('menu-cards/index');
+        });
+        Route::get('/{id}', function () {
+            return Inertia('menu-cards/index');
+        });
+    });
+
+
     Route::prefix('admin')->group(function (){
 
         Route::get('roles', function () {

@@ -1,4 +1,4 @@
-import {useLocation, withRouter} from "react-router-dom";
+import {useLocation, useParams, withRouter} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {apiFetch} from "../../assets/api/utils";
 import _ from "lodash";
@@ -22,23 +22,22 @@ const Item = styled(Paper)(({ theme }) => ({
 
 function Index(props) {
     let { state } = useLocation();
-    const [cardItems, setCardItems] = useState([])
+    const [cardItems, setCardItems] = useState([]);
+    let { id } = useParams();
+
     useEffect(()=>{
-        const elements = document.getElementsByClassName('breadcrumb');
-        while(elements.length > 0){
-            elements[0].parentNode.removeChild(elements[0]);
-        }
-        if(state !== undefined){
-            apiFetch('get',{},`/api/menu-cards/${state.id}`,{}).then(res=>{
+        let i = state !== undefined?state.id:id;
+        if(i !== undefined ){
+            apiFetch('get',{},`/api/menu-cards/${i}`,{}).then(res=>{
                 setCardItems(res.data.navigation_menu_items)
             })
         }
 
-    },[props])
+    },[props,id])
 
 
     return (
-        <div>
+        <div style={{marginTop:'15px'}}>
 
             <Grid container spacing={{ xs: 2, md: 1 }} columns={{ xs: 4, sm: 8, md: 12 }} alignItems="stretch" direction="row"  justifyContent="flex-start" sx={{height:"90vh"}}>
 
