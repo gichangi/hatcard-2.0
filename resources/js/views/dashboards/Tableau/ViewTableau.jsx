@@ -43,17 +43,19 @@ const useRefDimensions = (ref,w,h) => {
 let defaultHeight =0;
 let defaultWidth =0;
 function ViewTableau({id}) {
+
     const userPermissions= useSelector(state => state.user.user.permissions);
     const userOrganisations= useSelector(state => state.user.user.organisations);
     const [height, setHeight] = useState(1)
     const [width, setWidth] = useState(0)
     const [tabViz, setTabViz] = useState();
     const [vizLoaded, setVizLoaded] = useState(false);
+    const[currentid, setCurrentId] = useState('');
     const divRef = createRef();
     const dimensions = useRefDimensions(divRef,width,height);
     const ref = useRef();
     let limitIpFilter =true;
-
+    let tempId = '';
 
     function initViz(url){
         const myNode = document.getElementById("tableauBody");
@@ -82,7 +84,6 @@ function ViewTableau({id}) {
 
                     const viz2 = document.getElementById("tableauViz");
                     var divs = viz2.getElementsByTagName('tableau-viz')[0];
-                    console.log("-----viz2---"+divs.src)
                     divs.width=entries[0].contentRect.width;
                     divs.height=ref.current.clientHeight - 30;
                     setHeight(ref.current.clientHeight - 30);
@@ -108,9 +109,9 @@ function ViewTableau({id}) {
             })
         };
 
-        var onError = function (err) {
-            alert("error");
-        };
+        // var onError = function (err) {
+        //     console.log("tableu init error",err);
+        // };
 
 
         viz.addEventListener(TableauEventType.FilterChanged, async (event) => {
@@ -150,28 +151,47 @@ function ViewTableau({id}) {
     */
 
 
+
     useEffect(()=>{
+        const viz = document.getElementById("tableauViz")
+
         apiFetch('POST',{},`/api/tableau/view-url`,{id:id}).then(res=>{
             defaultHeight=ref.current.clientHeight - 30;
             defaultWidth=ref.current.clientWidth -20;
             if(userPermissions.includes('ALL')){
                 limitIpFilter=false;
-                initViz(res.data.message.url+'&:toolbar=no');
+                if(tempId  !== id){
+                    initViz(res.data.message.url+'&:toolbar=no');
+                }
+                tempId = id;
+                setCurrentId(id);
 
             }else{
-                initViz(res.data.message.url+"&:toolbar=no&IP="+_.join(userOrganisations,','));
+                if(tempId !== id){
+                    initViz(res.data.message.url+"&:toolbar=no&IP="+_.join(userOrganisations,','));
+                }
+                tempId = id;
+                setCurrentId(id);
             }
 
         })
-    },[id,width,height]);
+    },[id]);
 
     //Check if Box dimensions have changed and update the tableau viz dimensions
     useEffect(()=>{
         if( ref.current !== null ){
             const viz = document.getElementById("tableauViz")
-            viz.style.width=parseInt(`${dimensions.width - 20}`, 10);
-            viz.style.height=parseInt(`${dimensions.height -50}`, 10);
+            if(viz.style.width !== width){
+                viz.style.width=parseInt(`${dimensions.width - 20}`, 10);
+                viz.style.height=parseInt(`${dimensions.height -50}`, 10);
+
+                setWidth(parseInt(`${dimensions.width - 20}`, 10));
+                setHeight(parseInt(`${dimensions.height -50}`, 10));
+                console.log(viz.style.width,"dimensions change",width)
+            }
+
         }
+
     },[dimensions])
 
 

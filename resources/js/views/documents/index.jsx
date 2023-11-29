@@ -1,21 +1,18 @@
-import { useMemo, useRef, useState, useEffect } from 'react';
-import {apiFetch} from "../../../../assets/api/utils";
-import {connect} from "react-redux";
-import MaterialReactTable from 'material-react-table';
-import {Col, Row} from "react-bootstrap";
-import Card from "../../../../components/Card/MainCard";
-import '../custom-css.css'
-import Box from "@mui/material/Box";
-import {Button, IconButton, MenuItem, Tooltip} from "@mui/material";
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import React from 'react';
+import {useEffect, useMemo, useRef, useState} from "react";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import {updateMenuTree} from "../../../../actions/user";
+import {apiFetch} from  "../../assets/api/utils";
+import {Col, Row} from "react-bootstrap";
+import MaterialReactTable from "material-react-table";
+import {Button, MenuItem} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+import Box from "@mui/material/Box";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
-function NavItemGrid(props) {
+function Index(props) {
     const[menuItems, setMenuItems] = useState([]);
     //optionally, you can manage any/all of the table state yourself
     const [rowSelection, setRowSelection] = useState({});
@@ -23,13 +20,7 @@ function NavItemGrid(props) {
     const tableInstanceRef = useRef(null);
     const MySwal = withReactContent(Swal);
 
-    const sweetAlertHandler = (alert) => {
-        MySwal.fire({
-            title: alert.title,
-            text: alert.text,
-            type: alert.type
-        });
-    };
+
 
     const fetchMenuItems = () =>{
         let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
@@ -51,6 +42,26 @@ function NavItemGrid(props) {
     },[]);
 
 
+
+    const menuDelete = (row) =>{
+        let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
+        if(localStore !== 1){
+            let headers =  {
+                "Accept": "application/json",
+                "Authorization": `Bearer ${localStore.token}`
+            };
+            apiFetch('delete',headers,'/api/menu-items',{id:row.id}).then(res=>{
+                if(res.data.message.type === 'success'){
+                    MySwal.fire('', `You have successfully deleted: ${row.name} !`, 'success').then(()=>{
+                        fetchMenuItems();
+                        props.updatemenutree();
+                    })
+                }else{
+                    MySwal.fire('', 'An error occurred while saving the data', 'error');
+                }
+            })
+        }
+    }
 
 
 
@@ -99,35 +110,6 @@ function NavItemGrid(props) {
     useEffect(() => {
         //do something when the row selection changes
     }, [rowSelection]);
-
-
-
-    const someEventHandler = () => {
-        //read the table state during an event from the table instance ref
-        console.log(tableInstanceRef.current.getState().sorting);
-    }
-
-    const menuDelete = (row) =>{
-        let localStore = JSON.parse(localStorage.getItem('hatcard.auth'))||1;
-        if(localStore !== 1){
-            let headers =  {
-                "Accept": "application/json",
-                "Authorization": `Bearer ${localStore.token}`
-            };
-            apiFetch('delete',headers,'/api/menu-items',{id:row.id}).then(res=>{
-                if(res.data.message.type === 'success'){
-                    MySwal.fire('', `You have successfully deleted: ${row.name} !`, 'success').then(()=>{
-                        fetchMenuItems();
-                        props.updatemenutree();
-                    })
-                }else{
-                    MySwal.fire('', 'An error occurred while saving the data', 'error');
-                }
-            })
-        }
-    }
-
-
 
     return (
         <div>
@@ -249,7 +231,7 @@ function NavItemGrid(props) {
                                         }
                                     }}
                                 >
-                                    Menu
+                                    Document
                                 </Button>
                                 <Button
                                     variant="contained"
@@ -266,7 +248,7 @@ function NavItemGrid(props) {
                                         }
                                     }}
                                 >
-                                    Order Groups
+                                    Category
                                 </Button>
                             </Box>
                         )}
@@ -278,17 +260,7 @@ function NavItemGrid(props) {
 
         </div>
 
-
     );
 }
 
-const mapActionToProps = {
-    updatemenutree:updateMenuTree,
-};
-
-const mapStateToProps = state => {
-    return {
-        reduxStore: state
-    };
-};
-export default connect(mapStateToProps,mapActionToProps)(NavItemGrid);
+export default Index;

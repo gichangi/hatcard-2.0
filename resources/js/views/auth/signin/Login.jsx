@@ -15,18 +15,18 @@ const Login = ({ className, ...rest }) => {
         <>
             <Formik
                 initialValues={{
-                    email: null,
+                    username: null,
                     password: null,
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+                    username: Yup.string().email('Must be a valid username').max(255).required('Username is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         // await firebaseEmailPasswordSignIn(values.email, values.password);
-                        await emailPasswordSignIn(values.email, values.password);
+                        await emailPasswordSignIn(values.username, values.password);
 
                         if (scriptedRef.current) {
                             setStatus({ success: true });
@@ -44,28 +44,30 @@ const Login = ({ className, ...rest }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} className={className} {...rest}>
-                        <div className="form-group mb-3" style={{display:"flex", alignItems:'start',flexDirection:'column'}}>
-                            <label htmlFor="username" style={{'color':'#002a6c','fontFamily':'Noto Sans'}}>Email address</label>
+                        <div className="form-group mb-1" style={{display:"flex", alignItems:'start',flexDirection:'column'}}>
+                            <label htmlFor="username" style={{'color':'#002a6c','fontFamily':'Noto Sans',fontSize:'1.5rem'}}>User name</label>
                             <input
                                 className="form-control"
-                                error={touched.email && errors.email}
-                                label="Email Address / Username"
-                                name="email"
+                                error={touched.username && errors.username}
+                                label="Username/Email Address"
+                                name="username"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 type="email"
-                                value={values.email}
-                                placeholder="Email"
+                                value={values.username}
+                                placeholder="Username"
                                 style={{
                                     color:'#495057',
                                     fontSize:'0.875rem',
-                                    fontWeight:'600'
+                                    fontWeight:'600',
+                                    height:'4rem',
+                                    backgroundColor:'#fff'
                                 }}
                             />
-                            {touched.email && errors.email && <small class="text-danger form-text">{errors.email}</small>}
+                            {touched.email && errors.username && <small class="text-danger form-text">{errors.username}</small>}
                         </div>
-                        <div className="form-group mb-4" style={{display:"flex", alignItems:'start',flexDirection:'column'}}>
-                            <label htmlFor="username" style={{'color':'#002a6c','fontFamily':'Noto Sans'}}>Password</label>
+                        <div className="form-group mb-1" style={{display:"flex", alignItems:'start',flexDirection:'column'}}>
+                            <label htmlFor="username" style={{'color':'#002a6c','fontFamily':'Noto Sans',fontSize:'1.5rem'}}>Enter your Password</label>
                             <input
                                 className="form-control"
                                 error={touched.password && errors.password}
@@ -79,7 +81,9 @@ const Login = ({ className, ...rest }) => {
                                 style={{
                                     color:'#495057',
                                     fontSize:'0.875rem',
-                                    fontWeight:'600'
+                                    fontWeight:'600',
+                                    height:'4rem',
+                                    backgroundColor:'#fff'
                                 }}
                             />
                             {touched.password && errors.password && <small class="text-danger form-text">{errors.password}</small>}
@@ -94,7 +98,7 @@ const Login = ({ className, ...rest }) => {
 
                         <Row>
                             <Col mt={2}>
-                                <Button className="btn-block" color="primary" disabled={isSubmitting} size="large" type="submit" variant="primary" style={{backgroundColor:'#992E62', borderColor:'#992E62'}}>
+                                <Button className="btn-block" color="primary" disabled={isSubmitting} size="large" type="submit" variant="primary" style={{fontSize:'1.5rem', height:'4rem',backgroundColor:'#A52263', borderColor:'#992E62'}}>
                                     Signin
                                 </Button>
                             </Col>

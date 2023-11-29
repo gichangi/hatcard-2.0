@@ -59,6 +59,14 @@ Route::get('/pms', function () {
             return Inertia('menu-cards/index');
         });
     });
+    Route::prefix('documents')->group(function (){
+        Route::get('/', function () {
+            return Inertia('documents/index');
+        });
+        Route::get('/{id}', function () {
+            return Inertia('documents/index');
+        });
+    });
 
 
     Route::prefix('admin')->group(function (){
@@ -86,7 +94,6 @@ Route::get('/pms', function () {
                 return Inertia('admin/bi-dashboards/index');
             });
         });
-
         Route::get('explore', function () {
             return Inertia('menu-cards/index');
         });

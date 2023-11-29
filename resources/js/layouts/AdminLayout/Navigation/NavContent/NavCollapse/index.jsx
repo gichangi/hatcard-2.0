@@ -89,8 +89,8 @@ const NavCollapse = ({ collapse, type }) => {
 
   let itemTitle = collapse.title;
   if (collapse.icon) {
-    itemTitle = <span className="pcoded-mtext" style={{height:'100px'}}>
-      {collapse.title}
+    itemTitle = <span className="pcoded-mtext" style={{height:'100%'}}>
+      <div style={{display:'flex', alignItems:'center',height:'100%',marginTop:'-10px'}}>{collapse.title}</div>
     </span>;
   }
 
@@ -135,7 +135,7 @@ const NavCollapse = ({ collapse, type }) => {
             className={navLinkClass.join(' ')}
             onClick={() => dispatch({ type: actionType.COLLAPSE_TOGGLE, menu: { id: collapse.id, type: type } })}
             style={{
-              color:'#0E6073', fontWeight:'bold',height:`${menuItemHeightCalc()}em`
+               color:'#0E6073', fontWeight:'bold',height:`${menuItemHeightCalc()}em`
             }}
         >
           <NavIcon items={collapse} />

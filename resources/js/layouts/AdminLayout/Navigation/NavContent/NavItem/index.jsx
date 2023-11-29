@@ -41,7 +41,7 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
 
   let itemTitle = item.title;
   if (item.icon) {
-    itemTitle = <span className="pcoded-mtext">{item.title}</span>;
+    itemTitle = <span className="pcoded-mtext" style={{marginTop:'-10px !important'}}>{item.title}</span>;
   }
 
   let itemTarget = '';
@@ -67,12 +67,13 @@ const NavItem = ({ layout, item,showIcon=true,customClass=null}) => {
               <CustomNavLink
                   //to={{ pathname: '/dashboards/view', state: { id: item.id}}}
                   to={{ pathname: `/dashboards/view/${item.id}`}}
-                  style={{color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet',height:`${menuItemHeightCalc()}em`}}>
+                  style={{display: 'flex', alignItems: 'center',color:'#992E62', fontWeight:'bold',fontSize:'14px',fontFamily:'Trebuchet',height:`${menuItemHeightCalc()}em`}}>
                 {showIcon &&
                     <NavIcon  items={item} />
                 }
-                {itemTitle} {/*{item.category}*/}
 
+                {/*{itemTitle} /!*{item.category}*!/*/}
+                <div>{itemTitle}</div>
               </CustomNavLink>
           }
           {item.category !=='dashboard' &&

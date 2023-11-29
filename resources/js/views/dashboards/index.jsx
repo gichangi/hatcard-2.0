@@ -11,21 +11,27 @@ function Index(props) {
     let { state } = useLocation();
     const [reComp, setReComp] = useState(<FacebookCircularProgress />)
     const [currentDashboard, setCurrentDashboard] = useState(null)
-    const[currentId, setCurrentId] = useState(null);
+
     let { id } = useParams();
+    const[currentId, setCurrentId] = useState(id);
+    let count = 0;
 
     useEffect(()=>{
-        if(id !== undefined){
+
+        if(id !== undefined && (id !== currentId || count === 0)){
+            console.log(currentId,"dimensions change mew mew ref25",id)
             apiFetch('get',{},`/api/bi-dashboards/find/${id}`,{}).then(res=>{
                 pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
             })
-            setCurrentId(id)
+            setCurrentId(id);
+            count ++;
         }else{
-            if(state !== undefined && currentId !== state.id){
+            if(state !== undefined && (currentId !== state.id || count ===0) ){
                 apiFetch('get',{},`/api/bi-dashboards/find/${state.id}`,{}).then(res=>{
                     pageSwitch(res.data.dashboard.dashboard_type,res.data.dashboard.id,res.data.dashboard)
                 })
-                setCurrentId(state.id)
+                setCurrentId(state.id);
+                count ++;
             }
 
         }
