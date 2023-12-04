@@ -5,6 +5,8 @@ namespace App\Http\Services\TableauServices;
 use App\Http\Controllers\Controller;
 use App\Models\AdminModels\BIDashboards;
 use App\Models\AdminModels\BIPlatforms;
+use App\Models\DataModels\DHISData;
+use App\Models\TableauToken;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
@@ -78,37 +80,59 @@ class TableauServerServices extends Controller
     }
 
 
-    public function generateToken($id)
+    public function generateToken($id): array
     {
+
         try{
-            $server = BIPlatforms::find($id);
-            $ip = gethostbyname(parse_url($server->base_url, PHP_URL_HOST));
-            $server_config = json_decode($server['config_json']);
+            $currentToken = TableauToken::where('server_id','=',$id)->get();
+//            $remainingBoostHours = 5;
+//            if(sizeof($currentToken) === 1){
+//                $now = \Carbon\Carbon::now();
+//                $endDate = \Carbon\Carbon::parse($currentToken[0]['updated_at']);
+//                $remainingBoostHours = $now->diffInHours($endDate);
+//            }
 
-            $client = new Client([
-                'base_uri' => $server->base_url,
-                'verify' => false
-            ]);
+//            if($remainingBoostHours  > 4 ){
+                $server = BIPlatforms::find($id);
+                $ip = gethostbyname(parse_url($server->base_url, PHP_URL_HOST));
+                $server_config = json_decode($server['config_json']);
 
-            $url = $server_config->proxy.'/'.$server->base_url.'/trusted?'
-                . 'username=' . $server_config->username
-                . '&server='.$ip
-                . '&target_site=' . $server_config->target_site;
+                $client = new Client([
+                    'base_uri' => $server->base_url,
+                    'verify' => false
+                ]);
 
-            $response = $client->request('POST', $url, [
-                'headers' => [
-                    'Accept' => 'application/json',
-                    'Origin' => 'http://'.$ip,
-                ],
-            ]);
+                $url = $server_config->proxy.'/'.$server->base_url.'/trusted?'
+                    . 'username=' . $server_config->username
+                    . '&server='.$ip
+                    . '&target_site=' . $server_config->target_site;
 
-            $message=array("status"=>"error");
+                $response = $client->request('POST', $url, [
+                    'headers' => [
+                        'Accept' => 'application/json',
+                        'Origin' => 'http://'.$ip,
+                    ],
+                ]);
 
-            if ($response->getStatusCode() === 200) {
-                $token=$response->getBody()->__toString();
-                return array("status"=>"success","token"=>$token);
-            }
-            return $message;
+                $message=array("status"=>"error");
+
+                if ($response->getStatusCode() === 200) {
+                    $token=$response->getBody()->__toString();
+                    $tokenStore = TableauToken::updateOrCreate(
+                        [
+                            'server_id' => $id,
+                        ],
+                        [ 'token' => $token]
+                    );
+                    $tokenStore->save();
+
+                    return array("status"=>"success","token"=>$token);
+                }
+                return $message;
+//            }else{
+//                return array("status"=>"success","token"=>$currentToken[0]['token']);
+//            }
+
         }catch(\Exception $e){
             return (["status"=>"error","message"=>" error token. ".$e->getMessage().""]);
         }
@@ -359,6 +383,7 @@ class TableauServerServices extends Controller
 
     //Generate embedding url
     public function generateUrl(Request $request){
+
         try {
             $dashboard = BIDashboards::with('server')->where('id',$request->id)->get()->first();
             if($dashboard->dashboard_type === 'tableau_server'){
