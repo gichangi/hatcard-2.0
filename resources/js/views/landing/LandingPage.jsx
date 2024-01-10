@@ -3,8 +3,21 @@ import './assets/css/styles.scss';
 import hatcardLanding from './assets/images/hatcard_landing.png';
 import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
+
 import Grid from "@mui/material/Grid";
 import {Typography} from "@mui/material";
+
+import { styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+
+const Item = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+}));
 
 const LandingPage = () => {
   return (
@@ -14,9 +27,9 @@ const LandingPage = () => {
           <HeaderNav/>
           <div className="main" id="main" style={{backgroundColor:"#fff"}}>
             <div className="hero-section app-hero" style={{height:'79vh',backgroundColor:"#fff"}} >
-              <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}  direction="row" justifyContent="center" alignItems="center">
+                {/* <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}  direction="row" justifyContent="center" alignItems="center">
                 <Grid item xs={6} md={6} style={{display:'flex',justifyContent:'center',alignItems:'center'}} >
-                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} /> k
+                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} />
                 </Grid>
 
                 <Grid item xs={5} md={5} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
@@ -37,7 +50,35 @@ const LandingPage = () => {
 
 
                 </Grid>
+
               </Grid>
+                */}
+                <Grid container spacing={2}>
+                    <Grid item  md={7}>
+                        <Item
+
+                            xs={{ visibility: 'hidden' }}
+                        >
+                            <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} display={{ xs: "none", lg: "block", md: "block", sm: "block" }}/>
+                        </Item>
+                    </Grid>
+                    <Grid item xs={12} md={5}>
+                        <Item >
+                            <Typography variant="body2" style={{fontSize:'3.0vh',color:"#000"}}>
+                                The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
+                            </Typography>
+                        </Item>
+                    </Grid>
+                    <Grid item xs={4} >
+                        <Item sx={{
+                            display: { xs: "none", lg: "block", md: "block", sm: "none" }
+                        }}>This is my test </Item>
+
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Item>xs=8</Item>
+                    </Grid>
+                </Grid>
             </div>
             {/*<div className="services-section text-center" id="services">
               <div className="container">
@@ -116,7 +157,8 @@ const LandingPage = () => {
                 color:'#000'
               }}/>
             </div>
-            */}<PageFooter/>
+            */}
+              <PageFooter/>
           </div>
         </div>
       </div>
