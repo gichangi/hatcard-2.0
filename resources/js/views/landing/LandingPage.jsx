@@ -5,161 +5,51 @@ import HeaderNav from "./layouts/HeaderNav";
 import PageFooter from "./layouts/PageFooter";
 
 import Grid from "@mui/material/Grid";
-import {Typography} from "@mui/material";
+import { Typography } from "@mui/material";
 
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import {IsDesktop} from '../utils/IsDesktop';
 
 const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
 }));
 
 const LandingPage = () => {
+  const isDesktop = IsDesktop(990);
   return (
     <React.Fragment>
-      <div className="wrapper" style={{backgroundColor:"#fff"}}>
-        <div>
-          <HeaderNav/>
-          <div className="main" id="main" style={{backgroundColor:"#fff"}}>
-            <div className="hero-section app-hero" style={{height:'79vh',backgroundColor:"#fff"}} >
-                {/* <Grid container spacing={1} sx={{padding:'10px',height:"75vh"}}  direction="row" justifyContent="center" alignItems="center">
-                <Grid item xs={6} md={6} style={{display:'flex',justifyContent:'center',alignItems:'center'}} >
-                  <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} />
-                </Grid>
-
-                <Grid item xs={5} md={5} style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <Typography variant="h1" gutterBottom style={{fontSize:'8.0vh',color:'#C21C66',fontWeight:'bolder'}}>
-                        Comprehensive Access and Review Dashboard
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Typography variant="body2" style={{fontSize:'3.0vh',color:"#000"}}>
-                        The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
-
-                      </Typography>
-
-                    </Grid>
-                  </Grid>
-
-
-                </Grid>
-
-              </Grid>
-                */}
-                <Grid container spacing={2}>
-                    <Grid item  md={7}>
-                        <Item
-
-                            xs={{ visibility: 'hidden' }}
-                        >
-                            <img src={hatcardLanding} alt="Hatcard" height="95%" width={"70%"} display={{ xs: "none", lg: "block", md: "block", sm: "block" }}/>
-                        </Item>
-                    </Grid>
-                    <Grid item xs={12} md={5}>
-                        <Item >
-                            <Typography variant="body2" style={{fontSize:'3.0vh',color:"#000"}}>
-                                The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
-                            </Typography>
-                        </Item>
-                    </Grid>
-                    <Grid item xs={4} >
-                        <Item sx={{
-                            display: { xs: "none", lg: "block", md: "block", sm: "none" }
-                        }}>This is my test </Item>
-
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Item>xs=8</Item>
-                    </Grid>
-                </Grid>
-            </div>
-            {/*<div className="services-section text-center" id="services">
-              <div className="container">
-                <div className="row  justify-content-md-center">
-                  <div className="col-md-8">
-                    <div className="services-content">
-                      <h1 className="wow fadeInUp" data-wow-delay="0s" style={{color:'rgb(15, 105, 125)', fontSize:'42px',fontWeight:'bolder !important',fontFamily:"Noto Sans"}}>
-                        VSP Pillars
-                      </h1>
-                      <p className="wow fadeInUp" data-wow-delay="0.2s">
-                        Each Vital Signs Profile Provides answers to some of the most critical questions about a country's primary health care system
-                      </p>
+      <div className="wrapper" style={{ backgroundColor: "#fff", position:"relative" }}>
+        <div style={{width: '100%', position:"relative", height: '100vh'}}>
+          <HeaderNav />
+          <div className="main" id="main" style={{height: '80vh', backgroundColor: "#fff", paddingBottom:""}}>
+            <div style={{ height: '80%', backgroundColor: "#fff" }} >
+              <Grid direction={isDesktop ? 'row' : 'column'} container spacing={2}>
+                <Grid item xs={isDesktop ? 7 : 12} md={isDesktop ? 7 : 12} style={{width: '100%'}}>
+                    <div style={{height:isDesktop ? "full" : "50%", width:"100%", display: "flex", justifyContent: 'center'}}>
+                    <img src={hatcardLanding} alt="Hatcard" style={{width:'60%', objectFit:"contain", height:'auto'}} />
                     </div>
-                  </div>
-                  <div className="col-md-12 text-center">
-                    <div className="services">
-                      <div className="row">
-                        <div className="col-sm-3 wow fadeInUp" data-wow-delay="0.2s">
-                          <div className="services-icon">
-                            <AttachMoneyIcon sx={{fontSize: '4.5rem',color:'#000'}}/>
-                          </div>
-                          <div className="services-description">
-                            <h1>Finance</h1>
-                            <p>
-                              How much does your government spend on primary health care?
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-sm-3 wow fadeInUp" data-wow-delay="0.3s">
-                          <div className="services-icon">
-                            <img className="icon-2" src={capacityIcon} height="45" width="60" alt="Service" />
-                          </div>
-                          <div className="services-description">
-                            <h1>Capacity</h1>
-                            <p>
-                              Does your system have the policies, infrastructure and other physical and human resources required to deliver primary health care?
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-sm-3 wow fadeInUp" data-wow-delay="0.4s">
-                          <div className="services-icon">
-                            <img className="icon-3" src={performanceIcon} height="45" width="55" alt="Service" />
-                          </div>
-                          <div className="services-description">
-                            <h1>Performance</h1>
-                            <p>
-                              Does your primary health care system deliver quality care that meets people's health needs?
-                            </p>
-                          </div>
-                        </div>
-                        <div className="col-sm-3 wow fadeInUp" data-wow-delay="0.4s">
-                          <div className="services-icon">
-                            <BalanceIcon sx={{fontSize: '4.5rem',color:'#000'}}/>
-                          </div>
-                          <div className="services-description">
-                            <h1>Equity</h1>
-                            <p>
-                              Does your primary health care system effectively serve the most marginalized and disadvantaged groups in society?
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                </Grid>
+                <Grid item xs={12} md={isDesktop ? 5 : 12} style={{}}>
+                <div style={{height: isDesktop ? "95%" : "50%", display: "flex", justifyContent: 'center', alignItems: 'center', padding: isDesktop ? '20px' : '50px',  marginBottom: isDesktop ? '' : '100px'}}>
+                  <Typography marginRight={isDesktop && 6} style={{ fontSize: isDesktop ?'20px' : '15px', color: "#000", textAlign: 'justify'}}>
+                    The HIV AIDS Team Comprehensive Access and Review Dashboard (HATCARD) dashboard was developed by Data.FI with support from the U.S. Agency for International Development (USAID). The HATCARD provides a platform for monitoring, evaluating, and communicating HIV and tuberculosis (TB) program performance to accelerate and sustain access to high-quality data for improving program management.
+                  </Typography>
                 </div>
-              </div>
-              <Divider sx={{
-                border: '1px solid #000',
-                width: '100%',
-                color:'#000'
-              }}/>
-              <img className="icon-3" src={lowerPageIcon} height="80" width="95%" alt="Service" />
-              <Divider sx={{
-                border: '1px solid #000',
-                width: '100%',
-                color:'#000'
-              }}/>
+                  
+                </Grid>
+              </Grid>
             </div>
-            */}
-              <PageFooter/>
+            <Box margin={10}/>
           </div>
+            <div style={{width: '100%', position:"fixed", bottom: 0, display: 'flex', justifyContent: 'center', marginTop:"20px"}}>
+            <PageFooter />
+            </div>
         </div>
       </div>
     </React.Fragment>
