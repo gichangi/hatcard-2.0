@@ -58,19 +58,21 @@ function ViewTableau({id}) {
     let tempId = '';
 
     function initViz(url){
-        const myNode = document.getElementById("tableauBody");
-        myNode.innerHTML = '';
-        let g = document.createElement('div');
-        g.setAttribute("id", "tableauViz");
-        myNode.append(g)
-
+        // const myNode = document.getElementById("tableauBody");
+        // myNode.innerHTML = '';
+        // let g = document.createElement('div');
+        // g.setAttribute("id", "tableauViz");
+        // myNode.append(g)
+        
         let viz = new TableauViz();
         viz.src = url;
-        viz.style.height = `${defaultHeight}px`;
-        viz.style.width = `${defaultWidth}px`;
-        viz.hideTabs = true;
-        //viz.hideToolbar = true;
-        viz.toolbar = 'hidden';
+        // // viz.style.height = `${defaultHeight}px`;
+        // // viz.height = `${defaultHeight}px`;
+        // // viz.width = `${defaultWidth}px`;
+        // viz.hideTabs = true;
+        // //viz.hideToolbar = true;
+        // viz.toolbar = 'hidden';
+
 
         viz.addEventListener(TableauEventType.FirstInteractive, (event) => {
             setVizLoaded(true)
@@ -155,10 +157,15 @@ function ViewTableau({id}) {
     useEffect(()=>{
         const viz = document.getElementById("tableauViz")
 
+        callApi(id)
+    },[id]);
+
+    const callApi = (id) => {
         apiFetch('POST',{},`/api/tableau/view-url`,{id:id}).then(res=>{
-            defaultHeight=ref.current.clientHeight - 30;
-            defaultWidth=ref.current.clientWidth -20;
+            // defaultHeight=ref.current.clientHeight;
+            // defaultWidth=ref.current.clientWidth;
             if(userPermissions.includes('ALL')){
+                console.log("it's actually here");
                 limitIpFilter=false;
                 if(tempId  !== id){
                     initViz(res.data.message.url+'&:toolbar=no');
@@ -175,7 +182,7 @@ function ViewTableau({id}) {
             }
 
         })
-    },[id]);
+    }
 
     //Check if Box dimensions have changed and update the tableau viz dimensions
     useEffect(()=>{
@@ -228,29 +235,40 @@ function ViewTableau({id}) {
 
     return (
         <>
-            <Box ref={ref}  sx={{height:`80vh`,width:`100%`,marginTop:'0px'}} id={"tableauVizHolder"} >
-                <div style={{ height: '100%', width: `100%` }}>
+            <Box sx={{ height:`80vh`, width:`100%`,marginTop:'0px'}} id={"tableauVizHolder"} >
+                <div style={{backgroundColor: "#fff", height: '100%', width: '100%', display:"block" }}>
                     <div
                         ref={divRef}
                         style={{
-                            margin: '5px',
+                            position: "relative",
+                            // margin: '5px',
                             width: `100%`,
                             height: '100%',
-                            /*  border: '1px solid black',*/
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            // /*  border: '1px solid black',*/
+                            // display: 'flex',
+                            // justifyContent: 'center',
+                            // alignItems: 'center',
                         }}
                     >
 
-                        <Grid container>
-                            <Item sx={{height:`95%`,width:`100%`,margin:'2px'}} id={"tableauBody"} >
-                                <div id={'tableauViz'}>
+                            <Box 
+                            id={"tableauBody"}
+                            style={{display:"flex", justifyContent:"center", alignItems:"center"}}
+                             >
+                                <div id={'tableauViz'} style={{
+                                    position: "absolute",
+                                    top: "50%",
+                                    left: "50%",
+                                    transform: "translate(-50%, -50%)",
+                                    // position:"absolute", left:"20%",top:100, 
+                                    // backgroundColor:"green",
+                                    display:"flex", justifyContent:"center", alignItems:"center",
+                                    width:"100%",
+                                    height:"100%"
+                                    }}>
 
                                 </div>
-                            </Item>
-
-                        </Grid>
+                            </Box>
 
                     </div>
                 </div>
