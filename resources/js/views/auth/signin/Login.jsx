@@ -20,7 +20,7 @@ const Login = ({ className, ...rest }) => {
                     submit: null
                 }}
                 validationSchema={Yup.object().shape({
-                    username: Yup.string().email('Must be a valid username').max(255).required('Username is required'),
+                    username: Yup.string().email('Enter a valid username/email').max(255).required('Username is required'),
                     password: Yup.string().max(255).required('Password is required')
                 })}
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
@@ -64,10 +64,11 @@ const Login = ({ className, ...rest }) => {
                                     fontSize:'0.875rem',
                                     fontWeight:'600',
                                     height:'4rem',
-                                    backgroundColor:'#fff'
+                                    backgroundColor:'#fff',
+                                    marginBottom:'10px'
                                 }}
                             />
-                            {touched.email && errors.username && <small class="text-danger form-text">{errors.username}</small>}
+                            {touched.username && errors.username && <small class="text-danger form-text">{errors.username}</small>}
                         </div>
                         <div className="form-group mb-1" style={{display:"flex", alignItems:'start',flexDirection:'column'}}>
                             <label htmlFor="username" style={{'color':'#002a6c','fontFamily':'Noto Sans',fontSize:'1.5rem'}}>Enter your Password</label>
@@ -86,7 +87,8 @@ const Login = ({ className, ...rest }) => {
                                     fontSize:'0.875rem',
                                     fontWeight:'600',
                                     height:'4rem',
-                                    backgroundColor:'#fff'
+                                    backgroundColor:'#fff',
+                                    marginBottom:'10px'
                                 }}
                             />
                             {touched.password && errors.password && <small class="text-danger form-text">{errors.password}</small>}

@@ -32,7 +32,9 @@ Route::get('/pms', function () {
     return Inertia('landing/ProgressiveModelPage');
 });
 
-
+    Route::get('users', function () {
+        return Inertia('admin/users/index');
+    });
 
 
 /*Route::middleware('auth')->group(function(){*/
