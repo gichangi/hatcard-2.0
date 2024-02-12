@@ -165,7 +165,7 @@ export const AuthProvider = ({ children, props }) => {
                 //console.log("Error fetching user details")
                 //console.log(error);
             })
-
+            return true;
             })
             .catch(function (error) {
                 return dispatch({

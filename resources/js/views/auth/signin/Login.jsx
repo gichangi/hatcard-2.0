@@ -26,11 +26,16 @@ const Login = ({ className, ...rest }) => {
                 onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
                     try {
                         // await firebaseEmailPasswordSignIn(values.email, values.password);
-                        await emailPasswordSignIn(values.username, values.password);
+                        const successful = await emailPasswordSignIn(values.username, values.password);
+                        console.log(successful);
 
-                        if (scriptedRef.current) {
+                        if (successful) {
                             setStatus({ success: true });
                             setSubmitting(true);
+                        } else {
+                            setStatus({ success: false });
+                            setSubmitting(false);
+                            setErrors({ submit: "User name or password incorrect, please check and try again." });
                         }
                     } catch (err) {
                         console.error(err);
