@@ -27,8 +27,6 @@ const Login = ({ className, ...rest }) => {
                     try {
                         // await firebaseEmailPasswordSignIn(values.email, values.password);
                         const successful = await emailPasswordSignIn(values.username, values.password);
-                        console.log(successful);
-
                         if (successful) {
                             setStatus({ success: true });
                             setSubmitting(true);
